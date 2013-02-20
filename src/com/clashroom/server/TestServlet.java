@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.clashroom.server.data.PlayerEntity;
 import com.clashroom.server.data.TestEntity;
 
 public class TestServlet extends HttpServlet {
@@ -22,19 +23,17 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		resp.getWriter().println("<b>Hello</b>!!!");
 		
-
+		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		Query q  = pm.newQuery(TestEntity.class);
-		List<TestEntity> entities = (List<TestEntity>) q.execute();
-		for (TestEntity e : entities) {
-			resp.getWriter().println(e.getName());
+		List<PlayerEntity> entities = QueryUtils.query(PlayerEntity.class, "id > %s && name==%s", -1L, "Thomas");
+		for (PlayerEntity e : entities) {
+			resp.getWriter().println(String.format("%s (%s)", e.getName(), e.getDragon()));
 		}
 		
 		String name = req.getParameter("name");
 		if (name != null) {
-			TestEntity entity = new TestEntity();
-			entity.setName(name);
-			pm.makePersistent(name);
+			PlayerEntity entity = new PlayerEntity(name, name + "'s Dragon");
+			pm.makePersistent(entity);
 		}
 		
 		pm.close();
