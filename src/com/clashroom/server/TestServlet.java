@@ -5,13 +5,17 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.jdo.annotations.PersistenceAware;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.clashroom.server.data.PlayerEntity;
-import com.clashroom.server.data.TestEntity;
+import com.clashroom.shared.Battler;
+import com.clashroom.shared.data.BattleEntity;
+import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.data.PlayerEntity;
+import com.clashroom.shared.data.TestEntity;
 
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -25,15 +29,17 @@ public class TestServlet extends HttpServlet {
 		
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		List<PlayerEntity> entities = QueryUtils.query(PlayerEntity.class, "id > %s && name==%s", -1L, "Thomas");
-		for (PlayerEntity e : entities) {
-			resp.getWriter().println(String.format("%s (%s)", e.getName(), e.getDragon()));
+		List<BattleEntity> entities = QueryUtils.query(pm, BattleEntity.class, "");
+		for (BattleEntity e : entities) {
+			resp.getWriter().println(e.getBattler());
 		}
 		
 		String name = req.getParameter("name");
 		if (name != null) {
-			PlayerEntity entity = new PlayerEntity(name, name + "'s Dragon");
-			pm.makePersistent(entity);
+			Battler b = new Battler();
+			b.name = name;
+			BattleEntity be = new BattleEntity(b);
+			pm.makePersistent(be);
 		}
 		
 		pm.close();

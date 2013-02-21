@@ -39,9 +39,7 @@ public class Clashroom implements EntryPoint {
 	/**
 	 * This is the entry point method.
 	 */
-	public void onModuleLoad() {
-		GreetingServiceAsync gre = GWT.create(GreetingService.class);
-		
+	public void onModuleLoad() {		
 		final Button sendButton = new Button("Send");
 		final TextBox nameField = new TextBox();
 		nameField.setText("GWT User");

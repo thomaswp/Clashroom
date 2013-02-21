@@ -1,0 +1,91 @@
+package com.clashroom.shared.data;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import com.clashroom.server.QueryUtils;
+
+@PersistenceCapable
+public class DragonEntity {
+	
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	@PrimaryKey
+	private Long id;
+	
+	@Persistent
+	private String name;
+	
+	@Persistent
+	private int experience;
+	
+	@Persistent
+	private int level;
+	
+	@Persistent
+	private int strength, intelligence, agility; 
+	
+	public PlayerEntity getPlayer(PersistenceManager pm) {
+		return QueryUtils.queryUnique(pm, PlayerEntity.class, "dragonId == %s", id);
+	}
+	
+	public DragonEntity(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getExperience() {
+		return experience;
+	}
+
+	public void setExperience(int experience) {
+		this.experience = experience;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public int getStrength() {
+		return strength;
+	}
+
+	public void setStrength(int strength) {
+		this.strength = strength;
+	}
+
+	public int getIntelligence() {
+		return intelligence;
+	}
+
+	public void setIntelligence(int intelligence) {
+		this.intelligence = intelligence;
+	}
+
+	public int getAgility() {
+		return agility;
+	}
+
+	public void setAgility(int agility) {
+		this.agility = agility;
+	}
+
+	public Long getId() {
+		return id;
+	}
+	
+	
+}
