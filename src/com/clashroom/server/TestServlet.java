@@ -36,10 +36,10 @@ public class TestServlet extends HttpServlet {
 		
 		String name = req.getParameter("name");
 		if (name != null) {
-			Battler b = new Battler();
-			b.name = name;
-			BattleEntity be = new BattleEntity(b);
-			pm.makePersistent(be);
+//			Battler b = new Battler();
+//			b.name = name;
+//			BattleEntity be = new BattleEntity(b);
+//			pm.makePersistent(be);
 		}
 		
 		pm.close();
