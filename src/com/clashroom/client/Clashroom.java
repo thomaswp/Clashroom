@@ -1,6 +1,8 @@
 package com.clashroom.client;
 
+import com.clashroom.shared.Battle;
 import com.clashroom.shared.FieldVerifier;
+import com.clashroom.shared.GoblinBattler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -169,5 +171,6 @@ public class Clashroom implements EntryPoint {
 		MyHandler handler = new MyHandler();
 		sendButton.addClickHandler(handler);
 		nameField.addKeyUpHandler(handler);
+	
 	}
 }

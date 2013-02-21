@@ -1,6 +1,7 @@
 package com.clashroom.shared;
 
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class Battler implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -12,13 +13,9 @@ public abstract class Battler implements Serializable{
 	public int maxHP, maxMP;
 	public int hp, mp;
 	
-	public Battler() {
+	public void setup() {
 		generateMaxHP();
 		generateMaxMP();
-		setup();
-	}
-	
-	public void setup() {
 		hp = maxHP;
 		mp = maxMP;
 	}
@@ -33,5 +30,13 @@ public abstract class Battler implements Serializable{
 	
 	protected int getStatCurve(int level, int minGain, int maxGain) {
 		return (int)((Math.random() * (maxGain - minGain) + minGain) * (level + 3));
+	}
+	
+	public Battler selectTarget(List<Battler> enemies) {
+		return enemies.get((int)(Math.random() * enemies.size()));
+	}
+	
+	public String toString() {
+		return String.format("%s %d/%dhp", name, hp, maxHP);
 	}
 }

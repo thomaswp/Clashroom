@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.clashroom.shared.Battle;
 import com.clashroom.shared.Battler;
+import com.clashroom.shared.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
 import com.clashroom.shared.data.DragonEntity;
 import com.clashroom.shared.data.PlayerEntity;
@@ -27,12 +29,17 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		resp.getWriter().println("<b>Hello</b>!!!");
 		
+		Battle battle = new Battle(new GoblinBattler(10), new GoblinBattler(15));
+		while (!battle.isOver()) {
+			System.out.println(battle.nextAction().toBattleString());
+			System.out.println(battle.getStatus());
+		}
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		List<BattleEntity> entities = QueryUtils.query(pm, BattleEntity.class, "");
-		for (BattleEntity e : entities) {
-			resp.getWriter().println(e.getBattler());
-		}
+//		List<BattleEntity> entities = QueryUtils.query(pm, BattleEntity.class, "");
+//		for (BattleEntity e : entities) {
+//			resp.getWriter().println(e.getBattler());
+//		}
 		
 		String name = req.getParameter("name");
 		if (name != null) {
