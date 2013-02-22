@@ -10,6 +10,6 @@ public class ActionDeath extends BattleAction {
 
 	@Override
 	public String toBattleString() {
-		return String.format("%s fainted!", battler.name);
+		return Formatter.format("%s fainted!", battler.name);
 	}
 }

@@ -16,7 +16,7 @@ public class ActionAttack extends BattleAction {
 
 	@Override
 	public String toBattleString() {
-		String damageString = missed ? "and missed" : String.format("dealing %d damage", damage);
-		return String.format("%s attacked %s %s!", attacker.name, attacked.name, damageString);
+		String damageString = missed ? "and missed" : Formatter.format("dealing %d damage", damage);
+		return Formatter.format("%s attacked %s %s!", attacker.name, attacked.name, damageString);
 	}
 }

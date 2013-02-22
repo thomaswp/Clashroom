@@ -64,10 +64,10 @@ public class Battle {
 	}
 	
 	private ActionAttack doAttack(Battler attacker, Battler target) {
-		boolean miss = attacker.agility / (double)target.agility < Math.random() * 1.5;
+		boolean miss = Math.sqrt(attacker.agility / (double)target.agility) < Math.random() * 1.5;
 		int damage = 0;
 		if (!miss) {
-			damage = attacker.strength - target.strength / 4;
+			damage = (attacker.strength - target.strength / 4) * 3;
 		}
 		target.hp = Math.max(0, target.hp - damage);
 		return new ActionAttack(attacker, target, damage, miss);

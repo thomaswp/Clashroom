@@ -5,11 +5,12 @@ public class GoblinBattler extends Battler {
 	
 	public GoblinBattler(int level) {
 		name = "Goblin";
+		image = "goblin.png";
 		this.level = level;
 		strength = getStatCurve(level, 3, 5);
 		agility = getStatCurve(level, 2, 4);
 		intelligence = getStatCurve(level, 1, 2);
-		description = String.format("Level %d Goblin", level);
+		description = Formatter.format("Level %d Goblin", level);
 	}
 	
 }

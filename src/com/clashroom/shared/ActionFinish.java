@@ -10,6 +10,6 @@ public class ActionFinish extends BattleAction {
 
 	@Override
 	public String toBattleString() {
-		return String.format("%s was the winner!", victor.name);
+		return Formatter.format("%s was the winner!", victor.name);
 	}
 }

@@ -12,6 +12,7 @@ public abstract class Battler implements Serializable{
 	public int strength, agility, intelligence;
 	public int maxHP, maxMP;
 	public int hp, mp;
+	public String image;
 	
 	public void setup() {
 		generateMaxHP();
@@ -21,11 +22,11 @@ public abstract class Battler implements Serializable{
 	}
 	
 	protected void generateMaxHP() {
-		maxHP = level * 85 + strength * 23;
+		maxHP = level * 35 + strength * 23;
 	}
 	
 	protected void generateMaxMP() {
-		maxMP = level * 25 + intelligence * 18;
+		maxMP = level * 15 + intelligence * 8;
 	}
 	
 	protected int getStatCurve(int level, int minGain, int maxGain) {
@@ -37,6 +38,6 @@ public abstract class Battler implements Serializable{
 	}
 	
 	public String toString() {
-		return String.format("%s %d/%dhp", name, hp, maxHP);
+		return Formatter.format("%s %d/%dhp", name, hp, maxHP);
 	}
 }
