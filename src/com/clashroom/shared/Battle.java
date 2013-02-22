@@ -3,12 +3,12 @@ package com.clashroom.shared;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Stack;
+import java.util.List;
 
 public class Battle {
-	private Battler battlerA, battlerB;
 	private LinkedList<Battler> battlers = new LinkedList<Battler>();
+	private LinkedList<Battler> teamA = new LinkedList<Battler>();
+	private LinkedList<Battler> teamB = new LinkedList<Battler>();
 	private LinkedList<BattleAction> queuedActions = new LinkedList<BattleAction>();
 	private boolean isOver;
 	
@@ -16,12 +16,27 @@ public class Battle {
 		return isOver;
 	}
 	
-	public Battle(Battler battlerA, Battler battlerB) {
-		this.battlerA = battlerA;
-		this.battlerB = battlerB;
+	public List<Battler> getBattlers() {
+		return battlers;
+	}
+	
+	public List<Battler> getTeamA() {
+		return teamA;
+	}
+	
+	public List<Battler> getTeamB() {
+		return teamB;
+	}
+	
+	public Battle(LinkedList<Battler> teamA, LinkedList<Battler> teamB) {
+		this.teamA = teamA;
+		this.teamB = teamB;
 		
-		battlers.add(battlerA);
-		battlers.add(battlerB);
+		for (Battler b : teamA) b.teamA = true;
+		for (Battler b : teamB) b.teamA = false;
+		
+		battlers.addAll(teamA);
+		battlers.addAll(teamB);
 		Collections.sort(battlers, new Comparator<Battler>() {
 			@Override
 			public int compare(Battler o1, Battler o2) {
@@ -50,17 +65,31 @@ public class Battle {
 			return new ActionFinish(attacker);
 		}
 		
-		Battler target = attacker.selectTarget(battlers);
+		Battler target = attacker.selectTarget(getEnemies(attacker));
 		BattleAction attack = doAttack(attacker, target);
 		
 		if (target.hp <= 0) {
-			battlers.remove(target);
+			kill(target);
 			queuedActions.add(new ActionDeath(target));
 		}
 		
 		battlers.add(attacker);
 		
 		return attack;
+	}
+	
+	private void kill(Battler battler) {
+		battlers.remove(battler);
+		teamA.remove(battler);
+		teamB.remove(battler);
+	}
+	
+	private LinkedList<Battler> getAllies(Battler battler) {
+		return battler.teamA ? teamA : teamB;
+	}
+	
+	private LinkedList<Battler> getEnemies(Battler battler) {
+		return battler.teamA ? teamB : teamA;
 	}
 	
 	private ActionAttack doAttack(Battler attacker, Battler target) {

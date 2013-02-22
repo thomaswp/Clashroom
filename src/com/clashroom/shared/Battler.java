@@ -13,6 +13,7 @@ public abstract class Battler implements Serializable{
 	public int maxHP, maxMP;
 	public int hp, mp;
 	public String image;
+	public boolean teamA;
 	
 	public void setup() {
 		generateMaxHP();

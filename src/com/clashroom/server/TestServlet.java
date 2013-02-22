@@ -29,11 +29,11 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		resp.getWriter().println("<b>Hello</b>!!!");
 		
-		Battle battle = new Battle(new GoblinBattler(10), new GoblinBattler(15));
-		while (!battle.isOver()) {
-			System.out.println(battle.nextAction().toBattleString());
-			System.out.println(battle.getStatus());
-		}
+//		Battle battle = new Battle(new GoblinBattler(10), new GoblinBattler(15));
+//		while (!battle.isOver()) {
+//			System.out.println(battle.nextAction().toBattleString());
+//			System.out.println(battle.getStatus());
+//		}
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 //		List<BattleEntity> entities = QueryUtils.query(pm, BattleEntity.class, "");
