@@ -1,13 +1,19 @@
 package com.clashroom.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.clashroom.shared.Battler;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
+import com.google.gwt.canvas.dom.client.FillStrokeStyle;
+import com.google.gwt.canvas.dom.client.Context2d.TextAlign;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
 
-public class BattlerSprite {
+public class BattlerSprite extends BatchedSprite {
 	
 	public final static String IMG_DIR = "/img/";
 	
@@ -34,6 +40,7 @@ public class BattlerSprite {
 	}
 	
 	public BattlerSprite(Battler battler, float x, float y) {
+		super();
 		this.battler = battler;
 		this.x = x;
 		this.y = y;
@@ -45,7 +52,7 @@ public class BattlerSprite {
 		image = ImageElement.as(img.getElement());
 	}
 	
-	public void draw(Context2d context2d) {
+	public void update(long timeElapsed) {
 		if (width == 0) {
 			if (image.getWidth() == 0) return;
 			width = image.getWidth();
@@ -53,64 +60,6 @@ public class BattlerSprite {
 			loaded = true;
 		}
 		
-		if (phaseOut > 1) {
-			return;
-		} else if (phaseOut != 0) {
-			context2d.setGlobalAlpha(1 - phaseOut);
-		}
-		
-		
-		float left = x - width / 2, right = x + width / 2;
-		float top = y - height / 2, bot = y + height / 2;
-		
-		if (!flipped) {
-			context2d.drawImage(image, left, top);
-		} else {
-			context2d.save();
-			context2d.scale(-1, 1);
-			context2d.drawImage(image, -x - width / 2, top);
-			context2d.restore();
-		}
-		
-		if (battler.maxHP > 0) {
-			int barHeight = 12;
-			int barWidth = (int)(width * 0.8f);
-			int barFill = barWidth * hp / battler.maxHP;
-			context2d.setFillStyle(battler.teamA ? "#00CC00" : "#ff0000");
-			context2d.fillRect(x - barWidth / 2, top - barHeight * 2, barFill, barHeight);
-	
-			context2d.setStrokeStyle("#000000");
-			context2d.setLineWidth(1);
-			context2d.strokeRect(x - barWidth / 2, top - barHeight * 2, barWidth, barHeight);
-			
-			int textSize = 11;
-			context2d.setFillStyle("#000000");
-			String status = hp + "/" + battler.maxHP;
-			context2d.setFont(textSize + "px Book Antiqua");
-			double textWidth = context2d.measureText(status).getWidth();
-			context2d.fillText(status, x - textWidth / 2, top - barHeight - 2);
-			
-			textSize = 20;
-			context2d.setFont(textSize + "px Book Antiqua");
-			String name = battler.description;
-			textWidth = context2d.measureText(name).getWidth();
-			context2d.setFillStyle("#CCCCCC");
-			context2d.setGlobalAlpha((1 - phaseOut) * 0.5);
-			int border = 3;
-			context2d.fillRect(x - textWidth / 2 - border, 
-					top - barHeight * 2 - 3 * textSize / 2 - border + 3,
-					textWidth + border * 2, textSize + border * 2);
-			context2d.setGlobalAlpha((1 - phaseOut));
-			context2d.setFillStyle("#111111");
-			context2d.fillText(name, x - textWidth / 2, top - barHeight * 2 - textSize / 2);
-		}
-		
-		if (phaseOut > 0) {
-			context2d.setGlobalAlpha(1);
-		}
-	}
-	
-	public void update(long timeElapsed) {
 		int dif = battler.hp - hp;
 		int seg = Math.max((int)(battler.maxHP * 0.01f), 1);
 		if (dif > 0) {
@@ -124,7 +73,187 @@ public class BattlerSprite {
 		}
 	}
 	
-	private int lerp(int x0, int x1, float friction) {
-		return Math.round(x0 * friction + x1 * (1 - friction));
+	public static Renderer<BattlerSprite> getRenderer() {
+		return renderer;
 	}
+	
+	private static Renderer<BattlerSprite> renderer;
+	static {
+		renderer = new Renderer<BattlerSprite>() {
+
+			private boolean lastFlipped;
+			private boolean lastTeamA;
+			private double lastPhaseOut;
+//			
+//			private float left, top, width, height, x, y;
+//			private boolean flipped;
+//			private Battler battler;
+			
+			@Override
+			protected boolean startDraw(Context2d context2d, BattlerSprite sprite) {
+				if (!sprite.loaded) return false;
+				
+				if (sprite.phaseOut > 1) {
+					return false;
+				} else if (sprite.phaseOut != 0) {
+					context2d.setGlobalAlpha(1 - sprite.phaseOut);
+				}
+				
+				return true;
+			}			
+
+			@Override
+			protected void endDraw(Context2d context2d, BattlerSprite sprite) {		
+				if (sprite.phaseOut > 0) {
+					context2d.setGlobalAlpha(1);
+				}
+			}
+
+			@Override
+			protected void addDrawSteps(
+					ArrayList<DrawStep<BattlerSprite>> drawSteps) {
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					@Override
+					public void startStep(Context2d context2d) {
+						
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						float left = sprite.x - sprite.width / 2; 
+						float top = sprite.y - sprite.height / 2;
+						
+						if (!sprite.flipped && lastFlipped) {
+							context2d.restore();
+						} else if (sprite.flipped && !lastFlipped) {
+							context2d.save();
+							context2d.scale(-1, 1);
+						}
+						lastFlipped = sprite.flipped;
+						
+						if (!sprite.flipped) {
+							context2d.drawImage(sprite.image, left, top);
+						} else {
+							context2d.drawImage(sprite.image, -sprite.x - sprite.width / 2, top);
+						}
+					}
+					
+					@Override
+					public void endStep(Context2d context2d) {
+						if (lastFlipped) {
+							lastFlipped = false;
+							context2d.restore();
+						}
+					}
+				});
+				
+				final int barHeight = 12;
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					@Override
+					public void startStep(Context2d context2d) {
+						context2d.setStrokeStyle("#000000");
+						context2d.setLineWidth(1);
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						if (sprite.battler.teamA != lastTeamA) {
+							context2d.setFillStyle(sprite.battler.teamA ? "#00CC00" : "#ff0000");
+							lastTeamA = sprite.battler.teamA;
+						}
+						if (sprite.battler.maxHP > 0) {
+							float top = sprite.y - sprite.height / 2;
+							int barWidth = (int)(sprite.width * 0.8f);
+							int barFill = barWidth * sprite.hp / sprite.battler.maxHP;
+							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight * 2, barFill, barHeight);
+							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight * 2, barWidth, barHeight);
+						}
+					}
+				});
+				
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					final int textSize = 11;
+					final FillStrokeStyle fillStyle = CssColor.make("#000000");
+					final String font = textSize + "px Book Antiqua";
+					
+					@Override
+					public void startStep(Context2d context2d) {
+						context2d.setFillStyle(fillStyle);
+						context2d.setFont(font);
+						context2d.setTextAlign(TextAlign.CENTER);
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						float top = sprite.y - sprite.height / 2;
+						String status = sprite.hp + "/" + sprite.battler.maxHP;
+						context2d.fillText(status, sprite.x, top - barHeight - 2);
+					}
+				});
+
+				final int titleTextSize = 20;
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					
+					final FillStrokeStyle fillStyle = CssColor.make("#CCCCCC");
+					private String lastString;
+					private double lastWidth;
+					
+					@Override
+					public void startStep(Context2d context2d) {
+						context2d.setFont(titleTextSize + "px Book Antiqua");
+						context2d.setFillStyle(fillStyle);
+						lastPhaseOut = -1;
+						
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						String name = sprite.battler.description;
+						double textWidth = lastWidth;
+						if (!name.equals(lastString)) {
+							textWidth = context2d.measureText(name).getWidth();
+							lastString = name;
+							lastWidth = textWidth;
+						}
+						
+						if (lastPhaseOut != sprite.phaseOut) {
+							context2d.setGlobalAlpha((1 - sprite.phaseOut) * 0.5);
+							lastPhaseOut = sprite.phaseOut;
+						}
+						
+						int border = 3;
+						float top = sprite.y - sprite.height / 2;
+						context2d.fillRect(sprite.x - textWidth / 2 - border, 
+								top - barHeight * 2 - 3 * titleTextSize / 2 - border + 3,
+								textWidth + border * 2, titleTextSize + border * 2);
+					}
+				});
+				
+				
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					final FillStrokeStyle fillStyle = CssColor.make("#111111");
+					
+					@Override
+					public void startStep(Context2d context2d) {
+						context2d.setFillStyle(fillStyle);	
+						context2d.setTextAlign(TextAlign.CENTER);
+						lastPhaseOut = -1;
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						if (lastPhaseOut != sprite.phaseOut) {
+							context2d.setGlobalAlpha((1 - sprite.phaseOut));
+							lastPhaseOut = sprite.phaseOut;
+						}
+						
+						float top = sprite.y - sprite.height / 2;
+						context2d.fillText(sprite.battler.description, sprite.x, 
+								top - barHeight * 2 - titleTextSize / 2);
+					}
+				});
+			}
+		};
+	}
+
 }

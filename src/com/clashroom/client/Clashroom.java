@@ -140,9 +140,7 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 	private void draw() {
 		context2d.clearRect(0, 0, width, height);
 		
-		for (BattlerSprite sprite : battlers) {
-			sprite.draw(context2d);
-		}
+		BatchedSprite.draw(context2d, BattlerSprite.getRenderer(), battlers);
 		
 		drawFPS();
 	}
