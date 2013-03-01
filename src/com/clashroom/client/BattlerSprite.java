@@ -17,12 +17,24 @@ public class BattlerSprite extends BatchedSprite {
 	
 	public final static String IMG_DIR = "/img/";
 	
+	private final static int ATTACK_TIME = 400;
+	private final static int HURT_TIME = 400;
+	private final static float ATTACK_DISTANCE = 40;
+	
 	private Battler battler;
 	private float width, height;
-	private ImageElement image;
+	private ImageElement image, imageTinted;
 	private boolean loaded;
 	private int hp;
+	private int targetHp;
 	private double phaseOut;
+	private boolean dead;
+	
+	private int attackingFor = -1;
+	private float attackOffset;
+	private Runnable onAttackFinishedCallback;
+	
+	private int hurtFor = -1;
 	
 	public float x, y;
 	public boolean flipped;
@@ -46,29 +58,79 @@ public class BattlerSprite extends BatchedSprite {
 		this.y = y;
 		this.flipped = !battler.teamA;
 		
-		hp = battler.hp;
+		targetHp = hp = battler.hp;
 		
 		Image img = new Image(IMG_DIR + battler.image);
 		image = ImageElement.as(img.getElement());
+		
+		String parts[] = battler.image.split("\\.");
+		String imgTint = parts[0] + "-tint." + parts[1];
+		img = new Image(IMG_DIR + imgTint);
+		imageTinted = ImageElement.as(img.getElement());
+	}
+	
+	public void attack(Runnable onFinishedCallback) {
+		onAttackFinishedCallback = onFinishedCallback;
+		attackingFor = 0;
+	}
+	
+	public void takeHit() {
+		targetHp = battler.hp;
+		hurtFor = 0;
+	}
+	
+	public void die() {
+		dead = true;
 	}
 	
 	public void update(long timeElapsed) {
 		if (width == 0) {
-			if (image.getWidth() == 0) return;
+			if (image.getWidth() == 0 || imageTinted.getWidth() == 0) return;
 			width = image.getWidth();
 			height = image.getHeight();
 			loaded = true;
 		}
 		
-		int dif = battler.hp - hp;
-		int seg = Math.max((int)(battler.maxHP * 0.01f), 1);
-		if (dif > 0) {
-			hp = Math.min(battler.hp, hp + seg);
-		} else if (dif < 0) {
-			hp = Math.max(battler.hp, hp - seg);
+		if (attackingFor >= 0) {
+			attackingFor += timeElapsed;
+			if (attackingFor >= ATTACK_TIME) {
+				attackingFor = -1;
+				x -= attackOffset;
+				attackOffset = 0;
+			} else {
+				float newOffset = ATTACK_DISTANCE * (float)Math.sin(
+						Math.pow((float)attackingFor / ATTACK_TIME, 0.7) * Math.PI );
+				int dir = battler.teamA ? 1 : -1;
+				newOffset *= dir;
+				float dis = newOffset - attackOffset;
+				if (dis * dir < 0) {
+					if (onAttackFinishedCallback != null) {
+						onAttackFinishedCallback.run();
+						onAttackFinishedCallback = null;
+					}
+				}
+				x += dis;
+				attackOffset = newOffset;
+			}
+					
 		}
 		
-		if (battler.hp == 0 && phaseOut < 1) {
+		if (hurtFor >= 0) {
+			hurtFor += timeElapsed;
+			if (hurtFor >= HURT_TIME) {
+				hurtFor = -1;
+			}
+		}
+		
+		int dif = targetHp - hp;
+		int seg = Math.max((int)(battler.maxHP * 0.01f), 1);
+		if (dif > 0) {
+			hp = Math.min(targetHp, hp + seg);
+		} else if (dif < 0) {
+			hp = Math.max(targetHp, hp - seg);
+		}
+		
+		if (dead && phaseOut < 1) {
 			phaseOut += timeElapsed / 1000.0;
 		}
 	}
@@ -82,8 +144,6 @@ public class BattlerSprite extends BatchedSprite {
 		renderer = new Renderer<BattlerSprite>() {
 
 			private boolean lastFlipped;
-			private boolean lastTeamA;
-			private double lastPhaseOut;
 //			
 //			private float left, top, width, height, x, y;
 //			private boolean flipped;
@@ -104,7 +164,7 @@ public class BattlerSprite extends BatchedSprite {
 
 			@Override
 			protected void endDraw(Context2d context2d, BattlerSprite sprite) {		
-				if (sprite.phaseOut > 0) {
+				if (context2d.getGlobalAlpha() != 1) {
 					context2d.setGlobalAlpha(1);
 				}
 			}
@@ -131,10 +191,22 @@ public class BattlerSprite extends BatchedSprite {
 						}
 						lastFlipped = sprite.flipped;
 						
+						
 						if (!sprite.flipped) {
 							context2d.drawImage(sprite.image, left, top);
 						} else {
 							context2d.drawImage(sprite.image, -sprite.x - sprite.width / 2, top);
+						}
+						if (sprite.hurtFor >= 0) {
+							double alpha = context2d.getGlobalAlpha();
+							double perc = Math.sin(Math.PI * sprite.hurtFor / HURT_TIME);
+							context2d.setGlobalAlpha(alpha * perc);
+							if (!sprite.flipped) {
+								context2d.drawImage(sprite.imageTinted, left, top);
+							} else {
+								context2d.drawImage(sprite.imageTinted, -sprite.x - sprite.width / 2, top);
+							}
+							context2d.setGlobalAlpha(alpha);
 						}
 					}
 					
@@ -149,17 +221,23 @@ public class BattlerSprite extends BatchedSprite {
 				
 				final int barHeight = 12;
 				drawSteps.add(new DrawStep<BattlerSprite>() {
+					final FillStrokeStyle fillStyleA = CssColor.make("#00cc00");
+					final FillStrokeStyle fillStyleB = CssColor.make("#ff0000");
+					FillStrokeStyle currentFillStyle;
+					
 					@Override
 					public void startStep(Context2d context2d) {
 						context2d.setStrokeStyle("#000000");
 						context2d.setLineWidth(1);
+						currentFillStyle = null;
 					}
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-						if (sprite.battler.teamA != lastTeamA) {
-							context2d.setFillStyle(sprite.battler.teamA ? "#00CC00" : "#ff0000");
-							lastTeamA = sprite.battler.teamA;
+						FillStrokeStyle style = sprite.battler.teamA ? fillStyleA : fillStyleB;
+						if (currentFillStyle != style) {
+							context2d.setFillStyle(style);
+							currentFillStyle = style;
 						}
 						if (sprite.battler.maxHP > 0) {
 							float top = sprite.y - sprite.height / 2;
@@ -202,7 +280,6 @@ public class BattlerSprite extends BatchedSprite {
 					public void startStep(Context2d context2d) {
 						context2d.setFont(titleTextSize + "px Book Antiqua");
 						context2d.setFillStyle(fillStyle);
-						lastPhaseOut = -1;
 						
 					}
 					
@@ -216,10 +293,8 @@ public class BattlerSprite extends BatchedSprite {
 							lastWidth = textWidth;
 						}
 						
-						if (lastPhaseOut != sprite.phaseOut) {
-							context2d.setGlobalAlpha((1 - sprite.phaseOut) * 0.5);
-							lastPhaseOut = sprite.phaseOut;
-						}
+						double preferredAlpha = (1 - sprite.phaseOut) * 0.5;
+						context2d.setGlobalAlpha(preferredAlpha);
 						
 						int border = 3;
 						float top = sprite.y - sprite.height / 2;
@@ -237,15 +312,13 @@ public class BattlerSprite extends BatchedSprite {
 					public void startStep(Context2d context2d) {
 						context2d.setFillStyle(fillStyle);	
 						context2d.setTextAlign(TextAlign.CENTER);
-						lastPhaseOut = -1;
 					}
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-						if (lastPhaseOut != sprite.phaseOut) {
-							context2d.setGlobalAlpha((1 - sprite.phaseOut));
-							lastPhaseOut = sprite.phaseOut;
-						}
+
+						double preferredAlpha = (1 - sprite.phaseOut);
+						context2d.setGlobalAlpha(preferredAlpha);
 						
 						float top = sprite.y - sprite.height / 2;
 						context2d.fillText(sprite.battler.description, sprite.x, 

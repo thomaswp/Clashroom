@@ -1,6 +1,7 @@
 package com.clashroom.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public abstract class BatchedSprite {
 	
 	@SuppressWarnings("unchecked")
 	public static <T extends BatchedSprite> void draw(Context2d context2d, 
-			Renderer<T> renderer, List<T> sprites) {
+			Renderer<T> renderer, Collection<T> sprites) {
 		if (sprites.size() == 0) return;
 		
 		List<DrawStep<T>> drawSteps = renderer.drawSteps;

@@ -2,6 +2,8 @@ package com.clashroom.client;
 
 import java.util.LinkedList;
 
+import com.clashroom.shared.ActionAttack;
+import com.clashroom.shared.ActionDeath;
 import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleAction;
 import com.clashroom.shared.Battler;
@@ -21,16 +23,8 @@ import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -105,16 +99,13 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 		teamB.add(new GoblinBattler(8));
 		teamB.add(new GoblinBattler(12));
 		battle = new Battle(teamA, teamB);
-//		while (!battle.isOver()) {
-//			System.out.println(battle.nextAction().toBattleString());
-//			System.out.println(battle.getStatus());
-//		}
 		
 		int dx = 40, dy = 65;
 		int dSize = battle.getTeamA().size() / 2;
 		int x = 200 - dx * dSize, y = height / 2 - dy * dSize;
 		for (Battler b : battle.getTeamA()) {
 			BattlerSprite bs = new BattlerSprite(b, x, y);
+			b.tag = bs;
 			battlers.add(bs);
 			x += dx; y += dy;
 		}
@@ -124,6 +115,7 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 		y = height / 2 - dy * dSize;
 		for (Battler b : battle.getTeamB()) {
 			BattlerSprite bs = new BattlerSprite(b, x, y);
+			b.tag = bs;
 			battlers.add(bs);
 			x -= dx; y += dy;
 		}
@@ -177,7 +169,27 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
 		mouseDown = true;
-		BattleAction action = battle.nextAction();
-		info.setInnerHTML(SafeHtmlUtils.htmlEscape(action.toBattleString()));
+		if (!battle.isOver()) {
+			BattleAction action = battle.nextAction();
+			if (action instanceof ActionAttack) {
+				ActionAttack actionAttack = (ActionAttack) action;
+				BattlerSprite attacker = actionAttack.attacker.getTag();
+				final BattlerSprite attacked = actionAttack.attacked.getTag();
+				Runnable damage = null;
+				if (!actionAttack.missed) {
+					damage = new Runnable() {
+						@Override
+						public void run() {
+							attacked.takeHit();
+						}
+					};
+				}
+				attacker.attack(damage);
+			} else if (action instanceof ActionDeath) {
+				BattlerSprite battler = ((ActionDeath) action).battler.getTag();
+				battler.die();
+			}
+			info.setInnerHTML(SafeHtmlUtils.htmlEscape(action.toBattleString()));
+		}
 	}
 }

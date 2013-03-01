@@ -14,6 +14,12 @@ public abstract class Battler implements Serializable{
 	public int hp, mp;
 	public String image;
 	public boolean teamA;
+	public transient Object tag;
+	
+	@SuppressWarnings("unchecked")
+	public <T> T getTag() {
+		return (T)tag;
+	}
 	
 	public void setup() {
 		generateMaxHP();
