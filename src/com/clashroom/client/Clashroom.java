@@ -2,12 +2,16 @@ package com.clashroom.client;
 
 import java.util.LinkedList;
 
-import com.clashroom.shared.ActionAttack;
-import com.clashroom.shared.ActionDeath;
+import javax.annotation.Nonnull;
+
 import com.clashroom.shared.Battle;
-import com.clashroom.shared.BattleAction;
-import com.clashroom.shared.Battler;
-import com.clashroom.shared.GoblinBattler;
+import com.clashroom.shared.actions.ActionSkill;
+import com.clashroom.shared.actions.ActionDeath;
+import com.clashroom.shared.actions.ActionSkill.Damage;
+import com.clashroom.shared.actions.ActionSkillTargetAll;
+import com.clashroom.shared.actions.BattleAction;
+import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.battlers.GoblinBattler;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.TextMetrics;
@@ -21,6 +25,7 @@ import com.google.gwt.event.dom.client.MouseMoveEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.Image;
@@ -44,39 +49,55 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 	private final GreetingServiceAsync greetingService = GWT
 			.create(GreetingService.class);
 
-	
+
 	private Context2d context2d;
 	private ImageElement image;
 	private int width = 1000, height = 600;
 	private long lastUpdate;
-	
+
 	private LinkedList<BattlerSprite> battlers = new LinkedList<BattlerSprite>();
 	private Battle battle;
 	private Element info;
-	
+
 	private int fps;
 	private int fpsFrames;
 	private long fpsMS;
-	
+
+	private static void ensureNotUmbrellaError(@Nonnull Throwable e) {
+		for (Throwable th : ((UmbrellaException) e).getCauses()) {
+			if (th instanceof UmbrellaException) {
+				ensureNotUmbrellaError(th);
+			} else {
+				th.printStackTrace();
+			}
+		}
+	}
+
 	public void onModuleLoad() {		
+		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
+			@Override
+			public void onUncaughtException(@Nonnull Throwable e) {
+				ensureNotUmbrellaError(e);
+			}
+		});
 
 		info = RootPanel.get("info").getElement();
-		
+
 		final Canvas canvas = Canvas.createIfSupported();
 		RootPanel.get("canvasContainer").add(canvas);
-		
+
 		canvas.setWidth(width + "px");
 		canvas.setHeight(height + "px");
 		canvas.setCoordinateSpaceWidth(width);
 		canvas.setCoordinateSpaceHeight(height);
-		
+
 		canvas.addMouseDownHandler(this);
 		//canvas.addMouseUpHandler(this);
 		//canvas.addMouseMoveHandler(this);
-		
+
 		context2d = canvas.getContext2d();
 		image = ImageElement.as(new Image("/img/goblin.png").getElement());
-		
+
 		lastUpdate = System.currentTimeMillis();
 		Timer timer = new Timer() {
 			@Override
@@ -84,12 +105,12 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 				long now = System.currentTimeMillis();
 				update(now - lastUpdate);
 				lastUpdate = now;
-				
+
 				draw();
 			}
 		};
 		timer.scheduleRepeating(1000 / 60);
-		
+
 		LinkedList<Battler> teamA = new LinkedList<Battler>();
 		LinkedList<Battler> teamB = new LinkedList<Battler>();
 		teamA.add(new GoblinBattler(10));
@@ -98,8 +119,8 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 		teamB.add(new GoblinBattler(15));
 		teamB.add(new GoblinBattler(8));
 		teamB.add(new GoblinBattler(12));
-		battle = new Battle(teamA, teamB);
-		
+		battle = new Battle(teamA, teamB, (long)(Math.random() * 1000000));
+
 		int dx = 40, dy = 65;
 		int dSize = battle.getTeamA().size() / 2;
 		int x = 200 - dx * dSize, y = height / 2 - dy * dSize;
@@ -109,7 +130,7 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 			battlers.add(bs);
 			x += dx; y += dy;
 		}
-		
+
 		dSize = battle.getTeamB().size() / 2;
 		x = width - 200 + dx * dSize; 
 		y = height / 2 - dy * dSize;
@@ -120,23 +141,23 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 			x -= dx; y += dy;
 		}
 	}
-	
+
 	private void update(long timeElapsed) {
 		updateFPS(timeElapsed);
-		
+
 		for (BattlerSprite sprite : battlers) {
 			sprite.update(timeElapsed);
 		}
 	}
-	
+
 	private void draw() {
 		context2d.clearRect(0, 0, width, height);
-		
+
 		BatchedSprite.draw(context2d, BattlerSprite.getRenderer(), battlers);
-		
+
 		drawFPS();
 	}
-	
+
 	private void drawFPS() {
 		String text = fps + "fps";
 		context2d.setFillStyle("#000000");
@@ -144,7 +165,7 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 		TextMetrics tm = context2d.measureText(text);
 		context2d.fillText(text, width - tm.getWidth() - 2, 12);
 	}
-	
+
 	private void updateFPS(long timeElapsed) {
 		fpsFrames++;
 		fpsMS += timeElapsed;
@@ -154,7 +175,7 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 			fpsFrames = 0;
 		}
 	}
-	
+
 	boolean mouseDown;
 
 	@Override
@@ -171,19 +192,37 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 		mouseDown = true;
 		if (!battle.isOver()) {
 			BattleAction action = battle.nextAction();
-			if (action instanceof ActionAttack) {
-				ActionAttack actionAttack = (ActionAttack) action;
+			if (action instanceof ActionSkill) {
+				final ActionSkill actionAttack = (ActionSkill) action;
 				BattlerSprite attacker = actionAttack.attacker.getTag();
-				final BattlerSprite attacked = actionAttack.attacked.getTag();
 				Runnable damage = null;
 				if (!actionAttack.missed) {
 					damage = new Runnable() {
 						@Override
 						public void run() {
-							attacked.takeHit();
+							for (Damage damage : actionAttack.damages) {
+								BattlerSprite attacked = damage.target.getTag();
+								attacked.takeHit(damage.damage);	
+							}
 						}
 					};
 				}
+				attacker.attack(damage);
+			} else if (action instanceof ActionSkillTargetAll) {
+				final ActionSkillTargetAll actionAttack = (ActionSkillTargetAll) action;
+				BattlerSprite attacker = actionAttack.attacker.getTag();
+				Runnable damage = new Runnable() {
+					@Override
+					public void run() {
+						for (ActionSkill attack : actionAttack.attacks) {
+							if (!attack.missed) {
+								Damage damage = attack.getPrimaryDamage();
+								BattlerSprite attacked = damage.target.getTag();
+								attacked.takeHit(damage.damage);
+							}
+						}
+					}
+				};
 				attacker.attack(damage);
 			} else if (action instanceof ActionDeath) {
 				BattlerSprite battler = ((ActionDeath) action).battler.getTag();

@@ -6,7 +6,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.clashroom.shared.Battler;
+import com.clashroom.shared.battlers.Battler;
 
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class TestEntity {

@@ -5,7 +5,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Persistent;
 
-import com.clashroom.shared.Battler;
+import com.clashroom.shared.battlers.Battler;
 
 @PersistenceCapable
 public class BattleEntity {

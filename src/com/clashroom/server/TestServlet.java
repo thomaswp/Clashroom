@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.clashroom.shared.Battle;
-import com.clashroom.shared.Battler;
-import com.clashroom.shared.GoblinBattler;
+import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.battlers.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
 import com.clashroom.shared.data.DragonEntity;
 import com.clashroom.shared.data.PlayerEntity;

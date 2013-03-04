@@ -3,7 +3,7 @@ package com.clashroom.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.clashroom.shared.Battler;
+import com.clashroom.shared.battlers.Battler;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.canvas.dom.client.FillStrokeStyle;
@@ -19,11 +19,12 @@ public class BattlerSprite extends BatchedSprite {
 	
 	private final static int ATTACK_TIME = 400;
 	private final static int HURT_TIME = 400;
+	private final static int TEXT_RISE = 50;
 	private final static float ATTACK_DISTANCE = 40;
 	
 	private Battler battler;
 	private float width, height;
-	private ImageElement image, imageTinted;
+	private ImageElement image, imageDamaged, imageHealed;
 	private boolean loaded;
 	private int hp;
 	private int targetHp;
@@ -32,6 +33,8 @@ public class BattlerSprite extends BatchedSprite {
 	
 	private int attackingFor = -1;
 	private float attackOffset;
+	private boolean attackIsHeal;
+	private int attackDamage;
 	private Runnable onAttackFinishedCallback;
 	
 	private int hurtFor = -1;
@@ -64,9 +67,13 @@ public class BattlerSprite extends BatchedSprite {
 		image = ImageElement.as(img.getElement());
 		
 		String parts[] = battler.image.split("\\.");
-		String imgTint = parts[0] + "-tint." + parts[1];
+		String imgTint = parts[0] + "-red." + parts[1];
 		img = new Image(IMG_DIR + imgTint);
-		imageTinted = ImageElement.as(img.getElement());
+		imageDamaged = ImageElement.as(img.getElement());
+		
+		imgTint = parts[0] + "-green." + parts[1];
+		img = new Image(IMG_DIR + imgTint);
+		imageHealed = ImageElement.as(img.getElement());
 	}
 	
 	public void attack(Runnable onFinishedCallback) {
@@ -74,9 +81,11 @@ public class BattlerSprite extends BatchedSprite {
 		attackingFor = 0;
 	}
 	
-	public void takeHit() {
+	public void takeHit(int damage) {
 		targetHp = battler.hp;
 		hurtFor = 0;
+		attackIsHeal = damage < 0;
+		attackDamage = damage;
 	}
 	
 	public void die() {
@@ -85,7 +94,8 @@ public class BattlerSprite extends BatchedSprite {
 	
 	public void update(long timeElapsed) {
 		if (width == 0) {
-			if (image.getWidth() == 0 || imageTinted.getWidth() == 0) return;
+			if (image.getWidth() == 0 || imageDamaged.getWidth() == 0 ||
+					imageHealed.getWidth() == 0) return;
 			width = image.getWidth();
 			height = image.getHeight();
 			loaded = true;
@@ -201,10 +211,12 @@ public class BattlerSprite extends BatchedSprite {
 							double alpha = context2d.getGlobalAlpha();
 							double perc = Math.sin(Math.PI * sprite.hurtFor / HURT_TIME);
 							context2d.setGlobalAlpha(alpha * perc);
+							ImageElement img = sprite.attackIsHeal ?
+									sprite.imageHealed : sprite.imageDamaged;
 							if (!sprite.flipped) {
-								context2d.drawImage(sprite.imageTinted, left, top);
+								context2d.drawImage(img, left, top);
 							} else {
-								context2d.drawImage(sprite.imageTinted, -sprite.x - sprite.width / 2, top);
+								context2d.drawImage(img, -sprite.x - sprite.width / 2, top);
 							}
 							context2d.setGlobalAlpha(alpha);
 						}
@@ -223,12 +235,13 @@ public class BattlerSprite extends BatchedSprite {
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final FillStrokeStyle fillStyleA = CssColor.make("#00cc00");
 					final FillStrokeStyle fillStyleB = CssColor.make("#ff0000");
+					final FillStrokeStyle strokeStyle = CssColor.make("#000000");
 					FillStrokeStyle currentFillStyle;
 					
 					@Override
 					public void startStep(Context2d context2d) {
-						context2d.setStrokeStyle("#000000");
 						context2d.setLineWidth(1);
+						context2d.setStrokeStyle(strokeStyle);
 						currentFillStyle = null;
 					}
 					
@@ -245,6 +258,30 @@ public class BattlerSprite extends BatchedSprite {
 							int barFill = barWidth * sprite.hp / sprite.battler.maxHP;
 							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight * 2, barFill, barHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight * 2, barWidth, barHeight);
+						}
+					}
+				});
+				
+				final int mpBarHeight = 4;
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					final FillStrokeStyle fillStyle = CssColor.make("#0000ff");
+					final FillStrokeStyle strokeStyle = CssColor.make("#000000");
+					
+					@Override
+					public void startStep(Context2d context2d) {
+						context2d.setStrokeStyle(strokeStyle);
+						context2d.setFillStyle(fillStyle);
+						context2d.setLineWidth(1);
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						if (sprite.battler.maxMP > 0) {
+							float top = sprite.y - sprite.height / 2;
+							int barWidth = (int)(sprite.width * 0.8f);
+							int barFill = barWidth * sprite.battler.mp / sprite.battler.maxMP;
+							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight, barFill, mpBarHeight);
+							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight, barWidth, mpBarHeight);
 						}
 					}
 				});
@@ -323,6 +360,24 @@ public class BattlerSprite extends BatchedSprite {
 						float top = sprite.y - sprite.height / 2;
 						context2d.fillText(sprite.battler.description, sprite.x, 
 								top - barHeight * 2 - titleTextSize / 2);
+					}
+				});
+				
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					final FillStrokeStyle fillStyle = CssColor.make("#CCCCCC");
+					
+					@Override
+					public void startStep(Context2d context2d) {
+						context2d.setFillStyle(fillStyle);	
+						context2d.setTextAlign(TextAlign.CENTER);
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						if (sprite.hurtFor >= 0) {
+							float y = sprite.y - sprite.hurtFor * TEXT_RISE / HURT_TIME;
+							context2d.fillText("" + sprite.attackDamage, sprite.x, y);
+						}
 					}
 				});
 			}

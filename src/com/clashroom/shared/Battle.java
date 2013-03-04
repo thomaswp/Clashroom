@@ -4,13 +4,29 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+
+import com.clashroom.shared.actions.ActionSkill;
+import com.clashroom.shared.actions.ActionDeath;
+import com.clashroom.shared.actions.ActionFinish;
+import com.clashroom.shared.actions.ActionSkillTargetAll;
+import com.clashroom.shared.actions.BattleAction;
+import com.clashroom.shared.actions.ActionSkill.Damage;
+import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.skills.Skill;
+import com.clashroom.shared.skills.Skill.Target;
 
 public class Battle {
+	private Random random;
 	private LinkedList<Battler> battlers = new LinkedList<Battler>();
 	private LinkedList<Battler> teamA = new LinkedList<Battler>();
 	private LinkedList<Battler> teamB = new LinkedList<Battler>();
+	private LinkedList<Battler> teamALiving = new LinkedList<Battler>();
+	private LinkedList<Battler> teamBLiving = new LinkedList<Battler>();
 	private LinkedList<BattleAction> queuedActions = new LinkedList<BattleAction>();
 	private boolean isOver;
+	
+	private LinkedList<Battler> tempBattlers = new LinkedList<Battler>();
 	
 	public boolean isOver() {
 		return isOver;
@@ -28,12 +44,17 @@ public class Battle {
 		return teamB;
 	}
 	
-	public Battle(LinkedList<Battler> teamA, LinkedList<Battler> teamB) {
+	public Battle(LinkedList<Battler> teamA, LinkedList<Battler> teamB, long seed) {
+		random = new Random(seed);
+		
 		this.teamA = teamA;
 		this.teamB = teamB;
 		
 		for (Battler b : teamA) b.teamA = true;
 		for (Battler b : teamB) b.teamA = false;
+		
+		teamALiving.addAll(teamA);
+		teamBLiving.addAll(teamB);
 		
 		battlers.addAll(teamA);
 		battlers.addAll(teamB);
@@ -58,47 +79,110 @@ public class Battle {
 			return queuedActions.removeFirst();
 		}
 		
-		Battler attacker = battlers.removeFirst();
+		Battler attacker = battlers.get(0);
 		
-		if (battlers.size() == 0) {
+		if (teamALiving.size() == 0 || teamBLiving.size() == 0) {
 			isOver = true;
-			return new ActionFinish(attacker);
+			return new ActionFinish(teamALiving.size() == 0 ? "Team B" : "Team A");
+		}
+
+		List<Battler> allies = getLivingAllies(attacker);
+		List<Battler> enemies = getLivingEnemies(attacker);
+		
+		Skill skill = attacker.selectSkill(random, allies, enemies);
+		List<Battler> targets;
+		Battler target;
+		if (skill.targetAllies) {
+			targets = allies;
+			target = attacker.selectAllyTarget(targets, skill, random);
+		} else {
+			targets = enemies;
+			target = attacker.selectEnemyTarget(targets, skill, random);	
 		}
 		
-		Battler target = attacker.selectTarget(getEnemies(attacker));
-		BattleAction attack = doAttack(attacker, target);
 		
-		if (target.hp <= 0) {
-			kill(target);
-			queuedActions.add(new ActionDeath(target));
+		BattleAction action;
+		if (skill.target == Target.Self) {
+			ActionSkill attack = skill.getAttack(attacker, attacker, random);
+			action = attack;
+			doDamage(attack.getPrimaryDamage());
+		} else if (skill.target == Target.One) {
+			ActionSkill attack = skill.getAttack(attacker, target, random);
+			action = attack;
+			doDamage(attack.getPrimaryDamage());
+		} else if (skill.target == Target.Splash) {
+			ActionSkill attack = skill.getAttack(attacker, target, random);
+			action = attack;
+			doDamage(attack.getPrimaryDamage());
+			if (!attack.missed) {
+				List<Battler> allTargets = skill.targetAllies ? getAllAllies(attacker) :
+					getAllEnemies(attacker);
+				int index = allTargets.indexOf(target);
+				for (int i = index - 1; i < index + 2; i += 2) {
+					if (i >= 0 && i < allTargets.size() && !allTargets.get(i).isDead()) {
+						Damage damage = skill.getDamage(attacker, allTargets.get(i), random);
+						damage.damage *= 0.5;
+						attack.damages.add(damage);
+						doDamage(damage);
+					}
+				}
+			}
+		} else {
+			LinkedList<ActionSkill> attacks = new LinkedList<ActionSkill>();
+			for (Battler battler : targets) {
+				ActionSkill oneAttack = skill.getAttack(attacker, battler, random); 
+				attacks.add(oneAttack);
+				doDamage(oneAttack.getPrimaryDamage());
+			}
+			action = new ActionSkillTargetAll(attacker, skill, attacks);
+		}
+		attacker.mp -= skill.mpCost;
+		
+		tempBattlers.clear();
+		for (Battler b : battlers) {
+			if (b.hp <= 0) {
+				tempBattlers.add(b);
+			}
+		}
+		for (Battler b : tempBattlers) {
+			kill(b);
+			queuedActions.add(new ActionDeath(b));
 		}
 		
+		battlers.removeFirst();
 		battlers.add(attacker);
 		
-		return attack;
+		return action;
 	}
+	
+	private void doDamage(Damage damage) {
+		if (damage != null) {
+			Battler target = damage.target;
+			target.hp = Math.max(0, target.hp - damage.damage);
+			target.hp = Math.min(target.hp, target.maxHP);
+		}
+	}
+	
 	
 	private void kill(Battler battler) {
 		battlers.remove(battler);
-		teamA.remove(battler);
-		teamB.remove(battler);
+		teamALiving.remove(battler);
+		teamBLiving.remove(battler);
 	}
 	
-	private LinkedList<Battler> getAllies(Battler battler) {
-		return battler.teamA ? teamA : teamB;
+	private LinkedList<Battler> getLivingAllies(Battler battler) {
+		return battler.teamA ? teamALiving : teamBLiving;
 	}
 	
-	private LinkedList<Battler> getEnemies(Battler battler) {
-		return battler.teamA ? teamB : teamA;
+	private LinkedList<Battler> getLivingEnemies(Battler battler) {
+		return battler.teamA ? teamBLiving : teamALiving;
 	}
 	
-	private ActionAttack doAttack(Battler attacker, Battler target) {
-		boolean miss = Math.sqrt(attacker.agility / (double)target.agility) < Math.random() * 1.5;
-		int damage = 0;
-		if (!miss) {
-			damage = (attacker.strength - target.strength / 4) * 3;
-		}
-		target.hp = Math.max(0, target.hp - damage);
-		return new ActionAttack(attacker, target, damage, miss);
+	private LinkedList<Battler> getAllAllies(Battler battler) {
+		return battler.teamA ? teamA: teamB;
+	}
+	
+	private LinkedList<Battler> getAllEnemies(Battler battler) {
+		return battler.teamA ? teamB: teamA;
 	}
 }

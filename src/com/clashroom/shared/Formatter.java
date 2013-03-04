@@ -10,7 +10,8 @@ public class Formatter {
 		  final StringBuffer msg = new StringBuffer();
 		  for (int pos = 0; pos < split.length() - 1; ++pos) {
 		    msg.append(split.get(pos));
-		    msg.append(args[pos].toString());
+		    Object obj = args[pos];
+		    msg.append(obj == null ? "null" : obj.toString());
 		  }
 		  msg.append(split.get(split.length() - 1));
 		  return msg.toString();
