@@ -1,10 +1,13 @@
 package com.clashroom.client;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import com.clashroom.shared.Battle;
+import com.clashroom.shared.BattleFactory;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.actions.ActionSkill;
 import com.clashroom.shared.actions.ActionDeath;
 import com.clashroom.shared.actions.ActionSkill.Damage;
@@ -17,8 +20,12 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.TextMetrics;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dev.Link;
+import com.google.gwt.dev.Link.LinkOptions;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -28,7 +35,14 @@ import com.google.gwt.event.dom.client.MouseMoveHandler;
 import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -43,15 +57,13 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+	private final BattleServiceAsync battleService = GWT
+			.create(BattleService.class);
 
 
+	private BattleFactory factory;
+	
 	private Context2d context2d;
-	private ImageElement image;
 	private int width = 1000, height = 600;
 	private long lastUpdate;
 
@@ -96,7 +108,6 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 		//canvas.addMouseMoveHandler(this);
 
 		context2d = canvas.getContext2d();
-		image = ImageElement.as(new Image("/img/goblin.png").getElement());
 
 		lastUpdate = System.currentTimeMillis();
 		Timer timer = new Timer() {
@@ -110,17 +121,62 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 			}
 		};
 		timer.scheduleRepeating(1000 / 60);
-
-		LinkedList<Battler> teamA = new LinkedList<Battler>();
-		LinkedList<Battler> teamB = new LinkedList<Battler>();
-		teamA.add(new GoblinBattler(10));
-		teamA.add(new GoblinBattler(12));
-		teamA.add(new GoblinBattler(13));
-		teamB.add(new GoblinBattler(15));
-		teamB.add(new GoblinBattler(8));
-		teamB.add(new GoblinBattler(12));
-		battle = new Battle(teamA, teamB, (long)(Math.random() * 1000000));
-
+		
+		battleService.getBattles(new AsyncCallback<List<BattleFactory>>() {
+			@Override
+			public void onSuccess(List<BattleFactory> result) {
+				final FlexTable table = new FlexTable();
+				Debug.write(result);
+				for (int i = 0; i < result.size(); i++) {
+					final BattleFactory factory = result.get(i);
+					//table.setHTML(i, 0, factory.getName());
+					//Hyperlink link = new Hyperlink(factory.getName(), "battle");
+					Button button = new Button(factory.getName());
+					button.addClickHandler(new ClickHandler() {
+						@Override
+						public void onClick(ClickEvent event) {
+							Clashroom.this.factory = factory;
+							setupBattle();
+						}
+					});
+					table.setWidget(i, 0, button);
+				}
+				RootPanel.get("battles").add(table);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+		});
+		
+//		String idString = Window.Location.getParameter("id");
+//		long id;
+//		try {
+//			id = Long.parseLong(idString);  
+//			battleService.getBattle(id, new AsyncCallback<BattleFactory>() {
+//				@Override
+//				public void onSuccess(BattleFactory result) {
+//					factory = result;
+//					setupBattle();
+//				}
+//				
+//				@Override
+//				public void onFailure(Throwable caught) {
+//					caught.printStackTrace();
+//				}
+//			});
+//		} catch (Exception e) {
+//			
+//		}		
+	}
+	
+	private void setupBattle() {
+		if (factory == null) return;
+		
+		battlers.clear();
+		battle = factory.generateBattle();
+		
 		int dx = 40, dy = 65;
 		int dSize = battle.getTeamA().size() / 2;
 		int x = 200 - dx * dSize, y = height / 2 - dy * dSize;
@@ -190,7 +246,9 @@ public class Clashroom implements EntryPoint, MouseDownHandler, MouseMoveHandler
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
 		mouseDown = true;
-		if (!battle.isOver()) {
+		if (event.getNativeButton() == 2) {
+			setupBattle();
+		} else if (battle != null && !battle.isOver()) {
 			BattleAction action = battle.nextAction();
 			if (action instanceof ActionSkill) {
 				final ActionSkill actionAttack = (ActionSkill) action;

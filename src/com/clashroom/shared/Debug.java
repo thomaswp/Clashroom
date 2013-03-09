@@ -22,7 +22,7 @@ public class Debug {
 
 	public static void write(String format, Object... args) {
 		try {
-			write(String.format(format, args));
+			write(Formatter.format(format, args));
 		} catch (Exception e) {
 			write(e);
 		}

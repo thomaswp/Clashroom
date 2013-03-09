@@ -20,4 +20,6 @@ public class GoblinBattler extends Battler {
 		skills.add(new FireBreathSkill());
 	}
 	
+	public GoblinBattler() {}
+	
 }

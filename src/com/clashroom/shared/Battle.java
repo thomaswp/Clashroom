@@ -19,8 +19,8 @@ import com.clashroom.shared.skills.Skill.Target;
 public class Battle {
 	private Random random;
 	private LinkedList<Battler> battlers = new LinkedList<Battler>();
-	private LinkedList<Battler> teamA = new LinkedList<Battler>();
-	private LinkedList<Battler> teamB = new LinkedList<Battler>();
+	private String teamAName, teamBName;
+	private List<Battler> teamA, teamB;
 	private LinkedList<Battler> teamALiving = new LinkedList<Battler>();
 	private LinkedList<Battler> teamBLiving = new LinkedList<Battler>();
 	private LinkedList<BattleAction> queuedActions = new LinkedList<BattleAction>();
@@ -44,11 +44,14 @@ public class Battle {
 		return teamB;
 	}
 	
-	public Battle(LinkedList<Battler> teamA, LinkedList<Battler> teamB, long seed) {
+	public Battle(String teamAName, List<Battler> teamA, 
+			String teamBName, List<Battler> teamB, long seed) {
 		random = new Random(seed);
 		
 		this.teamA = teamA;
 		this.teamB = teamB;
+		this.teamAName = teamAName;
+		this.teamBName = teamBName;
 		
 		for (Battler b : teamA) b.teamA = true;
 		for (Battler b : teamB) b.teamA = false;
@@ -83,7 +86,8 @@ public class Battle {
 		
 		if (teamALiving.size() == 0 || teamBLiving.size() == 0) {
 			isOver = true;
-			return new ActionFinish(teamALiving.size() == 0 ? "Team B" : "Team A");
+			boolean teamAVictor = teamBLiving.size() == 0;
+			return new ActionFinish(teamAVictor, teamAVictor ? teamAName : teamBName);
 		}
 
 		List<Battler> allies = getLivingAllies(attacker);
@@ -178,11 +182,11 @@ public class Battle {
 		return battler.teamA ? teamBLiving : teamALiving;
 	}
 	
-	private LinkedList<Battler> getAllAllies(Battler battler) {
+	private List<Battler> getAllAllies(Battler battler) {
 		return battler.teamA ? teamA: teamB;
 	}
 	
-	private LinkedList<Battler> getAllEnemies(Battler battler) {
+	private List<Battler> getAllEnemies(Battler battler) {
 		return battler.teamA ? teamB: teamA;
 	}
 }

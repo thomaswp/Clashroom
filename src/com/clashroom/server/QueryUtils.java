@@ -13,6 +13,7 @@ import com.google.appengine.datanucleus.query.JDOCursorHelper;
 
 public class QueryUtils {
 	
+	@Deprecated
 	public static <T> T queryUnique(Class<T> c, String filter, Object... parameters) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		T answer = queryUnique(pm, c, filter, parameters);
@@ -26,6 +27,7 @@ public class QueryUtils {
 		return (T)query(pm, c, true, filter, parameters);
 	}
 	
+	@Deprecated
 	public static <T> List<T> query(Class<T> c, String filter, Object... parameters) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<T> answer = query(pm, c, filter, parameters);

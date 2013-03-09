@@ -4,15 +4,17 @@ import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battlers.Battler;
 
 public class ActionFinish extends BattleAction {
-	public String victor;
+	public String victorName;
+	public boolean teamAVictor;
 
-	public ActionFinish(String victor) {
+	public ActionFinish(boolean teamAVictor, String victorName) {
 		super();
-		this.victor = victor;
+		this.teamAVictor = teamAVictor;
+		this.victorName = victorName;
 	}
 
 	@Override
 	public String toBattleString() {
-		return Formatter.format("%s was the winner!", victor);
+		return Formatter.format("%s was the winner!", victorName);
 	}
 }
