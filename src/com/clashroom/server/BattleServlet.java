@@ -9,7 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
+import com.clashroom.shared.Debug;
+import com.clashroom.shared.RandomTest;
+import com.clashroom.shared.actions.ActionFinish;
+import com.clashroom.shared.actions.BattleAction;
 import com.clashroom.shared.battlers.Battler;
 import com.clashroom.shared.battlers.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
@@ -20,7 +25,7 @@ public class BattleServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-
+		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
 		LinkedList<Battler> teamA = new LinkedList<Battler>();
@@ -34,6 +39,17 @@ public class BattleServlet extends HttpServlet {
 		BattleEntity battle = new BattleEntity(new BattleFactory(
 				"Lefties", teamA, "Righties", teamB));
 		pm.makePersistent(battle);
+
+		
+//		BattleEntity battle = QueryUtils.queryUnique(pm, BattleEntity.class, "id==%s", 27L);
+//		
+//		Battle b = battle.getBattleFactory().generateBattle();
+//		BattleAction action = b.nextAction();
+//		while (!(action instanceof ActionFinish)) {
+//			action = b.nextAction();
+//		}
+//		Debug.write(((ActionFinish) action).teamAVictor);
+		
 		pm.close();
 	}
 

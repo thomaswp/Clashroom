@@ -44,6 +44,8 @@ public abstract class Battler implements Serializable{
 		hp = maxHP;
 		mp = maxMP;
 		skills.add(new AttackSkill());
+		tempBattlers = new LinkedList<Battler>();
+		tempSkills = new LinkedList<Skill>();
 	}
 	
 	protected void generateMaxHP() {

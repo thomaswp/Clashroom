@@ -12,6 +12,15 @@ public class BattleFactory implements Serializable {
 	private List<Battler> teamA, teamB;
 	private String teamAName, teamBName;
 	private long seed;
+	private long id;
+	
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
 	
 	public String getName() {
 		return Formatter.format("%s v %s", teamAName, teamBName);

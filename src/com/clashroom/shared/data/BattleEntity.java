@@ -44,6 +44,7 @@ public class BattleEntity {
 	}
 	
 	public BattleFactory getBattleFactory() {
+		battleFactory.setId(id);
 		return battleFactory;
 	}
 }
