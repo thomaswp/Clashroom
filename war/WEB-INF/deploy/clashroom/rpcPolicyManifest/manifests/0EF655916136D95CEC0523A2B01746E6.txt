@@ -1,2 +1,0 @@
-serviceClass: com.clashroom.client.GreetingService
-path: 7101C3B25F94F800AF99CA6BF27767C1.gwt.rpc

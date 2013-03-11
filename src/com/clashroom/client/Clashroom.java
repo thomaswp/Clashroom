@@ -37,6 +37,8 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 			}
 		});
 		
+		History.addValueChangeHandler(this);
+		
 		if (History.getToken().isEmpty()) {
 			FlowControl.go(new SelectBattlePage());
 		} else {

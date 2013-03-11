@@ -1,2 +1,0 @@
-serviceClass: com.clashroom.client.BattleService
-path: E78DBC4168C30435055C54D3C767AF14.gwt.rpc
