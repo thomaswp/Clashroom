@@ -19,6 +19,7 @@ import com.clashroom.shared.actions.ActionSkillTargetAll;
 import com.clashroom.shared.actions.BattleAction;
 import com.clashroom.shared.actions.ActionSkill.Damage;
 import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.data.BattleEntity;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.TextMetrics;
@@ -60,7 +61,9 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 			.create(BattleService.class);
 
 	private BattleFactory factory;
-	private long factoryId;
+	private long entityId;
+	
+	private Timer timer;
 
 	private Context2d context2d;
 	private int width = 1000, height = 600;
@@ -73,12 +76,17 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	private int fps;
 	private int fpsFrames;
 	private long fpsMS;
+	
+	public static String getToken(long id) {
+		return NAME + "?id=" + id;
+	}
+	
 
-	public BattlePage(BattleFactory factory) {
-		super(NAME + "?id=" + factory.getId());
+	public BattlePage(BattleEntity entity) {
+		super(getToken(entity.getId()));
 		
-		this.factory = factory;
-		factoryId = factory.getId();
+		factory = entity.getBattleFactory();
+		entityId = entity.getId();
 		setupPage();
 		setupBattle();
 	}
@@ -90,12 +98,12 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		
 		Long id = getLongParameter("id");
 		if (id != null) {
-			factoryId = id;
+			entityId = id;
 
-			battleService.getBattle(factoryId, new AsyncCallback<BattleFactory>() {
+			battleService.getBattle(entityId, new AsyncCallback<BattleEntity>() {
 				@Override
-				public void onSuccess(BattleFactory result) {
-					BattlePage.this.factory = result;
+				public void onSuccess(BattleEntity result) {
+					BattlePage.this.factory = result.getBattleFactory();
 					setupBattle();
 				}
 
@@ -105,6 +113,13 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 
 				}
 			});
+		}
+	}
+	
+	@Override
+	public void cleanup() {
+		if (timer != null) {
+			timer.cancel();
 		}
 	}
 
@@ -132,7 +147,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		context2d = canvas.getContext2d();
 
 		lastUpdate = System.currentTimeMillis();
-		Timer timer = new Timer() {
+		timer = new Timer() {
 			@Override
 			public void run() {
 				long now = System.currentTimeMillis();

@@ -16,24 +16,26 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public BattleFactory getBattle(long id) throws IllegalArgumentException {
+	public BattleEntity getBattle(long id) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		BattleEntity entity = pm.getObjectById(BattleEntity.class, id);
-		BattleFactory factory = entity.getBattleFactory();
+		entity.getBattleFactory();
+		entity = pm.detachCopy(entity);
 		pm.close();
-		return factory;
+		return entity;
 	}
 
 	@Override
-	public List<BattleFactory> getBattles() throws IllegalArgumentException {
-		ArrayList<BattleFactory> factories = new ArrayList<BattleFactory>();
+	public List<BattleEntity> getBattles() throws IllegalArgumentException {
+		ArrayList<BattleEntity> entities = new ArrayList<BattleEntity>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		List<BattleEntity> entities = QueryUtils.query(pm, BattleEntity.class, "");
-		for (BattleEntity entity : entities) {
-			factories.add(entity.getBattleFactory());
+		List<BattleEntity> queryEntities = QueryUtils.query(pm, BattleEntity.class, "");
+		for (BattleEntity entity : queryEntities) {
+			entity.getBattleFactory();
+			entities.add(pm.detachCopy(entity));
 		}
 		pm.close();
-		return factories;
+		return entities;
 	}
 
 }

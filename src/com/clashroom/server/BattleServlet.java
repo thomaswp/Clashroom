@@ -16,6 +16,7 @@ import com.clashroom.shared.RandomTest;
 import com.clashroom.shared.actions.ActionFinish;
 import com.clashroom.shared.actions.BattleAction;
 import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.battlers.FairyBattler;
 import com.clashroom.shared.battlers.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
 
@@ -31,11 +32,11 @@ public class BattleServlet extends HttpServlet {
 		LinkedList<Battler> teamA = new LinkedList<Battler>();
 		LinkedList<Battler> teamB = new LinkedList<Battler>();
 		teamA.add(new GoblinBattler(10));
-		teamA.add(new GoblinBattler(12));
 		teamA.add(new GoblinBattler(13));
+		teamA.add(new FairyBattler(12));
 		teamB.add(new GoblinBattler(15));
-		teamB.add(new GoblinBattler(8));
 		teamB.add(new GoblinBattler(12));
+		teamB.add(new FairyBattler(8));
 		BattleEntity battle = new BattleEntity(new BattleFactory(
 				"Lefties", teamA, "Righties", teamB));
 		pm.makePersistent(battle);

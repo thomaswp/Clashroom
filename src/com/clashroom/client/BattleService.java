@@ -3,6 +3,7 @@ package com.clashroom.client;
 import java.util.List;
 
 import com.clashroom.shared.BattleFactory;
+import com.clashroom.shared.data.BattleEntity;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -11,6 +12,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("battle")
 public interface BattleService extends RemoteService {
-	BattleFactory getBattle(long id) throws IllegalArgumentException;
-	List<BattleFactory> getBattles() throws IllegalArgumentException;
+	BattleEntity getBattle(long id) throws IllegalArgumentException;
+	List<BattleEntity> getBattles() throws IllegalArgumentException;
 }

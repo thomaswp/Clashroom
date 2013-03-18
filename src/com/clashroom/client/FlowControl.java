@@ -11,25 +11,23 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 public class FlowControl {
 
-	private static Page lastPage;
-
+	private static Page oldPage; 
+	
 	public static void go(Page c) {
 			
 		RootPanel root = RootPanel.get("main");
-		
-//		if (lastPage != null) {
-//			lastPage.removeFromParent();
-//		}
-//		lastPage = c;
-//		System.gc();
-		
 		root.clear();
+		
+		if (oldPage != null) {
+			oldPage.cleanup();
+		}
+		oldPage = c;
 		
 		root.getElement().getStyle().setPosition(Position.RELATIVE); // not sure why, but GWT throws an exception without this. Adding to CSS doesn't work.
 		// add, determine height/width, center, then move. height/width are unknown until added to document. Catch-22!
 		root.add(c);
 		int left = Window.getClientWidth() / 2 - c.getOffsetWidth() / 2; // find center
-		int top = Window.getClientHeight() / 2 - c.getOffsetHeight() / 2;
+		int top = 100; //Window.getClientHeight() / 2 - c.getOffsetHeight() / 2;
 		root.setWidgetPosition(c, left, top);
 		History.newItem(History.encodeHistoryToken(c.getToken()));
 	}

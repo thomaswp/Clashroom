@@ -1,6 +1,9 @@
 package com.clashroom.shared.data;
 
 
+import java.io.Serializable;
+import java.util.Date;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
@@ -11,8 +14,9 @@ import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.actions.ActionFinish;
 import com.clashroom.shared.actions.BattleAction;
 
+@SuppressWarnings("serial")
 @PersistenceCapable
-public class BattleEntity {
+public class BattleEntity implements Serializable {
 
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
@@ -24,6 +28,12 @@ public class BattleEntity {
 	@Persistent
 	private boolean teamAVictor;
 	
+	@Persistent
+	private Date date;
+	
+	@Deprecated
+	public BattleEntity() { }
+	
 	public BattleEntity(BattleFactory battleFactory) {
 		this.battleFactory = battleFactory;
 		
@@ -33,6 +43,8 @@ public class BattleEntity {
 			action = battle.nextAction();
 		}
 		teamAVictor = ((ActionFinish) action).teamAVictor;
+		
+		date = new Date();
 	}
 
 	public Long getId() {
@@ -44,7 +56,11 @@ public class BattleEntity {
 	}
 	
 	public BattleFactory getBattleFactory() {
-		battleFactory.setId(id);
 		return battleFactory;
 	}
+
+	public Date getDate() {
+		return date;
+	}
+	
 }

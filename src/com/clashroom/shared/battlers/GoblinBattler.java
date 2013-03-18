@@ -10,7 +10,7 @@ public class GoblinBattler extends Battler {
 	private static final long serialVersionUID = 1L;
 	
 	public GoblinBattler(int level) {
-		name = "Goblin" + (int)(Math.random() * 100);
+		name = "Goblin";
 		image = "goblin.png";
 		this.level = level;
 		strength = getStatCurve(level, 3, 5);

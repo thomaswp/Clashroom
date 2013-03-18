@@ -68,11 +68,30 @@ public class Battle {
 			}
 		});
 		
+		adjustNames(battlers);
+		
 		for (Battler b : battlers) {
 			b.setup();
 		}
 	}
 	
+	private void adjustNames(LinkedList<Battler> battlers) {
+		for (int i = 0; i < battlers.size(); i++) {
+			Battler b1 = battlers.get(i);
+			String name = b1.name;
+			char letter = 'A';
+			for (int j = i + 1; j < battlers.size(); j++) {
+				Battler b2 = battlers.get(j);
+				if (name.equals(b2.name)) {
+					if (letter == 'A') {
+						b1.name += " " + letter++;
+					}
+					b2.name += " " + letter++;
+				}
+			}
+		}
+	}
+
 	public String getStatus() {
 		return battlers.toString();
 	}
