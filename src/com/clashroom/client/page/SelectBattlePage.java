@@ -2,9 +2,9 @@ package com.clashroom.client.page;
 
 import java.util.List;
 
-import com.clashroom.client.BattleService;
-import com.clashroom.client.BattleServiceAsync;
 import com.clashroom.client.FlowControl;
+import com.clashroom.client.services.BattleService;
+import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.data.BattleEntity;

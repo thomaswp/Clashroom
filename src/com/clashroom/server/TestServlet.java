@@ -12,12 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.clashroom.shared.Battle;
+import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.battlers.Battler;
 import com.clashroom.shared.battlers.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
 import com.clashroom.shared.data.DragonEntity;
-import com.clashroom.shared.data.PlayerEntity;
+import com.clashroom.shared.data.UserEntity;
 import com.clashroom.shared.data.TestEntity;
+import com.clashroom.shared.dragons.LionDragon;
+import com.google.appengine.api.users.UserService;
 
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -26,27 +29,18 @@ public class TestServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		resp.setContentType("text/html");
-		resp.getWriter().println("<b>Hello</b>!!!");
 		
-//		Battle battle = new Battle(new GoblinBattler(10), new GoblinBattler(15));
-//		while (!battle.isOver()) {
-//			System.out.println(battle.nextAction().toBattleString());
-//			System.out.println(battle.getStatus());
-//		}
+		
+		resp.setContentType("text/html");
+		resp.getWriter().println("<b>Hello</b>!!!<br />");
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-//		List<BattleEntity> entities = QueryUtils.query(pm, BattleEntity.class, "");
-//		for (BattleEntity e : entities) {
-//			resp.getWriter().println(e.getBattler());
-//		}
+		BattleEntity entity = QueryUtils.queryUnique(pm, BattleEntity.class, 
+				"id == %s", 39L);
+		Battle battle = entity.getBattleFactory().generateBattle();
 		
-		String name = req.getParameter("name");
-		if (name != null) {
-//			Battler b = new Battler();
-//			b.name = name;
-//			BattleEntity be = new BattleEntity(b);
-//			pm.makePersistent(be);
+		while (!battle.isOver()) {
+			resp.getWriter().println(battle.nextAction().toBattleString() + "<br />");
 		}
 		
 		pm.close();

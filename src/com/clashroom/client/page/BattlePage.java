@@ -6,10 +6,10 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.clashroom.client.BatchedSprite;
-import com.clashroom.client.BattleService;
-import com.clashroom.client.BattleServiceAsync;
 import com.clashroom.client.BattlerSprite;
 import com.clashroom.client.Clashroom;
+import com.clashroom.client.services.BattleService;
+import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;

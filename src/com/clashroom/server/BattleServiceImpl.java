@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
-import com.clashroom.client.BattleService;
+import com.clashroom.client.services.BattleService;
 import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;

@@ -2,13 +2,33 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>battleServlet</servlet-name>
+    <servlet-name>battleService</servlet-name>
     <servlet-class>com.clashroom.server.BattleServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>battleServlet</servlet-name>
+    <servlet-name>battleService</servlet-name>
     <url-pattern>/clashroom/battle</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>loginService</servlet-name>
+    <servlet-class>com.clashroom.server.LoginServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+    <url-pattern>/clashroom/login</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>userService</servlet-name>
+    <servlet-class>com.clashroom.server.UserServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>userService</servlet-name>
+    <url-pattern>/clashroom/user</url-pattern>
   </servlet-mapping>
   
   <servlet>

@@ -18,6 +18,8 @@ public class GoblinBattler extends Battler {
 		intelligence = getStatCurve(level, 1, 2);
 		description = Formatter.format("Level %d %s", level, name);
 		skills.add(new FireBreathSkill());
+		generateMaxHP();
+		generateMaxMP();
 	}
 	
 	public GoblinBattler() {}

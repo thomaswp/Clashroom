@@ -36,8 +36,8 @@ public class ActionSkillTargetAll extends BattleAction {
 				damageString += Formatter.format("%d damage", Math.abs(damage.damage));
 				damageString += Formatter.format(" to %s", damage.target.name);
 			}
-			damageString += "!";
 		}
+		damageString += "!";
 		return attackString + " " + damageString;
 	}
 }

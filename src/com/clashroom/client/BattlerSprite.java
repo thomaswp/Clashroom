@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.Image;
 public class BattlerSprite extends BatchedSprite {
 	
 	public final static String IMG_DIR = "/img/";
+	public final static String IMG_DIR_RED = IMG_DIR + "red/";
+	public final static String IMG_DIR_GREEN = IMG_DIR + "green/";
 	
 	private final static int ATTACK_TIME = 400;
 	private final static int HURT_TIME = 400;
@@ -66,13 +68,10 @@ public class BattlerSprite extends BatchedSprite {
 		Image img = new Image(IMG_DIR + battler.image);
 		image = ImageElement.as(img.getElement());
 		
-		String parts[] = battler.image.split("\\.");
-		String imgTint = parts[0] + "-red." + parts[1];
-		img = new Image(IMG_DIR + imgTint);
+		img = new Image(IMG_DIR_RED + battler.image);
 		imageDamaged = ImageElement.as(img.getElement());
 		
-		imgTint = parts[0] + "-green." + parts[1];
-		img = new Image(IMG_DIR + imgTint);
+		img = new Image(IMG_DIR_GREEN + battler.image);
 		imageHealed = ImageElement.as(img.getElement());
 	}
 	
@@ -133,7 +132,7 @@ public class BattlerSprite extends BatchedSprite {
 		}
 		
 		int dif = targetHp - hp;
-		int seg = Math.max((int)(battler.maxHP * 0.01f), 1);
+		int seg = Math.max((int)(battler.maxHp * 0.01f), 1);
 		if (dif > 0) {
 			hp = Math.min(targetHp, hp + seg);
 		} else if (dif < 0) {
@@ -180,8 +179,7 @@ public class BattlerSprite extends BatchedSprite {
 			}
 
 			@Override
-			protected void addDrawSteps(
-					ArrayList<DrawStep<BattlerSprite>> drawSteps) {
+			protected void addDrawSteps(ArrayList<DrawStep<BattlerSprite>> drawSteps) {
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					@Override
 					public void startStep(Context2d context2d) {
@@ -252,10 +250,10 @@ public class BattlerSprite extends BatchedSprite {
 							context2d.setFillStyle(style);
 							currentFillStyle = style;
 						}
-						if (sprite.battler.maxHP > 0) {
+						if (sprite.battler.maxHp > 0) {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
-							int barFill = barWidth * sprite.hp / sprite.battler.maxHP;
+							int barFill = barWidth * sprite.hp / sprite.battler.maxHp;
 							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight * 2, barFill, barHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight * 2, barWidth, barHeight);
 						}
@@ -276,10 +274,10 @@ public class BattlerSprite extends BatchedSprite {
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-						if (sprite.battler.maxMP > 0) {
+						if (sprite.battler.maxMp > 0) {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
-							int barFill = barWidth * sprite.battler.mp / sprite.battler.maxMP;
+							int barFill = barWidth * sprite.battler.mp / sprite.battler.maxMp;
 							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight, barFill, mpBarHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight, barWidth, mpBarHeight);
 						}
@@ -301,7 +299,7 @@ public class BattlerSprite extends BatchedSprite {
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
 						float top = sprite.y - sprite.height / 2;
-						String status = sprite.hp + "/" + sprite.battler.maxHP;
+						String status = sprite.hp + "/" + sprite.battler.maxHp;
 						context2d.fillText(status, sprite.x, top - barHeight - 2);
 					}
 				});
@@ -376,7 +374,7 @@ public class BattlerSprite extends BatchedSprite {
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
 						if (sprite.hurtFor >= 0) {
 							float y = sprite.y - sprite.hurtFor * TEXT_RISE / HURT_TIME;
-							context2d.fillText("" + sprite.attackDamage, sprite.x, y);
+							context2d.fillText("" + Math.abs(sprite.attackDamage), sprite.x, y);
 						}
 					}
 				});

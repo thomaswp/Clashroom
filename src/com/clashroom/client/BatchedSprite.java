@@ -40,8 +40,8 @@ public abstract class BatchedSprite {
 			for (BatchedSprite sprite : sprites) {
 				if (renderer.startDraw(context2d, (T)sprite)) {
 					sDraw.doStep(context2d, (T)sprite);
-					renderer.endDraw(context2d, (T)sprite);
 				}
+				renderer.endDraw(context2d, (T)sprite);
 			}
 			sDraw.endStep(context2d);
 		}

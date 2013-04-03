@@ -15,6 +15,7 @@ import com.clashroom.shared.actions.ActionSkill.Damage;
 import com.clashroom.shared.battlers.Battler;
 import com.clashroom.shared.skills.Skill;
 import com.clashroom.shared.skills.Skill.Target;
+import com.google.appengine.tools.plugins.ActionsAndOptions;
 
 public class Battle {
 	private Random random;
@@ -114,7 +115,7 @@ public class Battle {
 		
 		Skill skill = attacker.selectSkill(random, allies, enemies);
 		List<Battler> targets;
-		Battler target;
+		Battler target = null;
 		if (skill.targetAllies) {
 			targets = allies;
 			target = attacker.selectAllyTarget(targets, skill, random);
@@ -158,6 +159,7 @@ public class Battle {
 				doDamage(oneAttack.getPrimaryDamage());
 			}
 			action = new ActionSkillTargetAll(attacker, skill, attacks);
+			//action = new ActionSkill(attacker, new AttackSkill(), true, new Damage(targets.get(0), 0));
 		}
 		attacker.mp -= skill.mpCost;
 		
@@ -182,7 +184,7 @@ public class Battle {
 		if (damage != null) {
 			Battler target = damage.target;
 			target.hp = Math.max(0, target.hp - damage.damage);
-			target.hp = Math.min(target.hp, target.maxHP);
+			target.hp = Math.min(target.hp, target.maxHp);
 		}
 	}
 	

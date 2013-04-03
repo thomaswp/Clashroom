@@ -22,13 +22,16 @@ public class DragonEntity {
 	private int experience;
 	
 	@Persistent
-	private int level;
+	private int level = 1;
 	
 	@Persistent
-	private int strength, intelligence, agility; 
+	private double strength, intelligence, agility, maxHp, maxMp; 
 	
-	public PlayerEntity getPlayer(PersistenceManager pm) {
-		return QueryUtils.queryUnique(pm, PlayerEntity.class, "dragonId == %s", id);
+	@Persistent
+	private int dragonClassId;
+	
+	public UserEntity getPlayer(PersistenceManager pm) {
+		return QueryUtils.queryUnique(pm, UserEntity.class, "dragonId == %s", id);
 	}
 	
 	public DragonEntity(String name) {
@@ -59,28 +62,52 @@ public class DragonEntity {
 		this.level = level;
 	}
 
-	public int getStrength() {
+	public double getStrength() {
 		return strength;
 	}
 
-	public void setStrength(int strength) {
+	public void setStrength(double strength) {
 		this.strength = strength;
 	}
 
-	public int getIntelligence() {
+	public double getIntelligence() {
 		return intelligence;
 	}
 
-	public void setIntelligence(int intelligence) {
+	public void setIntelligence(double intelligence) {
 		this.intelligence = intelligence;
 	}
 
-	public int getAgility() {
+	public double getAgility() {
 		return agility;
 	}
 
-	public void setAgility(int agility) {
+	public void setAgility(double agility) {
 		this.agility = agility;
+	}
+	
+	public double getMaxHp() {
+		return maxHp;
+	}
+
+	public void setMaxHp(double maxHp) {
+		this.maxHp = maxHp;
+	}
+
+	public double getMaxMp() {
+		return maxMp;
+	}
+
+	public void setMaxMp(double maxMp) {
+		this.maxMp = maxMp;
+	}
+
+	public int getDragonClassId() {
+		return dragonClassId;
+	}
+
+	public void setDragonClassId(int dragonClassId) {
+		this.dragonClassId = dragonClassId;
 	}
 
 	public Long getId() {

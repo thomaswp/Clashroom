@@ -19,6 +19,8 @@ public class FairyBattler extends Battler {
 		description = Formatter.format("Level %d %s", level, name);
 		skills.add(new FireballSkill());
 		skills.add(new HealSkill());
+		generateMaxHP();
+		generateMaxMP();
 	}
 
 }

@@ -33,11 +33,16 @@ h1 {
   margin: 15px 6px 6px;
 }
 
-/**
-#main {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	display: inline-block;
+#login {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	border-bottom: solid, black, thin;
 }
-*/
+.headerLabel {
+	font-size: larger;
+}
+.prompt {
+	margin-right: 5px;
+}

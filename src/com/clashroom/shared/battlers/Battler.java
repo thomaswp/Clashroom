@@ -18,7 +18,7 @@ public abstract class Battler implements Serializable{
 	public int level;
 	public String description;
 	public int strength, agility, intelligence;
-	public int maxHP, maxMP;
+	public int maxHp, maxMp;
 	public int hp, mp;
 	public String image;
 	public boolean teamA;
@@ -38,22 +38,23 @@ public abstract class Battler implements Serializable{
 		return (T)tag;
 	}
 	
-	public void setup() {
-		generateMaxHP();
-		generateMaxMP();
-		hp = maxHP;
-		mp = maxMP;
+	public Battler() {
 		skills.add(new AttackSkill());
+	}
+	
+	public void setup() {
+		hp = maxHp;
+		mp = maxMp;
 		tempBattlers = new LinkedList<Battler>();
 		tempSkills = new LinkedList<Skill>();
 	}
 	
 	protected void generateMaxHP() {
-		maxHP = level * 35 + strength * 23;
+		maxHp = level * 35 + strength * 23;
 	}
 	
 	protected void generateMaxMP() {
-		maxMP = level * 15 + intelligence * 8;
+		maxMp = level * 15 + intelligence * 8;
 	}
 	
 	protected int getStatCurve(int level, int minGain, int maxGain) {
@@ -78,7 +79,7 @@ public abstract class Battler implements Serializable{
 	public Battler selectAllyTarget(List<Battler> targets, Skill skill, Random random) {
 		tempBattlers.clear();
 		for (Battler battler : targets) {
-			if (battler.hp < battler.maxHP) tempBattlers.add(battler);
+			if (battler.hp < battler.maxHp) tempBattlers.add(battler);
 		}
 		return selectTarget(tempBattlers, skill, random);
 	}
@@ -98,9 +99,9 @@ public abstract class Battler implements Serializable{
 		tempSkills.clear();
 		boolean alliesHealed = true;
 		for (Battler battler : allies) {
-			if (battler.hp != battler.maxHP) alliesHealed = false;
+			if (battler.hp != battler.maxHp) alliesHealed = false;
 		}
-		boolean selfHealed = hp == maxHP;
+		boolean selfHealed = hp == maxHp;
 		for (Skill skill : skills) {
 			if (skill.mpCost <= mp && skillValid(skill, selfHealed, alliesHealed)) {
 				tempSkills.add(skill);
@@ -111,6 +112,6 @@ public abstract class Battler implements Serializable{
 	}
 	
 	public String toString() {
-		return Formatter.format("%s %d/%dhp", name, hp, maxHP);
+		return Formatter.format("%s %d/%dhp", name, hp, maxHp);
 	}
 }

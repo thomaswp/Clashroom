@@ -1,4 +1,4 @@
-package com.clashroom.client;
+package com.clashroom.client.services;
 
 import java.util.List;
 
