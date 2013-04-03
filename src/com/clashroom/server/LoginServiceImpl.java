@@ -14,6 +14,7 @@ LoginService {
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
+		
 		LoginInfo loginInfo = new LoginInfo();
 
 		if (user != null) {

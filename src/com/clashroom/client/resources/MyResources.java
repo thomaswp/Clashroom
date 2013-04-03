@@ -10,4 +10,7 @@ public interface MyResources extends ClientBundle {
 
 	@Source("SetupUser.html")
 	public TextResource getIntroHtml();
+	
+	@Source("names.txt")
+	public TextResource getNames();
 }

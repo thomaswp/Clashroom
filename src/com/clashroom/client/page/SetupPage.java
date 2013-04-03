@@ -1,5 +1,10 @@
 package com.clashroom.client.page;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import com.clashroom.client.fragments.SetupUser;
 import com.clashroom.client.resources.MyResources;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
@@ -46,12 +51,12 @@ public class SetupPage extends Page {
 		});
 	}
 	
-	private TestComponent form;
+	private SetupUser form;
 	
 	private void setupUI() {
 		Window.setTitle("Setup");
-		
-		form = new TestComponent();
+	
+		form = new SetupUser();
 		initWidget(form);
 		
 //		HTML html = new HTML();
@@ -63,5 +68,8 @@ public class SetupPage extends Page {
 	private void setupUser() {
 //		DOM.getElementById("email").setInnerHTML(user.getEmail());
 		form.getLabelEmail().setText(user.getEmail());
+		form.getImageIcon().setUrl(user.getIconUrl());
 	}
+	
+	
 }

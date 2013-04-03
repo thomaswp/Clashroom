@@ -38,11 +38,29 @@ h1 {
 	left: 0;
 	top: 0;
 	width: 100%;
-	border-bottom: solid, black, thin;
+	border-bottom: solid black thin;
 }
 .headerLabel {
 	font-size: larger;
 }
 .prompt {
 	margin-right: 5px;
+}
+.icon {
+	margin: 3px;
+	padding: 2px;
+	border: thin solid black;
+}
+
+.borderFocused {
+	border: none;
+	padding: 1px;
+}
+
+.borderFocused:FOCUS {
+	border: thin solid black;
+}
+
+.borderFocused:HOVER {
+	border: thin solid red;
 }
