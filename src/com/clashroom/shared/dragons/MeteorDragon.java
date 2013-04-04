@@ -2,22 +2,22 @@ package com.clashroom.shared.dragons;
 
 import com.clashroom.shared.data.DragonEntity;
 
-public class LionDragon extends DragonClass {
+public class MeteorDragon extends DragonClass {
 
 	@Override
 	public String getName() {
-		return "Lion Dragon";
+		return "Meteor Dragon";
 	}
 	
 	@Override
 	public String getImageName() {
-		return "lion-dragon.png";
+		return "meteor-dragon.png";
 	}
 	
 	@Override
 	public String getDescription() {
-		return "This graceful dragon is quick and powerful. It's lightening strikes will leave even the" +
-				"toughest creatures in a trance.";
+		return "This hulking dragon will pack quite a punch. It may not be the fastest or the smartest, " +
+				"but it can smash and burn whatever it catches.";
 	}
 
 	@Override

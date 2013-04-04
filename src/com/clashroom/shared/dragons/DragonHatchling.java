@@ -2,22 +2,22 @@ package com.clashroom.shared.dragons;
 
 import com.clashroom.shared.data.DragonEntity;
 
-public class LionDragon extends DragonClass {
+public class DragonHatchling extends DragonClass {
 
 	@Override
 	public String getName() {
-		return "Lion Dragon";
+		return "Dragon Hatchling";
 	}
 	
 	@Override
 	public String getImageName() {
-		return "lion-dragon.png";
+		return "hatchling-dragon.png";
 	}
-	
+
 	@Override
 	public String getDescription() {
-		return "This graceful dragon is quick and powerful. It's lightening strikes will leave even the" +
-				"toughest creatures in a trance.";
+		return "This dragon is fresh out of the egg, but don't be fooled by it's size. Dragon hatchlings " +
+				"have powerful magical abilities!";
 	}
 
 	@Override
@@ -44,6 +44,4 @@ public class LionDragon extends DragonClass {
 	public double getMpFactor() {
 		return 0;
 	}
-
-
 }

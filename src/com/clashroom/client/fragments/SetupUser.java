@@ -33,6 +33,11 @@ public class SetupUser extends Composite {
 	private Image imageIcon;
 	private DecoratedTabPanel decoratedTabPanel;
 	private HorizontalPanel horizontalPanelDragons;
+	
+	private FocusPanel focusedPanel;
+	private DragonClass dragonClass;
+	private Label labelDragonDescription;
+	
 	public SetupUser() {
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
@@ -149,21 +154,31 @@ public class SetupUser extends Composite {
 		
 		horizontalPanelDragons = new HorizontalPanel();
 		verticalPanel_3.add(horizontalPanelDragons);
-		for (DragonClass dragonClass : DragonClass.getAllClasses()) {
+		
+		labelDragonDescription = new Label("");
+		verticalPanel_3.add(labelDragonDescription);
+		for (final DragonClass dragonClass : DragonClass.getAllClasses()) {
 			Image image = new Image("img/" + dragonClass.getImageName());
 			image.setWidth("150px");
 			VerticalPanel vPanel = new VerticalPanel();
 			Label label = new Label(dragonClass.getName());
 			label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			
 			vPanel.add(label);
 			vPanel.add(image);
 			
-			FocusPanel focusPanel = new FocusPanel(vPanel);
-			focusPanel.setStyleName("borderFocused");
+			final FocusPanel focusPanel = new FocusPanel(vPanel);
+			focusPanel.setStyleName("borderHovered");
 			focusPanel.addFocusHandler(new FocusHandler() {
 				@Override
 				public void onFocus(FocusEvent event) {
-					
+					if (focusedPanel != null) {
+						focusedPanel.setStyleName("borderHovered");
+					}
+					focusedPanel = focusPanel;
+					focusPanel.setStyleName("border");
+					SetupUser.this.dragonClass = dragonClass; 
+					labelDragonDescription.setText(dragonClass.getDescription());
 				}
 			});
 			

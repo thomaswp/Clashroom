@@ -46,21 +46,17 @@ h1 {
 .prompt {
 	margin-right: 5px;
 }
-.icon {
+
+.icon, .border, .borderHovered {
 	margin: 3px;
 	padding: 2px;
 	border: thin solid black;
 }
 
-.borderFocused {
-	border: none;
-	padding: 1px;
+.borderHovered {
+	border-color: transparent;
 }
 
-.borderFocused:FOCUS {
-	border: thin solid black;
-}
-
-.borderFocused:HOVER {
-	border: thin solid red;
+.borderHovered:HOVER {
+	border-color: green;
 }

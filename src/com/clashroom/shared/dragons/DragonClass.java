@@ -8,7 +8,10 @@ public abstract class DragonClass {
 	protected int id = nextId++;
 	
 	private final static DragonClass[] dragons = new DragonClass[] { 
-		new LionDragon()
+		new LionDragon(),
+		new MeteorDragon(),
+		new DragonHatchling(),
+		new SkyDragon()
 	};
 	
 	public static DragonClass[] getAllClasses() {
@@ -55,6 +58,7 @@ public abstract class DragonClass {
 	
 	public abstract String getImageName();
 	public abstract String getName();
+	public abstract String getDescription();
 	public abstract double getStrengthFactor();
 	public abstract double getAgilityFactor();
 	public abstract double getIntelligenceFactor();
