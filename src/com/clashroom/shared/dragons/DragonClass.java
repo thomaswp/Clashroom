@@ -7,6 +7,8 @@ public abstract class DragonClass {
 	private static int nextId = 0;
 	protected int id = nextId++;
 	
+	//3 total stats
+	
 	private final static DragonClass[] dragons = new DragonClass[] { 
 		new LionDragon(),
 		new MeteorDragon(),
@@ -33,15 +35,16 @@ public abstract class DragonClass {
 		for (int i = 0; i < 2; i++) {
 			levelUp(entity);
 		}
+		
 	}
 	
 	public void levelUp(DragonEntity entity) {
 		
 		double plusStr = generatePlus(10, getStrengthFactor());
-		double plusAgi = generatePlus(10, getStrengthFactor());
-		double plusInt = generatePlus(10, getStrengthFactor());
-		double plusHp = generatePlus(100, getStrengthFactor());
-		double plusMp = generatePlus(25, getStrengthFactor());
+		double plusAgi = generatePlus(10, getAgilityFactor());
+		double plusInt = generatePlus(10, getIntelligenceFactor());
+		double plusHp = generatePlus(100, getHpFactor());
+		double plusMp = generatePlus(25, getMpFactor());
 		
 		entity.setStrength(entity.getStrength() + plusStr);
 		entity.setAgility(entity.getAgility() + plusAgi);
@@ -64,4 +67,8 @@ public abstract class DragonClass {
 	public abstract double getIntelligenceFactor();
 	public abstract double getHpFactor();
 	public abstract double getMpFactor();
+
+	public int getId() {
+		return id;
+	}
 }

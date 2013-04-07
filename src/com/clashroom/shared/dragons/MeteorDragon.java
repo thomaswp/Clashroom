@@ -22,27 +22,27 @@ public class MeteorDragon extends DragonClass {
 
 	@Override
 	public double getStrengthFactor() {
-		return 0;
+		return 1.0;
 	}
 
 	@Override
 	public double getAgilityFactor() {
-		return 0;
+		return 0.45;
 	}
 
 	@Override
 	public double getIntelligenceFactor() {
-		return 0;
+		return 0.30;
 	}
 
 	@Override
 	public double getHpFactor() {
-		return 0;
+		return 0.90;
 	}
 
 	@Override
 	public double getMpFactor() {
-		return 0;
+		return 0.35;
 	}
 
 

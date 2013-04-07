@@ -22,27 +22,27 @@ public class LionDragon extends DragonClass {
 
 	@Override
 	public double getStrengthFactor() {
-		return 0;
+		return 0.65;
 	}
 
 	@Override
 	public double getAgilityFactor() {
-		return 0;
+		return 0.75;
 	}
 
 	@Override
 	public double getIntelligenceFactor() {
-		return 0;
+		return 0.35;
 	}
 
 	@Override
 	public double getHpFactor() {
-		return 0;
+		return 0.75;
 	}
 
 	@Override
 	public double getMpFactor() {
-		return 0;
+		return 0.60;
 	}
 
 

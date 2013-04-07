@@ -22,26 +22,26 @@ public class DragonHatchling extends DragonClass {
 
 	@Override
 	public double getStrengthFactor() {
-		return 0;
+		return 0.40;
 	}
 
 	@Override
 	public double getAgilityFactor() {
-		return 0;
+		return 0.50;
 	}
 
 	@Override
 	public double getIntelligenceFactor() {
-		return 0;
+		return 0.85;
 	}
 
 	@Override
 	public double getHpFactor() {
-		return 0;
+		return 0.35;
 	}
 
 	@Override
 	public double getMpFactor() {
-		return 0;
+		return 0.90;
 	}
 }

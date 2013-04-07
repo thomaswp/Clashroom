@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.clashroom.client.FlowControl;
 import com.clashroom.client.fragments.SetupUser;
 import com.clashroom.client.resources.MyResources;
 import com.clashroom.client.services.UserInfoService;
@@ -58,18 +59,33 @@ public class SetupPage extends Page {
 	
 		form = new SetupUser();
 		initWidget(form);
-		
-//		HTML html = new HTML();
-//		html.setHTML(MyResources.INSTANCE.getIntroHtml().getText());
-//		initWidget(html);
-		
 	}
 	
 	private void setupUser() {
-//		DOM.getElementById("email").setInnerHTML(user.getEmail());
-		form.getLabelEmail().setText(user.getEmail());
-		form.getImageIcon().setUrl(user.getIconUrl());
+		if (user.getUsername() != null) {
+			FlowControl.go(new UserInfoPage());
+			return;
+		}
+		form.setUser(user);
+		form.setOnFinishedHandler(new Runnable() {
+			@Override
+			public void run() {
+				finish();
+			}
+		});
 	}
 	
-	
+	private void finish() {
+		userInfoService.setUser(form.getUser(), form.getDragon(), new AsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void result) {
+				FlowControl.go(new UserInfoPage());
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+		});
+	}
 }

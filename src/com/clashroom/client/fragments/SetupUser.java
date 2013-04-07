@@ -1,6 +1,12 @@
 package com.clashroom.client.fragments;
 
+import com.clashroom.client.AnimatedProgressBar;
+import com.clashroom.client.MomentumScrollPanel;
 import com.clashroom.client.resources.MyResources;
+import com.clashroom.shared.Debug;
+import com.clashroom.shared.Formatter;
+import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.data.UserEntity;
 import com.clashroom.shared.dragons.DragonClass;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Button;
@@ -14,6 +20,8 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.InlineHTML;
@@ -23,8 +31,17 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Grid;
+import com.clashroom.client.ProgressBar;
 
 public class SetupUser extends Composite {
+	
+	private static final int SCROLL = 25;
+	
 	private Label labelEmail;
 	private TextBox textBoxFirstName;
 	private TextBox textBoxLastName;
@@ -36,7 +53,11 @@ public class SetupUser extends Composite {
 	
 	private FocusPanel focusedPanel;
 	private DragonClass dragonClass;
-	private Label labelDragonDescription;
+	private TextBox textBoxDragonName;
+	
+	private UserEntity user;
+	private DragonEntity dragon;
+	private Runnable onFinishedHandler;
 	
 	public SetupUser() {
 		
@@ -60,6 +81,7 @@ public class SetupUser extends Composite {
 		verticalPanel_1.add(lblItLooksLike);
 		
 		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		horizontalPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel_1.add(horizontalPanel);
 		
 		Label lblEmail = new Label("Email: ");
@@ -146,17 +168,115 @@ public class SetupUser extends Composite {
 		horizontalPanel_5.add(btnRefresh);
 		
 		VerticalPanel verticalPanel_3 = new VerticalPanel();
-		decoratedTabPanel.add(verticalPanel_3, "Dragon", false);
+		decoratedTabPanel.add(verticalPanel_3, "Dragon Class", false);
 		verticalPanel_3.setSize("100%", "3cm");
 		
 		Label lblAlrightNowLets = new Label("Alright, now let's set you up with a dragon. Click on a dragon to see more about it. Then, when you've decided, hit the next button.");
 		verticalPanel_3.add(lblAlrightNowLets);
 		
-		horizontalPanelDragons = new HorizontalPanel();
-		verticalPanel_3.add(horizontalPanelDragons);
+		HorizontalPanel horizontalPanel1 = new HorizontalPanel();
+		horizontalPanel1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel_3.add(horizontalPanel1);
 		
-		labelDragonDescription = new Label("");
-		verticalPanel_3.add(labelDragonDescription);
+		final MomentumScrollPanel scrollPanel = new MomentumScrollPanel();
+		scrollPanel.getElement().getStyle().setOverflow(Overflow.HIDDEN);
+		
+		Button buttonLeft = new Button("<");
+		horizontalPanel1.add(buttonLeft);
+		buttonLeft.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				scrollPanel.scrollHorizontal(-SCROLL);
+			}
+		});
+		buttonLeft.getElement().getStyle().setFloat(Style.Float.LEFT);
+		
+		horizontalPanel1.add(scrollPanel);
+		scrollPanel.setWidth("586px");
+		
+		horizontalPanelDragons = new HorizontalPanel();
+		scrollPanel.setWidget(horizontalPanelDragons);
+		horizontalPanelDragons.setSize("100%", "100%");
+		
+		Button buttonRight = new Button(">");
+		buttonRight.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				scrollPanel.scrollHorizontal(SCROLL);
+			}
+		});
+		buttonRight.getElement().getStyle().setFloat(Style.Float.RIGHT);
+		horizontalPanel1.add(buttonRight);
+		
+		final HTML htmlDragonDescription = new HTML("", true);
+		verticalPanel_3.add(htmlDragonDescription);
+		
+		Label lblHp = new Label("Hp:");
+		lblHp.setStyleName("prompt");
+		verticalPanel_3.add(lblHp);
+		lblHp.setWidth("50px");
+		
+		final AnimatedProgressBar progressBarHp = new AnimatedProgressBar(0.0, 1.0, 0.0);
+		verticalPanel_3.add(progressBarHp);
+		
+		Label lblMp = new Label("Mp:");
+		lblMp.setStyleName("prompt");
+		verticalPanel_3.add(lblMp);
+		lblMp.setWidth("50px");
+		
+		final AnimatedProgressBar progressBarMp = new AnimatedProgressBar(0.0, 1.0, 0.0);
+		verticalPanel_3.add(progressBarMp);
+		
+		Label lblNewLabel_1 = new Label("Strength:");
+		lblNewLabel_1.setStyleName("prompt");
+		verticalPanel_3.add(lblNewLabel_1);
+		lblNewLabel_1.setWidth("50px");
+		
+		final AnimatedProgressBar progressBarStr = new AnimatedProgressBar(0, 1, 0);
+		verticalPanel_3.add(progressBarStr);
+		
+		Label lblAgility = new Label("Agility:");
+		lblAgility.setStyleName("prompt");
+		verticalPanel_3.add(lblAgility);
+		lblAgility.setWidth("50px");
+		
+		final AnimatedProgressBar progressBarAgi = new AnimatedProgressBar(0.0, 1.0, 0.0);
+		verticalPanel_3.add(progressBarAgi);
+		
+		Label lblIntelligence = new Label("Intelligence:");
+		lblIntelligence.setStyleName("prompt");
+		verticalPanel_3.add(lblIntelligence);
+		lblIntelligence.setWidth("50px");
+		
+		final AnimatedProgressBar progressBarInt = new AnimatedProgressBar(0.0, 1.0, 0.0);
+		verticalPanel_3.add(progressBarInt);
+		
+		VerticalPanel verticalPanel_4 = new VerticalPanel();
+		decoratedTabPanel.add(verticalPanel_4, "Dragon", false);
+		verticalPanel_4.setSize("100%", "3cm");
+		
+		Label lblNowGiveYour = new Label("Great choice! I think it likes you. Do you want to give your dragon a name?");
+		verticalPanel_4.add(lblNowGiveYour);
+		
+		HorizontalPanel horizontalPanel_7 = new HorizontalPanel();
+		horizontalPanel_7.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel_4.add(horizontalPanel_7);
+		
+		Label lblDragonName = new Label("Dragon Name:");
+		lblDragonName.setStyleName("prompt");
+		horizontalPanel_7.add(lblDragonName);
+		
+		textBoxDragonName = new TextBox();
+		textBoxDragonName.setMaxLength(30);
+		horizontalPanel_7.add(textBoxDragonName);
+		
+		HorizontalPanel horizontalPanel_6 = new HorizontalPanel();
+		horizontalPanel_6.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel_4.add(horizontalPanel_6);
+		horizontalPanel_6.setWidth("100%");
+		
+		final Image imageDragonBig = new Image("clear.cache.gif");
+		horizontalPanel_6.add(imageDragonBig);
+		
 		for (final DragonClass dragonClass : DragonClass.getAllClasses()) {
 			Image image = new Image("img/" + dragonClass.getImageName());
 			image.setWidth("150px");
@@ -178,7 +298,15 @@ public class SetupUser extends Composite {
 					focusedPanel = focusPanel;
 					focusPanel.setStyleName("border");
 					SetupUser.this.dragonClass = dragonClass; 
-					labelDragonDescription.setText(dragonClass.getDescription());
+					htmlDragonDescription.setHTML(Formatter.format(
+							"<b>%s</b>: %s", dragonClass.getName(), 
+							dragonClass.getDescription()));
+					progressBarHp.animateSetProgress(dragonClass.getHpFactor());
+					progressBarMp.animateSetProgress(dragonClass.getMpFactor());
+					progressBarStr.animateSetProgress(dragonClass.getStrengthFactor());
+					progressBarAgi.animateSetProgress(dragonClass.getAgilityFactor());
+					progressBarInt.animateSetProgress(dragonClass.getIntelligenceFactor());
+					imageDragonBig.setUrl("img/" + dragonClass.getImageName());
 				}
 			});
 			
@@ -197,12 +325,77 @@ public class SetupUser extends Composite {
 				if (index < decoratedTabPanel.getTabBar().getTabCount()) {
 					decoratedTabPanel.selectTab(index);
 				} else {
-					
+					tryFinish();
 				}
 			}
 		});
 		horizontalPanel_3.add(buttonNext);
 		horizontalPanel_3.setCellHorizontalAlignment(buttonNext, HasHorizontalAlignment.ALIGN_RIGHT);
+	}
+	
+	private void tryFinish() {
+		if (user == null) return;
+		
+		String firstName = textBoxFirstName.getText();
+		if (firstName.length() == 0) {
+			decoratedTabPanel.getTabBar().selectTab(0);
+			textBoxFirstName.setFocus(true);
+			return;
+		}
+		user.setFirstName(firstName);
+		
+		String lastName = textBoxLastName.getText();
+		if (lastName.length() == 0) {
+			decoratedTabPanel.getTabBar().selectTab(0);
+			textBoxLastName.setFocus(true);
+			return;
+		}
+		user.setLastName(lastName);
+		
+		String username = textBoxUsername.getText();
+		if (username.length() == 0) {
+			decoratedTabPanel.getTabBar().selectTab(1);
+			textBoxUsername.setFocus(true);
+			return;
+		}
+		user.setUsername(username);
+		
+		if (dragonClass == null) {
+			decoratedTabPanel.getTabBar().selectTab(2);
+			return;
+		}
+		dragon.setDragonClassId(dragonClass.getId());
+		
+		String dragonName = textBoxDragonName.getText();
+		if (dragonName.length() == 0) {
+			decoratedTabPanel.getTabBar().selectTab(3);
+			textBoxDragonName.setFocus(true);
+			return;
+		}
+		dragon.setName(dragonName);
+		
+		if (onFinishedHandler != null) {
+			onFinishedHandler.run();
+		}
+	}
+	
+	public void setUser(UserEntity user) {
+		this.user = user;
+		getLabelEmail().setText(user.getEmail());
+		getImageIcon().setUrl(user.getIconUrl());
+		dragon = new DragonEntity();
+	}
+	
+	public UserEntity getUser() {
+		return user;
+	}
+	
+	public DragonEntity getDragon() {
+		return dragon;
+	}
+	
+	public void setOnFinishedHandler(Runnable onFinishedHandler) {
+		this.onFinishedHandler = onFinishedHandler;
 	}
 
 	public Label getLabelEmail() {
@@ -222,5 +415,8 @@ public class SetupUser extends Composite {
 	}
 	public Image getImageIcon() {
 		return imageIcon;
+	}
+	public TextBox getTextBoxDragonName() {
+		return textBoxDragonName;
 	}
 }

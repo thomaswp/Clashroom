@@ -1,5 +1,7 @@
 package com.clashroom.shared.data;
 
+import java.io.Serializable;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -8,8 +10,9 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.clashroom.server.QueryUtils;
 
+@SuppressWarnings("serial")
 @PersistenceCapable
-public class DragonEntity {
+public class DragonEntity implements Serializable {
 	
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
@@ -30,12 +33,11 @@ public class DragonEntity {
 	@Persistent
 	private int dragonClassId;
 	
-	public UserEntity getPlayer(PersistenceManager pm) {
-		return QueryUtils.queryUnique(pm, UserEntity.class, "dragonId == %s", id);
-	}
+//	public UserEntity getPlayer(PersistenceManager pm) {
+//		return QueryUtils.queryUnique(pm, UserEntity.class, "dragonId == %s", id);
+//	}
 	
-	public DragonEntity(String name) {
-		this.name = name;
+	public DragonEntity() {
 	}
 
 	public String getName() {
