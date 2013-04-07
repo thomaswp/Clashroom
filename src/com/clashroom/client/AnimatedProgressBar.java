@@ -5,15 +5,24 @@ import java.beans.Beans;
 import com.google.gwt.user.client.Timer;
 
 public class AnimatedProgressBar extends ProgressBar {
-	
+
 	private Timer timer;
 	private double desiredProgress;
 	private boolean animating;
-	
+
+	public AnimatedProgressBar() {
+		super();
+		setup();
+	}
+
 	public AnimatedProgressBar(double minProgress, double maxProgress, double curProgress) {
 		super(minProgress, maxProgress, curProgress);
 		desiredProgress = curProgress;
-			if (!Beans.isDesignTime()) {
+		setup();
+	}
+	
+	private void setup() {
+		if (!Beans.isDesignTime()) {
 			timer = new Timer() {
 				@Override
 				public void run() {
@@ -23,7 +32,7 @@ public class AnimatedProgressBar extends ProgressBar {
 			timer.scheduleRepeating(1000 / 60);
 		}
 	}
-	
+
 	private void updateAnimation() {
 		if (desiredProgress != getProgress()) {
 			double anim = getProgress() * 0.9 + desiredProgress * 0.1;
@@ -33,11 +42,11 @@ public class AnimatedProgressBar extends ProgressBar {
 			animating = false;
 		}
 	}
-	
+
 	public void animateSetProgress(double progress) {
 		desiredProgress = progress;
 	}
-	
+
 	@Override
 	public void setProgress(double progress) {
 		super.setProgress(progress);
@@ -45,7 +54,7 @@ public class AnimatedProgressBar extends ProgressBar {
 			desiredProgress = progress;
 		}
 	}
-	
+
 	@Override
 	public void onUnload() {
 		super.onUnload();

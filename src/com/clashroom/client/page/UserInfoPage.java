@@ -2,8 +2,10 @@ package com.clashroom.client.page;
 
 import com.clashroom.client.Clashroom;
 import com.clashroom.client.FlowControl;
+import com.clashroom.client.fragments.UserInfo;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.shared.data.DragonEntity;
 import com.clashroom.shared.data.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
@@ -16,16 +18,17 @@ public class UserInfoPage extends Page {
 	private static UserInfoServiceAsync userInfoService = 
 			GWT.create(UserInfoService.class);
 	
+	private UserInfo userInfoWidget;
+	private UserEntity user;
+	
 	public UserInfoPage() {
 		this(NAME);
 	}
 	
 	public UserInfoPage(String token) {
 		super(token);
-		
-		Window.setTitle("My Info");
-		
-		initWidget(new Label());
+				
+		setupUI();
 		
 		userInfoService.getUser(new AsyncCallback<UserEntity>() {
 			@Override
@@ -33,7 +36,8 @@ public class UserInfoPage extends Page {
 				if (!result.isSetup()) {
 					FlowControl.go(new SetupPage(result));
 				} else {
-					
+					user = result;
+					populate();
 				}
 			}
 			
@@ -42,6 +46,16 @@ public class UserInfoPage extends Page {
 				caught.printStackTrace();
 			}
 		});
+	}
+	
+	private void setupUI() {
+		Window.setTitle("My Info");
+		userInfoWidget = new UserInfo();
+		initWidget(userInfoWidget);
+	}
+	
+	private void populate() {
+		userInfoWidget.setUser(user);
 	}
 
 }

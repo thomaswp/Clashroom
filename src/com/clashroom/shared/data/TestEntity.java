@@ -1,5 +1,7 @@
 package com.clashroom.shared.data;
 
+import javax.jdo.annotations.Embedded;
+import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -18,6 +20,18 @@ public class TestEntity {
 	@Persistent
 	private String name;
 	
+	@Persistent
+	@Embedded
+	private TestEntitySub sub;
+	
+	public TestEntitySub getSub() {
+		return sub;
+	}
+
+	public void setSub(TestEntitySub sub) {
+		this.sub = sub;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -25,7 +39,5 @@ public class TestEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
 	
 }

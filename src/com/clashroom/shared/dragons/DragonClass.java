@@ -16,6 +16,10 @@ public abstract class DragonClass {
 		new SkyDragon()
 	};
 	
+	public static int getNextLevelExp(int level) {
+		return (int)(Math.pow(1.3, level - 1) * 100);
+	}
+	
 	public static DragonClass[] getAllClasses() {
 		return dragons;
 	}

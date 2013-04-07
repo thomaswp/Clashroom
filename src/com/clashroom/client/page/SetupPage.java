@@ -62,7 +62,7 @@ public class SetupPage extends Page {
 	}
 	
 	private void setupUser() {
-		if (user.getUsername() != null) {
+		if (user.isSetup()) {
 			FlowControl.go(new UserInfoPage());
 			return;
 		}
@@ -76,7 +76,7 @@ public class SetupPage extends Page {
 	}
 	
 	private void finish() {
-		userInfoService.setUser(form.getUser(), form.getDragon(), new AsyncCallback<Void>() {
+		userInfoService.setUser(form.getUser(), new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 				FlowControl.go(new UserInfoPage());

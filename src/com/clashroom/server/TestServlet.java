@@ -17,6 +17,7 @@ import com.clashroom.shared.battlers.Battler;
 import com.clashroom.shared.battlers.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
 import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.data.TestEntitySub;
 import com.clashroom.shared.data.UserEntity;
 import com.clashroom.shared.data.TestEntity;
 import com.clashroom.shared.dragons.LionDragon;
@@ -35,13 +36,13 @@ public class TestServlet extends HttpServlet {
 		resp.getWriter().println("<b>Hello</b>!!!<br />");
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		BattleEntity entity = QueryUtils.queryUnique(pm, BattleEntity.class, 
-				"id == %s", 39L);
-		Battle battle = entity.getBattleFactory().generateBattle();
 		
-		while (!battle.isOver()) {
-			resp.getWriter().println(battle.nextAction().toBattleString() + "<br />");
-		}
+		TestEntity test = new TestEntity();
+		test.setName("Hello");
+		test.setSub(new TestEntitySub());
+		test.getSub().setState("Goodbye");
+		
+		pm.makePersistent(test);
 		
 		pm.close();
 	}

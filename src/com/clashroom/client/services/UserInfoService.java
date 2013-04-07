@@ -8,5 +8,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("user")
 public interface UserInfoService extends RemoteService {
 	public UserEntity getUser();
-	public void setUser(UserEntity user, DragonEntity dragon);
+	public void setUser(UserEntity user);
 }

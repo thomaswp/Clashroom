@@ -32,28 +32,25 @@ implements UserInfoService {
 			pm.makePersistent(entity);
 		}
 		
+		entity.getDragon();
 		entity = pm.detachCopy(entity);
 		
+		pm.flush();
 		pm.close();
 		
 		return entity;
 	}
 
 	@Override
-	public void setUser(UserEntity user, DragonEntity dragon) {
+	public void setUser(UserEntity user) {
+		DragonEntity dragon = user.getDragon();
+		
 		DragonClass dragonClass = DragonClass.getById(dragon.getDragonClassId());
 		dragonClass.setUp(dragon);
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		pm.currentTransaction().begin();
-		pm.makePersistent(dragon);
-		pm.currentTransaction().commit();
-		
-		pm.currentTransaction().begin();
-		Debug.write("Dragon id: %d", dragon.getId());
-		user.setDragonId(dragon.getId());
 		pm.makePersistent(user);
-		pm.currentTransaction().commit();
+		pm.flush();
 		pm.close();
 	}
 

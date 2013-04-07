@@ -288,7 +288,7 @@ public class ProgressBar extends Widget {
     curProgress = Math.max(curProgress, minProgress);
     resetProgress();
   }
-
+  
   /**
    * Set the current progress.
    *

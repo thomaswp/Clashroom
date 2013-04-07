@@ -6,7 +6,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.annotations.Embedded;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.PrimaryKey;
 import javax.jdo.annotations.Persistent;
@@ -28,15 +30,12 @@ public class UserEntity implements Serializable {
 	private String email;
 	
 	@Persistent
-	private Long dragonId;
+	@Embedded
+	private DragonEntity dragonEntity;
 	
 	public boolean isSetup() {
 		return username != null;
 	}
-
-//	public DragonEntity getDragon(PersistenceManager pm) {
-//		return QueryUtils.queryUnique(pm, DragonEntity.class, "id == %s", dragonId);
-//	}
 	
 	public String getIconUrl() {
 		try {
@@ -68,23 +67,11 @@ public class UserEntity implements Serializable {
 	
 	public UserEntity(String email) {
 		this.email = email;
+		dragonEntity = new DragonEntity();
 	}
-	
-//	public UserEntity(String playerName, Long dragonId) {
-//		username = playerName;
-//		this.dragonId = dragonId;
-//	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public Long getDragonId() {
-		return dragonId;
-	}
-
-	public void setDragonId(Long dragonId) {
-		this.dragonId = dragonId;
 	}
 
 	public String getUsername() {
@@ -117,5 +104,13 @@ public class UserEntity implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public DragonEntity getDragon() {
+		return dragonEntity;
+	}
+	
+	public void setDragon(DragonEntity dragon) {
+		this.dragonEntity = dragon;
 	}
 }

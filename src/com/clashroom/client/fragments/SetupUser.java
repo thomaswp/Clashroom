@@ -56,7 +56,6 @@ public class SetupUser extends Composite {
 	private TextBox textBoxDragonName;
 	
 	private UserEntity user;
-	private DragonEntity dragon;
 	private Runnable onFinishedHandler;
 	
 	public SetupUser() {
@@ -360,6 +359,7 @@ public class SetupUser extends Composite {
 		}
 		user.setUsername(username);
 		
+		DragonEntity dragon = user.getDragon();
 		if (dragonClass == null) {
 			decoratedTabPanel.getTabBar().selectTab(2);
 			return;
@@ -383,15 +383,10 @@ public class SetupUser extends Composite {
 		this.user = user;
 		getLabelEmail().setText(user.getEmail());
 		getImageIcon().setUrl(user.getIconUrl());
-		dragon = new DragonEntity();
 	}
 	
 	public UserEntity getUser() {
 		return user;
-	}
-	
-	public DragonEntity getDragon() {
-		return dragon;
 	}
 	
 	public void setOnFinishedHandler(Runnable onFinishedHandler) {

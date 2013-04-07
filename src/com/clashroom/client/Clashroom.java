@@ -10,6 +10,7 @@ import com.clashroom.client.services.LoginServiceAsync;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.LoginInfo;
+import com.clashroom.shared.data.UserEntity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
