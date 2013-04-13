@@ -1,13 +1,22 @@
 package com.clashroom.shared.dragons;
 
+import java.util.HashMap;
+
 import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.skills.Skill;
 
 public abstract class DragonClass {
 
 	private static int nextId = 0;
+	
 	protected int id = nextId++;
+	protected HashMap<Skill, Integer> skillTree = new HashMap<Skill, Integer>();
 	
 	//3 total stats
+	
+	public HashMap<Skill, Integer> getSkillTree() {
+		return skillTree;
+	}
 	
 	private final static DragonClass[] dragons = new DragonClass[] { 
 		new LionDragon(),
@@ -27,6 +36,10 @@ public abstract class DragonClass {
 	public static DragonClass getById(int id) {
 		if (id < dragons.length) return dragons[id];
 		return null;
+	}
+	
+	public DragonClass() {
+		fillSkillTree(skillTree);
 	}
 	
 	public void setUp(DragonEntity entity) {
@@ -71,6 +84,7 @@ public abstract class DragonClass {
 	public abstract double getIntelligenceFactor();
 	public abstract double getHpFactor();
 	public abstract double getMpFactor();
+	protected abstract void fillSkillTree(HashMap<Skill, Integer> skillTree);
 
 	public int getId() {
 		return id;

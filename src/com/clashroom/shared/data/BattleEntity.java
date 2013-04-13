@@ -3,6 +3,7 @@ package com.clashroom.shared.data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -13,11 +14,15 @@ import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.actions.ActionFinish;
 import com.clashroom.shared.actions.BattleAction;
+import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.battlers.DragonBattler;
 
 @SuppressWarnings("serial")
 @PersistenceCapable
 public class BattleEntity implements Serializable {
 
+	public final static double LOSE_EXP_FACTOR = 0.25;
+	
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
 	private Long id;
@@ -30,6 +35,9 @@ public class BattleEntity implements Serializable {
 	
 	@Persistent
 	private Date date;
+	
+	@Persistent
+	private LinkedList<Long> playerIds = new LinkedList<Long>();
 	
 	@Deprecated
 	public BattleEntity() { }
@@ -45,6 +53,17 @@ public class BattleEntity implements Serializable {
 		teamAVictor = ((ActionFinish) action).teamAVictor;
 		
 		date = new Date();
+		
+		for (Battler battler : battleFactory.getTeamA()) {
+			if (battler instanceof DragonBattler) {
+				playerIds.add(((DragonBattler) battler).playerId);
+			}
+		}
+		for (Battler battler : battleFactory.getTeamB()) {
+			if (battler instanceof DragonBattler) {
+				playerIds.add(((DragonBattler) battler).playerId);
+			}
+		}
 	}
 
 	public Long getId() {

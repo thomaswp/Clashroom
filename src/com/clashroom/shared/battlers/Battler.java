@@ -23,6 +23,7 @@ public abstract class Battler implements Serializable{
 	public String image;
 	public boolean teamA;
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
+	public double expFactor = 1;
 	
 	protected transient LinkedList<Battler> tempBattlers = new LinkedList<Battler>();
 	protected transient LinkedList<Skill> tempSkills = new LinkedList<Skill>(); 
@@ -49,6 +50,10 @@ public abstract class Battler implements Serializable{
 		tempSkills = new LinkedList<Skill>();
 	}
 	
+	public int getExpReward() {
+		return (int)(23 * expFactor);
+	}
+	
 	protected void generateMaxHP() {
 		maxHp = level * 35 + strength * 23;
 	}
@@ -58,7 +63,7 @@ public abstract class Battler implements Serializable{
 	}
 	
 	protected int getStatCurve(int level, int minGain, int maxGain) {
-		return (int)((Math.random() * (maxGain - minGain) + minGain) * (level + 3));
+		return (int)((Math.random() * (maxGain - minGain) + minGain) * (level + 0));
 	}
 	
 	protected Battler selectTarget(List<Battler> targets, Skill skill, Random random) {

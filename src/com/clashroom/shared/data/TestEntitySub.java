@@ -8,7 +8,7 @@ import javax.jdo.annotations.Persistent;
 @EmbeddedOnly
 public class TestEntitySub {
 	@Persistent
-	public String state;
+	private String state;
 	
 	public String getState() {
 		return state;

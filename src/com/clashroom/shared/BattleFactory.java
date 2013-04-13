@@ -24,6 +24,14 @@ public class BattleFactory implements Serializable {
 	public String getTeamBName() {
 		return teamBName;
 	}
+	
+	public List<Battler> getTeamA() {
+		return teamA;
+	}
+	
+	public List<Battler> getTeamB() {
+		return teamB;
+	}
 
 	public Battle generateBattle() {
 		return new Battle(teamAName, teamA, 

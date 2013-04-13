@@ -74,9 +74,12 @@ public abstract class Skill implements Serializable {
 		if (targetAllies || accuracyFactor == ACCURACY_PERFECT) {
 			return false;
 		} else {
-			double chance = accuracyFactor * Math.sqrt(
-					attacker.agility / (double)target.agility);
-			return chance < random.nextDouble() * 1.5;
+//			double chance = accuracyFactor * Math.sqrt(
+//					attacker.agility / (double)target.agility);
+//			return chance < random.nextDouble() * 1.5;
+			
+			double missChance = (10 - (attacker.agility - target.agility)) / 100.0;
+			return missChance > random.nextDouble();
 		}
 	}
 	

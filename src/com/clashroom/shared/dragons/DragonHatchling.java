@@ -1,6 +1,10 @@
 package com.clashroom.shared.dragons;
 
+import java.util.HashMap;
+
 import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.skills.FireballSkill;
+import com.clashroom.shared.skills.Skill;
 
 public class DragonHatchling extends DragonClass {
 
@@ -43,5 +47,10 @@ public class DragonHatchling extends DragonClass {
 	@Override
 	public double getMpFactor() {
 		return 0.90;
+	}
+
+	@Override
+	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
+		skillTree.put(new FireballSkill(), 1);
 	}
 }

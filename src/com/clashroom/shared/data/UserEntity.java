@@ -29,7 +29,7 @@ public class UserEntity implements Serializable {
 	@Persistent
 	private String email;
 	
-	@Persistent
+	@Persistent(defaultFetchGroup="true")
 	@Embedded
 	private DragonEntity dragonEntity;
 	

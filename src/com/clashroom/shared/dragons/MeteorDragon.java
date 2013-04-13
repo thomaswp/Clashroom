@@ -1,6 +1,9 @@
 package com.clashroom.shared.dragons;
 
+import java.util.HashMap;
+
 import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.skills.Skill;
 
 public class MeteorDragon extends DragonClass {
 
@@ -43,6 +46,12 @@ public class MeteorDragon extends DragonClass {
 	@Override
 	public double getMpFactor() {
 		return 0.35;
+	}
+
+	@Override
+	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

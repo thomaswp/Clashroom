@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import com.clashroom.client.BatchedSprite;
 import com.clashroom.client.BattlerSprite;
 import com.clashroom.client.Clashroom;
+import com.clashroom.client.DetailsSprite;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.Battle;
@@ -77,6 +78,8 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	private int fpsFrames;
 	private long fpsMS;
 	
+	private DetailsSprite detailsSprite;
+	
 	public static String getToken(long id) {
 		return NAME + "?id=" + id;
 	}
@@ -142,7 +145,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 
 		canvas.addMouseDownHandler(this);
 		//canvas.addMouseUpHandler(this);
-		//canvas.addMouseMoveHandler(this);
+//		canvas.addMouseMoveHandler(this);
 
 		context2d = canvas.getContext2d();
 
@@ -187,6 +190,9 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 			battlers.add(bs);
 			x -= dx; y += dy;
 		}
+		
+		detailsSprite = new DetailsSprite();
+//		detailsSprite.setBattle(battle.getTeamA().get(0));
 	}
 
 	private void update(long timeElapsed) {
@@ -195,12 +201,14 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		for (BattlerSprite sprite : battlers) {
 			sprite.update(timeElapsed);
 		}
+		detailsSprite.update();
 	}
 
 	private void draw() {
 		context2d.clearRect(0, 0, width, height);
 
 		BatchedSprite.draw(context2d, BattlerSprite.getRenderer(), battlers);
+		detailsSprite.draw(context2d);
 
 		drawFPS();
 	}
@@ -232,6 +240,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 
 	@Override
 	public void onMouseMove(MouseMoveEvent event) {
+		detailsSprite.setPosition(event.getX(), event.getY());
 	}
 
 	@Override

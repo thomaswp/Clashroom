@@ -16,6 +16,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.InlineLabel;
+import com.google.gwt.user.client.ui.HorizontalSplitPanel;
+import com.google.gwt.user.client.ui.NumberLabel;
 
 public class UserInfo extends Composite {
 	
@@ -30,18 +32,28 @@ public class UserInfo extends Composite {
 		DragonClass dragonClass = dragon.getDragonClass();
 		
 		labelDragonName.setText(dragon.getName());
-		imageDragon.setUrl("img/" + dragon.getDragonClass().getImageName());
+		imageDragon.setUrl("img/" + dragonClass.getImageName());
 		labelLevel.setText("Level " + dragon.getLevel());
 		progressBarExp.setMinProgress(0);
 		progressBarExp.setMaxProgress(DragonClass.getNextLevelExp(dragon.getLevel()));
 		progressBarExp.setProgress(dragon.getExperience());
 		
+		labelHp.setValue((int)dragon.getMaxHp());
+		labelMp.setValue((int)dragon.getMaxMp());
+		labelStr.setValue((int)dragon.getStrength());
+		labelAgi.setValue((int)dragon.getAgility());
+		labelInt.setValue((int)dragon.getIntelligence());
 	}
 	
 	private Label labelDragonName;
 	private Image imageDragon;
 	private AnimatedProgressBar progressBarExp;
 	private Label labelLevel;
+	private NumberLabel<Integer> labelHp;
+	private NumberLabel<Integer> labelMp;
+	private NumberLabel<Integer> labelStr;
+	private NumberLabel<Integer> labelAgi;
+	private NumberLabel<Integer> labelInt;
 	public UserInfo() {
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
@@ -78,6 +90,61 @@ public class UserInfo extends Composite {
 		});
 		verticalPanel.add(progressBarExp);
 		progressBarExp.setWidth("75%");
+		
+		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.add(horizontalPanel_1);
+		
+		Label lblNewLabel = new Label("HP:");
+		horizontalPanel_1.add(lblNewLabel);
+		lblNewLabel.setStyleName("prompt");
+		
+		labelHp = new NumberLabel<Integer>();
+		horizontalPanel_1.add(labelHp);
+		
+		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
+		horizontalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.add(horizontalPanel_2);
+		
+		Label lblMp = new Label("MP:");
+		lblMp.setStyleName("prompt");
+		horizontalPanel_2.add(lblMp);
+		
+		labelMp = new NumberLabel<Integer>();
+		horizontalPanel_2.add(labelMp);
+		
+		HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
+		horizontalPanel_3.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.add(horizontalPanel_3);
+		
+		Label lblStrength = new Label("Strength:");
+		lblStrength.setStyleName("prompt");
+		horizontalPanel_3.add(lblStrength);
+		
+		labelStr = new NumberLabel<Integer>();
+		horizontalPanel_3.add(labelStr);
+		
+		HorizontalPanel horizontalPanel_4 = new HorizontalPanel();
+		horizontalPanel_4.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.add(horizontalPanel_4);
+		
+		Label lblAgility = new Label("Agility:");
+		lblAgility.setStyleName("prompt");
+		horizontalPanel_4.add(lblAgility);
+		
+		labelAgi = new NumberLabel<Integer>();
+		horizontalPanel_4.add(labelAgi);
+		
+		HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
+		horizontalPanel_5.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		verticalPanel.add(horizontalPanel_5);
+		
+		Label lblIntelligence = new Label("Intelligence:");
+		lblIntelligence.setStyleName("prompt");
+		horizontalPanel_5.add(lblIntelligence);
+		
+		labelInt = new NumberLabel<Integer>();
+		horizontalPanel_5.add(labelInt);
 	}
 
 }

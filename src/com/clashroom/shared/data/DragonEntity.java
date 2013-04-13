@@ -43,6 +43,18 @@ public class DragonEntity implements Serializable {
 //	public UserEntity getPlayer(PersistenceManager pm) {
 //		return QueryUtils.queryUnique(pm, UserEntity.class, "dragonId == %s", id);
 //	}
+
+	public void addExp(int exp) {
+		DragonClass dragonClass = getDragonClass();
+		this.experience += exp;
+		while (this.experience >= DragonClass.getNextLevelExp(level)) {
+			this.experience -= DragonClass.getNextLevelExp(level);
+			this.level++;
+			dragonClass.levelUp(this);
+		}
+		setExperience(experience);
+		setLevel(level);
+	}
 	
 	public DragonEntity() {
 	}
@@ -121,7 +133,5 @@ public class DragonEntity implements Serializable {
 
 	public Long getId() {
 		return id;
-	}
-	
-	
+	}	
 }
