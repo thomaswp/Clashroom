@@ -40,6 +40,7 @@ public class BattlerSprite extends BatchedSprite {
 	private Runnable onAttackFinishedCallback;
 	
 	private int hurtFor = -1;
+	private boolean showDamage;
 	
 	public float x, y;
 	public boolean flipped;
@@ -54,6 +55,10 @@ public class BattlerSprite extends BatchedSprite {
 	
 	public boolean isLoaded() {
 		return loaded;
+	}
+	
+	public void setTargetHp(int hp) {
+		targetHp = hp;
 	}
 	
 	public BattlerSprite(Battler battler, float x, float y) {
@@ -85,6 +90,13 @@ public class BattlerSprite extends BatchedSprite {
 		hurtFor = 0;
 		attackIsHeal = damage < 0;
 		attackDamage = damage;
+		showDamage = true;
+	}
+	
+	public void levelUp() {
+		hurtFor = 0;
+		attackIsHeal = true;
+		showDamage = false;
 	}
 	
 	public void die() {
@@ -225,6 +237,9 @@ public class BattlerSprite extends BatchedSprite {
 						if (lastFlipped) {
 							lastFlipped = false;
 							context2d.restore();
+							if (context2d.getGlobalAlpha() != 1) {
+								context2d.setGlobalAlpha(1);
+							}
 						}
 					}
 				});
@@ -372,7 +387,7 @@ public class BattlerSprite extends BatchedSprite {
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-						if (sprite.hurtFor >= 0) {
+						if (sprite.hurtFor >= 0 && sprite.showDamage) {
 							float y = sprite.y - sprite.hurtFor * TEXT_RISE / HURT_TIME;
 							context2d.fillText("" + Math.abs(sprite.attackDamage), sprite.x, y);
 						}

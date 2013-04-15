@@ -15,6 +15,7 @@ import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.actions.ActionDeath;
+import com.clashroom.shared.actions.ActionExp;
 import com.clashroom.shared.actions.ActionSkill;
 import com.clashroom.shared.actions.ActionSkillTargetAll;
 import com.clashroom.shared.actions.BattleAction;
@@ -246,6 +247,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
 		mouseDown = true;
+		BattleAction postAction;
 		if (event.getNativeButton() == 2) {
 			setupBattle();
 		} else if (battle != null && !battle.isOver()) {
@@ -287,6 +289,19 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				battler.die();
 			}
 			info.setText(SafeHtmlUtils.htmlEscape(action.toBattleString()));
+		}
+		else if (battle != null && (postAction = battle.getNextPostBattleAction()) != null) {
+			if (postAction instanceof ActionExp) {
+				ActionExp actionExp = (ActionExp) postAction;
+				if (actionExp.newLevel != actionExp.battler.level) {
+					actionExp.battler.setLevel(actionExp.newLevel);
+					BattlerSprite sprite = actionExp.battler.getTag();
+					sprite.levelUp();
+					sprite.setTargetHp(actionExp.battler.maxHp);
+				}
+				((ActionExp) postAction).battler.setLevel(((ActionExp) postAction).newLevel);
+			}
+			info.setText(SafeHtmlUtils.htmlEscape(postAction.toBattleString()));
 		}
 	}
 }

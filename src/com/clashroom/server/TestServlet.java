@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.Formatter;
+import com.clashroom.shared.actions.ActionExp;
 import com.clashroom.shared.battlers.Battler;
 import com.clashroom.shared.battlers.DragonBattler;
 import com.clashroom.shared.battlers.GoblinBattler;
@@ -41,41 +43,40 @@ public class TestServlet extends HttpServlet {
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-//		UserEntity userEntity = QueryUtils.queryUnique(pm, UserEntity.class, "email==%s", "test@example.com");
+		UserEntity userEntity = QueryUtils.queryUnique(pm, UserEntity.class, "email==%s", "test@example.com");
 		
-//		LinkedList<Battler> teamA = new LinkedList<Battler>(), teamB = new LinkedList<Battler>();
-//		DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
+		LinkedList<Battler> teamA = new LinkedList<Battler>(), teamB = new LinkedList<Battler>();
+		DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
+		
+		teamA.add(db);		
+		int level = Math.max(1, db.level - 1);
+		teamB.add(new GoblinBattler(level));
+		teamB.add(new GoblinBattler(level));
+		
+		BattleFactory factory = new BattleFactory(Formatter.format("%s", db.name, db.level), 
+				teamA, "Goblins", teamB);
+		BattleEntity battleEntity = new BattleEntity(factory);
+		
+		int exp = battleEntity.getTeamAExp();
+		DragonEntity dragon = userEntity.getDragon();
+		dragon = pm.detachCopy(dragon);
+		dragon.addExp(exp);
+		userEntity.setDragon(dragon);
+		factory.addPostBattleAction(new ActionExp(db, exp, dragon.getLevel()));
+		
+		pm.makePersistent(battleEntity);
+		pm.makePersistent(userEntity);
+		
+//		TestEntity test = pm.getObjectById(TestEntity.class, 75L);
+//		TestEntitySub sub = test.getSub();
+//		resp.getWriter().println(sub.toString() + "<br />");
+//		sub = pm.detachCopy(sub);
+//		resp.getWriter().println(sub.toString() + "<br />");
+//		sub.setState("New State III");
+//		test.setSub(sub);
 //		
-//		teamA.add(db);		
-//		teamB.add(new GoblinBattler(1));
-//		teamB.add(new GoblinBattler(1));
+//		pm.makePersistent(test);
 //		
-//		BattleFactory factory = new BattleFactory("Rufus", teamA, "Goblins", teamB);
-//		BattleEntity battleEntity = new BattleEntity(factory);
-//		
-//		int exp = 0;
-//		for (Battler battler : teamB) {
-//			exp += battler.getExpReward();
-//		}
-//		if (!battleEntity.isTeamAVictor()) {
-//			exp *= BattleEntity.LOSE_EXP_FACTOR;
-//		}
-//		Debug.write(exp);
-//		DragonEntity dragon = userEntity.getDragon();
-//		dragon.addExp(exp);
-//		dragon.setExperience(dragon.getExperience());
-//		userEntity.setDragon(dragon);
-//		Debug.write(userEntity.getDragon().getExperience());
-//		
-//		pm.makePersistent(battleEntity);
-		
-//		pm.makePersistent(userEntity);
-		
-		TestEntity test = pm.getObjectById(TestEntity.class, 75L);
-		test.getSub().setState("New State");
-		
-		pm.makePersistent(test);
-		
 		pm.close();
 		
 		//resp.getWriter().println("" + battleEntity.getId());

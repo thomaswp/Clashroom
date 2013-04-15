@@ -21,7 +21,7 @@ import com.clashroom.shared.battlers.DragonBattler;
 @PersistenceCapable
 public class BattleEntity implements Serializable {
 
-	public final static double LOSE_EXP_FACTOR = 0.25;
+	public final static double LOSE_EXP_FACTOR = 0.50;
 	
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
@@ -39,6 +39,12 @@ public class BattleEntity implements Serializable {
 	@Persistent
 	private LinkedList<Long> playerIds = new LinkedList<Long>();
 	
+	@Persistent
+	private Integer teamAExp = 0;
+	
+	@Persistent
+	private Integer teamBExp = 0;
+	
 	@Deprecated
 	public BattleEntity() { }
 	
@@ -51,6 +57,19 @@ public class BattleEntity implements Serializable {
 			action = battle.nextAction();
 		}
 		teamAVictor = ((ActionFinish) action).teamAVictor;
+		
+		for (Battler battler : battle.getTeamB()) {
+			if (battler.isDead()) {
+				teamAExp += battler.getExpReward();
+			}
+		}
+		if (!teamAVictor) teamAExp = (int)(teamAExp * LOSE_EXP_FACTOR);
+		for (Battler battler : battle.getTeamA()) {
+			if (battler.isDead()) {
+				teamBExp += battler.getExpReward();
+			}
+		}
+		if (teamAVictor) teamBExp = (int)(teamBExp * LOSE_EXP_FACTOR);
 		
 		date = new Date();
 		
@@ -80,6 +99,14 @@ public class BattleEntity implements Serializable {
 
 	public Date getDate() {
 		return date;
+	}
+
+	public Integer getTeamAExp() {
+		return teamAExp;
+	}
+
+	public Integer getTeamBExp() {
+		return teamBExp;
 	}
 	
 }

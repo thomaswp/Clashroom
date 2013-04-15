@@ -51,7 +51,7 @@ public abstract class Battler implements Serializable{
 	}
 	
 	public int getExpReward() {
-		return (int)(23 * expFactor);
+		return (int)(23 * expFactor * (1 + (level - 1) * 0.3));
 	}
 	
 	protected void generateMaxHP() {
@@ -119,4 +119,11 @@ public abstract class Battler implements Serializable{
 	public String toString() {
 		return Formatter.format("%s %d/%dhp", name, hp, maxHp);
 	}
+
+	public void setLevel(int newLevel) {
+		this.level = newLevel;
+		this.description = getDescription();
+	}
+
+	protected abstract String getDescription();
 }

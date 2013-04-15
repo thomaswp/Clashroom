@@ -36,7 +36,7 @@ public class UserInfo extends Composite {
 		labelLevel.setText("Level " + dragon.getLevel());
 		progressBarExp.setMinProgress(0);
 		progressBarExp.setMaxProgress(DragonClass.getNextLevelExp(dragon.getLevel()));
-		progressBarExp.setProgress(dragon.getExperience());
+		progressBarExp.animateSetProgress(dragon.getExperience());
 		
 		labelHp.setValue((int)dragon.getMaxHp());
 		labelMp.setValue((int)dragon.getMaxMp());
@@ -57,7 +57,6 @@ public class UserInfo extends Composite {
 	public UserInfo() {
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		verticalPanel.setStyleName("gwt-vPanel");
 		initWidget(verticalPanel);
 		verticalPanel.setWidth("600px");
@@ -80,7 +79,17 @@ public class UserInfo extends Composite {
 		imageDragon = new Image("clear.cache.gif");
 		horizontalPanel.add(imageDragon);
 		
+		VerticalPanel verticalPanel_3 = new VerticalPanel();
+		verticalPanel_3.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel.add(verticalPanel_3);
+		verticalPanel_3.setWidth("100%");
+		
+		VerticalPanel verticalPanel_2 = new VerticalPanel();
+		verticalPanel_3.add(verticalPanel_2);
+		verticalPanel_2.setWidth("75%");
+		
 		progressBarExp = new AnimatedProgressBar();
+		verticalPanel_2.add(progressBarExp);
 		progressBarExp.setTextFormatter(new TextFormatter() {
 			@Override
 			protected String getText(ProgressBar bar, double curProgress) {
@@ -88,12 +97,21 @@ public class UserInfo extends Composite {
 						(int)bar.getMaxProgress());
 			}
 		});
-		verticalPanel.add(progressBarExp);
-		progressBarExp.setWidth("75%");
+		progressBarExp.setWidth("100%");
+		
+		VerticalPanel verticalPanel_1 = new VerticalPanel();
+		verticalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		verticalPanel.add(verticalPanel_1);
+		verticalPanel_1.setWidth("100%");
+		
+		HorizontalPanel horizontalPanel_6 = new HorizontalPanel();
+		verticalPanel_1.add(horizontalPanel_6);
+		horizontalPanel_6.setWidth("250px");
 		
 		HorizontalPanel horizontalPanel_1 = new HorizontalPanel();
+		horizontalPanel_1.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		horizontalPanel_6.add(horizontalPanel_1);
 		horizontalPanel_1.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		verticalPanel.add(horizontalPanel_1);
 		
 		Label lblNewLabel = new Label("HP:");
 		horizontalPanel_1.add(lblNewLabel);
@@ -103,8 +121,8 @@ public class UserInfo extends Composite {
 		horizontalPanel_1.add(labelHp);
 		
 		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
+		horizontalPanel_6.add(horizontalPanel_2);
 		horizontalPanel_2.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		verticalPanel.add(horizontalPanel_2);
 		
 		Label lblMp = new Label("MP:");
 		lblMp.setStyleName("prompt");
@@ -113,9 +131,13 @@ public class UserInfo extends Composite {
 		labelMp = new NumberLabel<Integer>();
 		horizontalPanel_2.add(labelMp);
 		
+		HorizontalPanel horizontalPanel_7 = new HorizontalPanel();
+		verticalPanel_1.add(horizontalPanel_7);
+		horizontalPanel_7.setWidth("350px");
+		
 		HorizontalPanel horizontalPanel_3 = new HorizontalPanel();
+		horizontalPanel_7.add(horizontalPanel_3);
 		horizontalPanel_3.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		verticalPanel.add(horizontalPanel_3);
 		
 		Label lblStrength = new Label("Strength:");
 		lblStrength.setStyleName("prompt");
@@ -125,8 +147,8 @@ public class UserInfo extends Composite {
 		horizontalPanel_3.add(labelStr);
 		
 		HorizontalPanel horizontalPanel_4 = new HorizontalPanel();
+		horizontalPanel_7.add(horizontalPanel_4);
 		horizontalPanel_4.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		verticalPanel.add(horizontalPanel_4);
 		
 		Label lblAgility = new Label("Agility:");
 		lblAgility.setStyleName("prompt");
@@ -136,8 +158,8 @@ public class UserInfo extends Composite {
 		horizontalPanel_4.add(labelAgi);
 		
 		HorizontalPanel horizontalPanel_5 = new HorizontalPanel();
+		horizontalPanel_7.add(horizontalPanel_5);
 		horizontalPanel_5.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		verticalPanel.add(horizontalPanel_5);
 		
 		Label lblIntelligence = new Label("Intelligence:");
 		lblIntelligence.setStyleName("prompt");

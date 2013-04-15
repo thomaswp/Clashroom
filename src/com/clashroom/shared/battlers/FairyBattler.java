@@ -16,11 +16,16 @@ public class FairyBattler extends Battler {
 		strength = getStatCurve(level, 1, 2);
 		agility = getStatCurve(level, 2, 4);
 		intelligence = getStatCurve(level, 3, 5);
-		description = Formatter.format("Level %d %s", level, name);
+		description = getDescription();
 		skills.add(new FireballSkill());
 		skills.add(new HealSkill());
 		generateMaxHP();
 		generateMaxMP();
+	}
+
+	@Override
+	protected String getDescription() {
+		return Formatter.format("Level %d %s", level, name);
 	}
 
 }

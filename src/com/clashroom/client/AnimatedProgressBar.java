@@ -36,7 +36,8 @@ public class AnimatedProgressBar extends ProgressBar {
 	private void updateAnimation() {
 		if (desiredProgress != getProgress()) {
 			double anim = getProgress() * 0.9 + desiredProgress * 0.1;
-			if (Math.abs(anim - desiredProgress) < 0.01) anim = desiredProgress;
+			double minProg = (getMaxProgress() - getMinProgress()) / 200.0;
+			if (Math.abs(anim - desiredProgress) < minProg) anim = desiredProgress;
 			animating = true;
 			setProgress(anim);
 			animating = false;

@@ -1,17 +1,20 @@
 package com.clashroom.shared;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.clashroom.shared.actions.BattleAction;
 import com.clashroom.shared.battlers.Battler;
 
 public class BattleFactory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	private List<Battler> teamA, teamB;
 	private String teamAName, teamBName;
 	private long seed;
+	private List<BattleAction> postBattleActions =
+			new LinkedList<BattleAction>();
 	
 	public String getName() {
 		return Formatter.format("%s v %s", teamAName, teamBName);
@@ -35,7 +38,11 @@ public class BattleFactory implements Serializable {
 
 	public Battle generateBattle() {
 		return new Battle(teamAName, teamA, 
-				teamBName, teamB, seed);
+				teamBName, teamB, seed, postBattleActions);
+	}
+	
+	public void addPostBattleAction(BattleAction battleAction) {
+		postBattleActions.add(battleAction);
 	}
 	
 	public BattleFactory(String teamAName, List<Battler> teamA, 

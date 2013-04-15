@@ -26,6 +26,7 @@ public class Battle {
 	private LinkedList<Battler> teamBLiving = new LinkedList<Battler>();
 	private LinkedList<BattleAction> queuedActions = new LinkedList<BattleAction>();
 	private boolean isOver;
+	private List<BattleAction> postBattleActions;
 	
 	private LinkedList<Battler> tempBattlers = new LinkedList<Battler>();
 	
@@ -45,9 +46,16 @@ public class Battle {
 		return teamB;
 	}
 	
+	public BattleAction getNextPostBattleAction() {
+		if (postBattleActions.size() == 0) return null;
+		return postBattleActions.remove(0);
+	}
+	
 	public Battle(String teamAName, List<Battler> teamA, 
-			String teamBName, List<Battler> teamB, long seed) {
+			String teamBName, List<Battler> teamB, long seed, 
+			List<BattleAction> postBattleActions) {
 		random = new Random(seed);
+		this.postBattleActions = postBattleActions;
 		
 		this.teamA = teamA;
 		this.teamB = teamB;

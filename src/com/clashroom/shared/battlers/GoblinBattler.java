@@ -16,12 +16,17 @@ public class GoblinBattler extends Battler {
 		strength = getStatCurve(level, 3, 5);
 		agility = getStatCurve(level, 2, 4);
 		intelligence = getStatCurve(level, 1, 2);
-		description = Formatter.format("Level %d %s", level, name);
+		description = getDescription();
 		generateMaxHP();
 		generateMaxMP();
 	}
 	
 	@Deprecated
 	public GoblinBattler() {}
+
+	@Override
+	protected String getDescription() {
+		return Formatter.format("Level %d %s", level, name);
+	}
 	
 }

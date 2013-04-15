@@ -26,8 +26,7 @@ public class DragonBattler extends Battler {
 		intelligence = (int)dragon.getIntelligence();
 		maxHp = (int)dragon.getMaxHp();
 		maxMp = (int)dragon.getMaxMp();
-		description = Formatter.format("Level %d %s", 
-				dragon.getLevel(), dragonClass.getName());
+		description = getDescription();
 		
 		for (Skill skill : dragonClass.getSkillTree().keySet()) {
 			int level = dragonClass.getSkillTree().get(skill);
@@ -35,6 +34,12 @@ public class DragonBattler extends Battler {
 				skills.add(skill);
 			}
 		}
+	}
+
+	@Override
+	protected String getDescription() {
+		return Formatter.format("%s, Level %d", 
+				name, level);
 	}
 
 }
