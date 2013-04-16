@@ -12,13 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 import com.clashroom.shared.Battle;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.Formatter;
 import com.clashroom.shared.RandomTest;
+import com.clashroom.shared.actions.ActionExp;
 import com.clashroom.shared.actions.ActionFinish;
 import com.clashroom.shared.actions.BattleAction;
 import com.clashroom.shared.battlers.Battler;
+import com.clashroom.shared.battlers.DragonBattler;
 import com.clashroom.shared.battlers.FairyBattler;
 import com.clashroom.shared.battlers.GoblinBattler;
 import com.clashroom.shared.data.BattleEntity;
+import com.clashroom.shared.data.DragonEntity;
+import com.clashroom.shared.data.UserEntity;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserServiceFactory;
 
 public class BattleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,31 +34,42 @@ public class BattleServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		PersistenceManager pm = PMF.get().getPersistenceManager();
-		
-		LinkedList<Battler> teamA = new LinkedList<Battler>();
-		LinkedList<Battler> teamB = new LinkedList<Battler>();
-		teamA.add(new GoblinBattler(10));
-		teamA.add(new GoblinBattler(13));
-		teamA.add(new FairyBattler(12));
-		teamB.add(new GoblinBattler(15));
-		teamB.add(new GoblinBattler(12));
-		teamB.add(new FairyBattler(8));
-		BattleEntity battle = new BattleEntity(new BattleFactory(
-				"Lefties", teamA, "Righties", teamB));
-		pm.makePersistent(battle);
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+		if (user == null) {
+			resp.getWriter().println("No user");
+			return;
+		}
 
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		UserEntity userEntity = QueryUtils.queryUnique(pm, UserEntity.class, "email==%s", user.getEmail());
 		
-//		BattleEntity battle = QueryUtils.queryUnique(pm, BattleEntity.class, "id==%s", 27L);
-//		
-//		Battle b = battle.getBattleFactory().generateBattle();
-//		BattleAction action = b.nextAction();
-//		while (!(action instanceof ActionFinish)) {
-//			action = b.nextAction();
-//		}
-//		Debug.write(((ActionFinish) action).teamAVictor);
+		LinkedList<Battler> teamA = new LinkedList<Battler>(), teamB = new LinkedList<Battler>();
+		DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
 		
+		teamA.add(db);		
+		int levelDown = db.level - 1;
+		teamB.add(new GoblinBattler(db.level));
+		if (levelDown > 0) {
+			teamB.add(new GoblinBattler(levelDown));
+		}
+		
+		BattleFactory factory = new BattleFactory(Formatter.format("%s", db.name, db.level), 
+				teamA, "Goblins", teamB);
+		BattleEntity battleEntity = new BattleEntity(factory);
+		
+		int exp = battleEntity.getTeamAExp();
+		DragonEntity dragon = userEntity.getDragon();
+		dragon = pm.detachCopy(dragon);
+		dragon.addExp(exp);
+		userEntity.setDragon(dragon);
+		factory.addPostBattleAction(new ActionExp(db, exp, dragon.getLevel()));
+		
+		pm.makePersistent(battleEntity);
+		pm.makePersistent(userEntity);
+		pm.flush();
 		pm.close();
+		
+		resp.getWriter().println("Success!");
 	}
 
 	

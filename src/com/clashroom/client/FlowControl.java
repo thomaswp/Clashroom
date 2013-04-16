@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import com.clashroom.client.page.BattlePage;
 import com.clashroom.client.page.Page;
-import com.clashroom.client.page.SelectBattlePage;
+import com.clashroom.client.page.ListBattlePage;
 import com.clashroom.client.page.SetupPage;
 import com.clashroom.client.page.UserInfoPage;
 import com.clashroom.shared.Debug;
@@ -53,8 +53,8 @@ public class FlowControl {
 		
 		if (token.startsWith(BattlePage.NAME)) {
 			go(new BattlePage(token));
-		} else if (token.startsWith(SelectBattlePage.NAME)) {
-			go(new SelectBattlePage(token));
+		} else if (token.startsWith(ListBattlePage.NAME)) {
+			go(new ListBattlePage(token));
 		} else if (token.startsWith(SetupPage.NAME)) {
 			go(new SetupPage(token));
 		} else if (token.startsWith(UserInfoPage.NAME)) {

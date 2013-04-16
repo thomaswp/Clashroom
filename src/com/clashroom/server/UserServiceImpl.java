@@ -29,13 +29,12 @@ implements UserInfoService {
 		
 		if (entity == null) {
 			entity = new UserEntity(user.getEmail());
-			pm.makePersistent(entity);
+//			pm.makePersistent(entity);
+//			pm.flush();
+		} else {
+			entity = pm.detachCopy(entity);
 		}
 		
-		entity.getDragon();
-		entity = pm.detachCopy(entity);
-		
-		pm.flush();
 		pm.close();
 		
 		return entity;
@@ -43,6 +42,8 @@ implements UserInfoService {
 
 	@Override
 	public void setUser(UserEntity user) {
+		//if (user.getId() == null) throw new RuntimeException("No id!");
+		
 		DragonEntity dragon = user.getDragon();
 		
 		DragonClass dragonClass = DragonClass.getById(dragon.getDragonClassId());

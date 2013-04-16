@@ -7,6 +7,7 @@ import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.BattleFactory;
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.battlers.Battler;
 import com.clashroom.shared.data.BattleEntity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -19,7 +20,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Hyperlink;
 
-public class SelectBattlePage extends Page {
+public class ListBattlePage extends Page {
 
 	private static DateTimeFormat dateFormat = 
 			DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT); 
@@ -27,13 +28,13 @@ public class SelectBattlePage extends Page {
 	private final BattleServiceAsync battleService = GWT
 			.create(BattleService.class);
 
-	public final static String NAME = "SelectBattle";
+	public final static String NAME = "ListBattles";
 	
-	public SelectBattlePage() {
+	public ListBattlePage() {
 		this(NAME);
 	}
 	
-	public SelectBattlePage(String token) {
+	public ListBattlePage(String token) {
 		super(token);
 		
 		Window.setTitle("Select Battle");
@@ -43,7 +44,7 @@ public class SelectBattlePage extends Page {
 		initWidget(table);
 		
 		String[] headers = new String[] {
-			"Name", "Date", "Victor"
+				"Date", "Battle", "Challengers", "Victor", "Exp Gained"
 		};
 		
 		for (int i = 0; i < headers.length; i++) {
@@ -56,20 +57,22 @@ public class SelectBattlePage extends Page {
 				for (int i = 0; i < result.size(); i++) {
 					BattleEntity entity = result.get(i);
 					BattleFactory factory = entity.getBattleFactory();
-					//table.setHTML(i, 0, factory.getName());
 					Hyperlink link = new Hyperlink(factory.getName(), 
 							BattlePage.getToken(entity.getId()));
-//					Button button = new Button(factory.getName());
-//					button.addClickHandler(new ClickHandler() {
-//						@Override
-//						public void onClick(ClickEvent event) {
-//							FlowControl.go(new BattlePage(factory));
-//						}
-//					});
-					table.setWidget(i+1, 0, link);
-					table.setText(i+1, 1, dateFormat.format(entity.getDate()));
-					table.setText(i+1, 2, entity.isTeamAVictor() ? 
+					int row = i + 1;
+					int col = 0;
+					String enemies = "";
+					for (Battler battler : entity.getBattleFactory().getTeamB()) {
+						if (enemies.length() > 0) enemies += ", ";
+						enemies += battler.description;
+					}
+
+					table.setText(row, col++, dateFormat.format(entity.getDate()));
+					table.setWidget(i+1, col++, link);
+					table.setText(row, col++, enemies);
+					table.setText(row, col++, entity.isTeamAVictor() ? 
 							factory.getTeamAName() : factory.getTeamBName());
+					table.setText(row, col++, "" + entity.getTeamAExp());
 				}
 			}
 

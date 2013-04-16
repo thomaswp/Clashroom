@@ -3,7 +3,7 @@ package com.clashroom.client;
 import javax.annotation.Nonnull;
 
 import com.clashroom.client.page.BattlePage;
-import com.clashroom.client.page.SelectBattlePage;
+import com.clashroom.client.page.ListBattlePage;
 import com.clashroom.client.page.UserInfoPage;
 import com.clashroom.client.services.LoginService;
 import com.clashroom.client.services.LoginServiceAsync;

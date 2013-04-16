@@ -41,45 +41,7 @@ public class TestServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		resp.getWriter().println("<b>Hello</b>!!!<br />");
 		
-		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
-		UserEntity userEntity = QueryUtils.queryUnique(pm, UserEntity.class, "email==%s", "test@example.com");
-		
-		LinkedList<Battler> teamA = new LinkedList<Battler>(), teamB = new LinkedList<Battler>();
-		DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
-		
-		teamA.add(db);		
-		int level = Math.max(1, db.level - 1);
-		teamB.add(new GoblinBattler(level));
-		teamB.add(new GoblinBattler(level));
-		
-		BattleFactory factory = new BattleFactory(Formatter.format("%s", db.name, db.level), 
-				teamA, "Goblins", teamB);
-		BattleEntity battleEntity = new BattleEntity(factory);
-		
-		int exp = battleEntity.getTeamAExp();
-		DragonEntity dragon = userEntity.getDragon();
-		dragon = pm.detachCopy(dragon);
-		dragon.addExp(exp);
-		userEntity.setDragon(dragon);
-		factory.addPostBattleAction(new ActionExp(db, exp, dragon.getLevel()));
-		
-		pm.makePersistent(battleEntity);
-		pm.makePersistent(userEntity);
-		
-//		TestEntity test = pm.getObjectById(TestEntity.class, 75L);
-//		TestEntitySub sub = test.getSub();
-//		resp.getWriter().println(sub.toString() + "<br />");
-//		sub = pm.detachCopy(sub);
-//		resp.getWriter().println(sub.toString() + "<br />");
-//		sub.setState("New State III");
-//		test.setSub(sub);
-//		
-//		pm.makePersistent(test);
-//		
-		pm.close();
-		
-		//resp.getWriter().println("" + battleEntity.getId());
 	}
 
 }

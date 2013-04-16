@@ -26,7 +26,7 @@ public class UserEntity implements Serializable {
 	@Persistent
 	private String username, firstName, lastName;
 	
-	@Persistent
+	@Persistent()
 	private String email;
 	
 	@Persistent(defaultFetchGroup="true")
@@ -34,7 +34,7 @@ public class UserEntity implements Serializable {
 	private DragonEntity dragonEntity;
 	
 	public boolean isSetup() {
-		return username != null;
+		return id != null;
 	}
 	
 	public String getIconUrl() {
