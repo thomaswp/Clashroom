@@ -1,7 +1,5 @@
 package com.clashroom.client;
 
-import com.clashroom.client.FlowControl.OnPageChangedListener;
-import com.clashroom.client.page.Page;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.LoginInfo;
 import com.google.gwt.user.client.ui.HTML;

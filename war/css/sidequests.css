@@ -1,0 +1,45 @@
+.sideQuests {
+	width:600px;
+	margin:20px auto;
+}
+
+.sideQuests table {
+	width:100%;
+}
+
+.quest_list {
+	background: #f5f5f5;
+	padding:0;
+	width:100%;
+	margin:0 auto 20px auto;
+	box-shadow:0px 2px 1px -1px rgba(0,0,0,0.1);
+	border:1px solid #dfdfdf;
+	border-radius:3px;
+}
+
+.quest_list td {
+	padding:5px;
+}
+
+.quest_list tr:nth-child(even) {
+	background: #fff;
+}
+
+.quest_list button {
+	border:1px solid #4096ee;
+	border-radius:3px;
+	width:20px;
+	height:20px;
+	color: #fff;
+	text-shadow:0px -1px 0px #4096ee;
+}
+
+.quest_list_header {
+	color: #fff;
+	text-shadow:0px -1px 0px #4096ee;
+}
+
+.quest_list_header td {
+	border-radius:2px;
+	border-bottom:1px solid #4096ee;
+}

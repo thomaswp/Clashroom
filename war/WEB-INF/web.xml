@@ -2,8 +2,28 @@
 
   <!-- Servlets -->
   <servlet>
+   <servlet-name>StoreQuestServlet</servlet-name>
+   <servlet-class>com.clashroom.server.StoreQuestServlet</servlet-class>
+  </servlet>
+  
+   <servlet-mapping>
+    <servlet-name>StoreQuestServlet</servlet-name>
+    <url-pattern>clashroom/storeQuest</url-pattern>
+  </servlet-mapping>
+ 
+  <servlet>
+    <servlet-name>QuestRetrieverServiceImpl</servlet-name>
+    <servlet-class>com.clashroom.server.impl.QuestRetrieverServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>QuestRetrieverServiceImpl</servlet-name>
+    <url-pattern>clashroom/retrieveQuest</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>battleService</servlet-name>
-    <servlet-class>com.clashroom.server.BattleServiceImpl</servlet-class>
+    <servlet-class>com.clashroom.server.impl.BattleServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -12,8 +32,18 @@
   </servlet-mapping>
   
   <servlet>
+    <servlet-name>questServlet</servlet-name>
+    <servlet-class>com.clashroom.server.impl.TaskServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>questServlet</servlet-name>
+    <url-pattern>/clashroom/quest</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
     <servlet-name>loginService</servlet-name>
-    <servlet-class>com.clashroom.server.LoginServiceImpl</servlet-class>
+    <servlet-class>com.clashroom.server.impl.LoginServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
@@ -23,7 +53,7 @@
   
   <servlet>
     <servlet-name>userService</servlet-name>
-    <servlet-class>com.clashroom.server.UserServiceImpl</servlet-class>
+    <servlet-class>com.clashroom.server.impl.UserServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>

@@ -1,0 +1,2 @@
+serviceClass: com.clashroom.client.services.LoginService
+path: AFFCDD0E971DC5D310573BF604B30C47.gwt.rpc

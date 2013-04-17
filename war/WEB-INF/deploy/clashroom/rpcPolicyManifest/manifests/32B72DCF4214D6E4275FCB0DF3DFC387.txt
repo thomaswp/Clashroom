@@ -1,0 +1,2 @@
+serviceClass: com.clashroom.client.services.QuestRetrieverService
+path: D224B894C58271D738B437DD1D81FFED.gwt.rpc

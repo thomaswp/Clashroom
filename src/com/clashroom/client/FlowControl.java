@@ -2,11 +2,15 @@ package com.clashroom.client;
 
 import java.util.LinkedList;
 
-import com.clashroom.client.page.BattlePage;
+import com.clashroom.client.battle.BattlePage;
+import com.clashroom.client.battle.ListBattlePage;
 import com.clashroom.client.page.Page;
-import com.clashroom.client.page.ListBattlePage;
-import com.clashroom.client.page.SetupPage;
-import com.clashroom.client.page.UserInfoPage;
+import com.clashroom.client.task.SideQuestPage;
+import com.clashroom.client.teacher.AvailableQuestsPage;
+import com.clashroom.client.teacher.CreateQuestPage;
+import com.clashroom.client.teacher.QuestDetailPage;
+import com.clashroom.client.user.SetupPage;
+import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.shared.Debug;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.History;
@@ -59,7 +63,20 @@ public class FlowControl {
 			go(new SetupPage(token));
 		} else if (token.startsWith(UserInfoPage.NAME)) {
 			go(new UserInfoPage(token));
-		}
+		} else if (token.startsWith(HomePage.NAME)) {
+			go(new HomePage(token));
+		} else if (token.startsWith(SideQuestPage.NAME)) {
+			go(new SideQuestPage(token));
+		} else if(token.startsWith(AvailableQuestsPage.NAME)){
+        	go(new AvailableQuestsPage(token));
+        } else if(token.startsWith(QuestDetailPage.NAME)){
+        	go(new QuestDetailPage(token));
+        } else if (token.startsWith(CreateQuestPage.NAME)){
+        	go(new CreateQuestPage(token));
+        } else {
+			History.back();
+			throw new RuntimeException("No such page " + token);
+        }
 	}
 	
 	public interface OnPageChangedListener {

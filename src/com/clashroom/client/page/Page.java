@@ -1,6 +1,5 @@
 package com.clashroom.client.page;
 
-import com.clashroom.shared.Debug;
 import com.google.gwt.user.client.ui.Composite;
 
 public abstract class Page extends Composite {

@@ -2,8 +2,7 @@ package com.clashroom.client.services;
 
 import java.util.List;
 
-import com.clashroom.shared.BattleFactory;
-import com.clashroom.shared.data.BattleEntity;
+import com.clashroom.shared.entity.BattleEntity;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface BattleServiceAsync {

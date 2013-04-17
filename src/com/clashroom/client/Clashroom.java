@@ -2,27 +2,19 @@ package com.clashroom.client;
 
 import javax.annotation.Nonnull;
 
-import com.clashroom.client.page.BattlePage;
-import com.clashroom.client.page.ListBattlePage;
-import com.clashroom.client.page.UserInfoPage;
 import com.clashroom.client.services.LoginService;
 import com.clashroom.client.services.LoginServiceAsync;
-import com.clashroom.shared.Debug;
-import com.clashroom.shared.Formatter;
+import com.clashroom.client.user.SetupPage;
+import com.clashroom.client.user.SetupUser;
 import com.clashroom.shared.LoginInfo;
-import com.clashroom.shared.data.UserEntity;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -50,6 +42,7 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 		}
 	}
 	
+	@Override
 	public void onModuleLoad() {
 	
 		GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
@@ -73,10 +66,14 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 					RootPanel login = RootPanel.get("login");
 					login.add(loginWidget = new LoginWidget(result));
 					
-					if (History.getToken().isEmpty()) {
-						FlowControl.go(new UserInfoPage());
+					if (result.isHasAccount()) {
+						if (History.getToken().isEmpty()) {
+							FlowControl.go(new HomePage());
+						} else {
+					        FlowControl.go(History.getToken());
+						}
 					} else {
-				        FlowControl.go(History.getToken());
+						FlowControl.go(new SetupPage());
 					}
 				} else {
 					Window.Location.replace(result.getLoginUrl());

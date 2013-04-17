@@ -1,7 +1,6 @@
 package com.clashroom.client.services;
 
-import com.clashroom.shared.data.DragonEntity;
-import com.clashroom.shared.data.UserEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface UserInfoServiceAsync {
