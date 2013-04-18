@@ -1,2 +1,7 @@
 # Module clashroom
 # RPC service class, partial path of RPC policy file
+com.clashroom.client.services.BattleService, 4B580E98E2902D37C0F893946FB873B6.gwt.rpc
+com.clashroom.client.services.UserInfoService, 94EE90D0269D6F9917B5E690487BAC94.gwt.rpc
+com.clashroom.client.services.QuestRetrieverService, 666858A0A83BA698729FBBB56364F392.gwt.rpc
+com.clashroom.client.services.TaskService, 089FA024273EE837A39527CEF033119F.gwt.rpc
+com.clashroom.client.services.LoginService, AFFCDD0E971DC5D310573BF604B30C47.gwt.rpc

@@ -1,103 +1,108 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="2.5"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee                http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-  <!-- Servlets -->
-  <servlet>
-   <servlet-name>StoreQuestServlet</servlet-name>
-   <servlet-class>com.clashroom.server.StoreQuestServlet</servlet-class>
-  </servlet>
-  
-   <servlet-mapping>
-    <servlet-name>StoreQuestServlet</servlet-name>
-    <url-pattern>clashroom/storeQuest</url-pattern>
-  </servlet-mapping>
- 
-  <servlet>
-    <servlet-name>QuestRetrieverServiceImpl</servlet-name>
-    <servlet-class>com.clashroom.server.impl.QuestRetrieverServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>QuestRetrieverServiceImpl</servlet-name>
-    <url-pattern>clashroom/retrieveQuest</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>battleService</servlet-name>
-    <servlet-class>com.clashroom.server.impl.BattleServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>battleService</servlet-name>
-    <url-pattern>/clashroom/battle</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>questServlet</servlet-name>
-    <servlet-class>com.clashroom.server.impl.TaskServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>questServlet</servlet-name>
-    <url-pattern>/clashroom/quest</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>loginService</servlet-name>
-    <servlet-class>com.clashroom.server.impl.LoginServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>loginService</servlet-name>
-    <url-pattern>/clashroom/login</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>userService</servlet-name>
-    <servlet-class>com.clashroom.server.impl.UserServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>userService</servlet-name>
-    <url-pattern>/clashroom/user</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>test</servlet-name>
-    <servlet-class>com.clashroom.server.TestServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>test</servlet-name>
-    <url-pattern>/test</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
-    <servlet-name>battle</servlet-name>
-    <servlet-class>com.clashroom.server.BattleServlet</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>battle</servlet-name>
-    <url-pattern>/battle</url-pattern>
-  </servlet-mapping>
-  
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>Clashroom.html</welcome-file>
-  </welcome-file-list>
+	<!-- Servlets -->
 
-  <servlet>
-    <servlet-name>SystemServiceServlet</servlet-name>
-    <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
-    <init-param>
-      <param-name>services</param-name>
-      <param-value/>
-    </init-param>
-  </servlet>
 
-  <servlet-mapping>
-    <servlet-name>SystemServiceServlet</servlet-name>
-    <url-pattern>/_ah/spi/*</url-pattern>
-  </servlet-mapping>
+	<servlet>
+		<servlet-name>QuestRetrieverServiceImpl</servlet-name>
+		<servlet-class>com.clashroom.server.impl.QuestRetrieverServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QuestRetrieverServiceImpl</servlet-name>
+		<url-pattern>/clashroom/retrieveQuest</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>StoreQuestServlet</servlet-name>
+		<servlet-class>com.clashroom.server.StoreQuestServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>StoreQuestServlet</servlet-name>
+		<url-pattern>/clashroom/storeQuest</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>battleService</servlet-name>
+		<servlet-class>com.clashroom.server.impl.BattleServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>battleService</servlet-name>
+		<url-pattern>/clashroom/battle</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>questServlet</servlet-name>
+		<servlet-class>com.clashroom.server.impl.TaskServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>questServlet</servlet-name>
+		<url-pattern>/clashroom/quest</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>loginService</servlet-name>
+		<servlet-class>com.clashroom.server.impl.LoginServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>loginService</servlet-name>
+		<url-pattern>/clashroom/login</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>userService</servlet-name>
+		<servlet-class>com.clashroom.server.impl.UserServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>userService</servlet-name>
+		<url-pattern>/clashroom/user</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>test</servlet-name>
+		<servlet-class>com.clashroom.server.TestServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>test</servlet-name>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>battle</servlet-name>
+		<servlet-class>com.clashroom.server.BattleServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>battle</servlet-name>
+		<url-pattern>/battle</url-pattern>
+	</servlet-mapping>
+
+	<!-- Default page to serve -->
+	<welcome-file-list>
+		<welcome-file>Clashroom.html</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value />
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
 
 </web-app>
