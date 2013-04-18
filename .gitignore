@@ -17,6 +17,7 @@ local.properties
 .loadpath
 war/WEB-INF/classes/*
 *.class
+local_db.bin
 
 # External tool builders
 .externalToolBuilders/
