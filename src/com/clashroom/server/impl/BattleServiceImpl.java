@@ -12,6 +12,10 @@ import com.clashroom.shared.entity.BattleEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
+import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.user.server.rpc.RPC;
+import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class BattleServiceImpl extends RemoteServiceServlet implements BattleService {
@@ -48,5 +52,4 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		pm.close();
 		return entities;
 	}
-
 }

@@ -1,4 +1,4 @@
-package com.clashroom.client.page;
+package com.clashroom.client;
 
 import com.google.gwt.user.client.ui.Composite;
 

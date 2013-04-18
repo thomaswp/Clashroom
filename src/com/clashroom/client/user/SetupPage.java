@@ -1,7 +1,8 @@
 package com.clashroom.client.user;
 
 import com.clashroom.client.FlowControl;
-import com.clashroom.client.page.Page;
+import com.clashroom.client.HomePage;
+import com.clashroom.client.Page;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.entity.UserEntity;
@@ -73,7 +74,7 @@ public class SetupPage extends Page {
 		userInfoService.setUser(form.getUser(), new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
-				FlowControl.go(new UserInfoPage());
+				FlowControl.go(new HomePage());
 			}
 			
 			@Override

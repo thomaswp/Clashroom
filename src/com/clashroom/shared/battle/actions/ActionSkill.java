@@ -7,6 +7,8 @@ import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class ActionSkill extends BattleAction {
+	private static final long serialVersionUID = 1L;
+	
 	public Battler attacker;
 	public Skill skill;
 	public LinkedList<Damage> damages = new LinkedList<ActionSkill.Damage>();

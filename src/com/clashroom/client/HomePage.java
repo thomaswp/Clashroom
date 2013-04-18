@@ -1,7 +1,6 @@
 package com.clashroom.client;
 
 import com.clashroom.client.battle.ListBattlePage;
-import com.clashroom.client.page.Page;
 import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.client.window.TasksWindow;
 import com.google.gwt.user.client.ui.AbsolutePanel;

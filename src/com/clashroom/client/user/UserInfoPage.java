@@ -1,7 +1,7 @@
 package com.clashroom.client.user;
 
 import com.clashroom.client.FlowControl;
-import com.clashroom.client.page.Page;
+import com.clashroom.client.Page;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.entity.UserEntity;

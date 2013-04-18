@@ -3,6 +3,8 @@ package com.clashroom.shared.battle.actions;
 import com.clashroom.shared.Formatter;
 
 public class ActionFinish extends BattleAction {
+	private static final long serialVersionUID = 1L;
+	
 	public String victorName;
 	public boolean teamAVictor;
 

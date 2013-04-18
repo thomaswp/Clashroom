@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import com.clashroom.client.battle.BattlePage;
 import com.clashroom.client.battle.ListBattlePage;
-import com.clashroom.client.page.Page;
 import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.teacher.AvailableQuestsPage;
 import com.clashroom.client.teacher.CreateQuestPage;

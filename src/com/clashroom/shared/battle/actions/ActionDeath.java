@@ -4,6 +4,8 @@ import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
 
 public class ActionDeath extends BattleAction {
+	private static final long serialVersionUID = 1L;
+	
 	public Battler battler;
 	
 	public ActionDeath(Battler battler) {

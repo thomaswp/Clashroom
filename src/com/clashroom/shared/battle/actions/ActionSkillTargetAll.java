@@ -8,6 +8,8 @@ import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class ActionSkillTargetAll extends BattleAction {
+	private static final long serialVersionUID = 1L;
+	
 	public Battler attacker;
 	public Skill skill;
 	public LinkedList<ActionSkill> attacks;

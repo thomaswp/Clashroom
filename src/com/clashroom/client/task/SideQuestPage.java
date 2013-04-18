@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import com.clashroom.client.HomePage;
+import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
-import com.clashroom.client.page.Page;
 import com.clashroom.client.services.TaskService;
 import com.clashroom.client.services.TaskServiceAsync;
 import com.clashroom.client.widget.ProgressBar;

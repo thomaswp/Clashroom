@@ -1,6 +1,6 @@
 package com.clashroom.client.teacher;
 
-import com.clashroom.client.page.Page;
+import com.clashroom.client.Page;
 import com.google.gwt.user.client.Window;
 
 public class CreateQuestPage extends Page {

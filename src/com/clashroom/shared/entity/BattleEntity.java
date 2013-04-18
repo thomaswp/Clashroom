@@ -17,9 +17,9 @@ import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.battlers.DragonBattler;
 
-@SuppressWarnings("serial")
 @PersistenceCapable
 public class BattleEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	public final static double LOSE_EXP_FACTOR = 0.50;
 	

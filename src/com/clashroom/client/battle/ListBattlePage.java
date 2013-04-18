@@ -2,7 +2,7 @@ package com.clashroom.client.battle;
 
 import java.util.List;
 
-import com.clashroom.client.page.Page;
+import com.clashroom.client.Page;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.battle.BattleFactory;
