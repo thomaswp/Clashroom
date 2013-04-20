@@ -55,18 +55,8 @@ public class QuestRetrieverServiceImpl extends RemoteServiceServlet
 		Collection<QuestEntity> questCollection = null;
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		/*
-		Query q = pm.newQuery("select from " + QuestEntity.class.getName() +
-				" where questName == questNameParam " +
-				"parameters String questNameParam ");*/
+		
 		try{
-			/*
-			List<QuestEntity> results = (List<QuestEntity>) q.execute(questName);
-			questCollection = pm.detachCopyAll(results);
-			
-			for (QuestEntity qst : questCollection) {
-                aQuestEntity = qst;
-            }*/
 			
 			aQuestEntity = QueryUtils.queryUnique(pm, QuestEntity.class, "id==%s", questId);
 			aQuestEntity = pm.detachCopy(aQuestEntity);
