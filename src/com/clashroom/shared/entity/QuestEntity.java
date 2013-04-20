@@ -38,12 +38,12 @@ public class QuestEntity implements Serializable {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
     @Persistent
-    private List<String> itemsRewarded;// This will change to a
+    private List<String> itemsRewarded;//TODO: This will change to a
                                        // item keys
     @Persistent
     private int levelRequirement;
     @Persistent
-    private String prereqQuest;// String for now but will be a
+    private String prereqQuest;// TODO: String for now but will be a
     // a key to another quest in the datastore
     @Persistent
     private String questDescription;
@@ -51,6 +51,8 @@ public class QuestEntity implements Serializable {
     private String questName;
     @Persistent
     private String victoryText;
+    @Persistent
+    private boolean questCompleted; //TODO: Might need to make this specific to the student
 
     /**
      * Zero arguement constructor in order to make the class
@@ -106,6 +108,7 @@ public class QuestEntity implements Serializable {
         this.prereqQuest = prereqQuest;
         globallyAvailable = false;
         itemsRewarded = itemsRewardedPassed;
+        questCompleted = false;
 
     }
 
@@ -288,5 +291,12 @@ public class QuestEntity implements Serializable {
     public void setVictoryText(String aVictoryText) {
         victoryText = aVictoryText;
     }
-
+    
+    public void completeQuest(){
+    	questCompleted = true;
+    }
+    
+    public boolean getQuestCompleted(){
+    	return questCompleted;
+    }
 }

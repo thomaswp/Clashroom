@@ -2,6 +2,7 @@ package com.clashroom.client;
 
 import com.clashroom.client.battle.ListBattlePage;
 import com.clashroom.client.user.UserInfoPage;
+import com.clashroom.client.window.QuestsWindow;
 import com.clashroom.client.window.TasksWindow;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -39,8 +40,9 @@ public class HomePage extends Page {
 		box.addStyleName("center");
 		link = new Hyperlink("Battles", ListBattlePage.NAME);
 		box.add(link);
-		link = new Hyperlink("Quests", "");
-		box.add(link);
+	
+		QuestsWindow qw = new QuestsWindow();
+		box.add(qw);
 		box.setWidth("50%");
 		main.add(box);
 		
