@@ -6,6 +6,7 @@ import com.clashroom.client.window.QuestsWindow;
 import com.clashroom.client.window.TasksWindow;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
@@ -31,6 +32,7 @@ public class HomePage extends Page {
 		box.addStyleName("column");
 		box.addStyleName("side");
 		Hyperlink link = new Hyperlink("Profile", UserInfoPage.NAME);
+		link.addStyleName(Styles.text_title);
 		box.add(link);
 		box.setWidth("24%");
 		main.add(box);
@@ -38,12 +40,12 @@ public class HomePage extends Page {
 		box = new VerticalPanel();
 		box.addStyleName("column");
 		box.addStyleName("center");
-		link = new Hyperlink("Battles", ListBattlePage.NAME);
-		box.add(link);
-	
+		box.setWidth("50.5%");
 		QuestsWindow qw = new QuestsWindow();
 		box.add(qw);
-		box.setWidth("50%");
+		link = new Hyperlink("Battles", ListBattlePage.NAME);
+		link.addStyleName(Styles.text_title);
+		box.add(link);
 		main.add(box);
 		
 		box = new VerticalPanel();
@@ -51,6 +53,7 @@ public class HomePage extends Page {
 		box.addStyleName("side");
 		link = new Hyperlink("Activity", "");
 		box.add(link);
+		
 		TasksWindow sqw = new TasksWindow();
 		box.add(sqw);
 		box.setWidth("24%");

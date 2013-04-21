@@ -1,21 +1,21 @@
-.overview {
+.home {
 	top:20px;
 	right:0;
 	left:0;
 	height:600px;
 }
 
-.overview .column {
+.home .column {
 	float:left;
-	background:#f8f8f8;
+	background:#ccc;
 	height:100%;
 	padding:20px;
 }
 
-.overview .side {
+.home .side {
 }
 
-.overview .center {
+.home .center {
 	left:25px;
 	margin:0px 1%;
 }

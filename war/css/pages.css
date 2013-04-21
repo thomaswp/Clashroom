@@ -1,0 +1,11 @@
+
+/* --- TASKS --- */
+.sideQuests {
+	width:800px;
+	margin:40px auto;
+}
+
+.sideQuests table {
+	width:100%;
+	border:2px solid #ccc;
+}

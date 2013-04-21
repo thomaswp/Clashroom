@@ -15,6 +15,7 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class FlowControl {
 
@@ -37,12 +38,12 @@ public class FlowControl {
 		}
 		oldPage = nextPage;
 		
-		root.getElement().getStyle().setPosition(Position.RELATIVE); // not sure why, but GWT throws an exception without this. Adding to CSS doesn't work.
+		//root.getElement().getStyle().setPosition(Position.RELATIVE); // not sure why, but GWT throws an exception without this. Adding to CSS doesn't work.
 		// add, determine height/width, center, then move. height/width are unknown until added to document. Catch-22!
 		root.add(nextPage);
-		int left = Window.getClientWidth() / 2 - nextPage.getOffsetWidth() / 2; // find center
-		int top = 100; //Window.getClientHeight() / 2 - c.getOffsetHeight() / 2;
-		root.setWidgetPosition(nextPage, left, top);
+		//int left = Window.getClientWidth() / 2 - nextPage.getOffsetWidth() / 2; // find center
+		//int top = 100; //Window.getClientHeight() / 2 - c.getOffsetHeight() / 2;
+		//root.setWidgetPosition(nextPage, left, top);
 		Debug.write(nextPage.getToken());
 		History.newItem(History.encodeHistoryToken(nextPage.getToken()));
 		

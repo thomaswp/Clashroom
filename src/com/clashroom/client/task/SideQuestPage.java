@@ -23,6 +23,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class SideQuestPage extends Page {
@@ -68,18 +69,21 @@ public class SideQuestPage extends Page {
 		queueTable.setText(0, 6, "Remove");
 		
 		// Add styles to elements in the quest tables
-		questTable.getRowFormatter().addStyleName(0, Styles.squest_header);
+		questTable.getRowFormatter().addStyleName(0, Styles.table_header);
 		questTable.getRowFormatter().addStyleName(0, Styles.gradient);
-		questTable.addStyleName(Styles.squest_table);
+		questTable.addStyleName(Styles.table);
 		questTable.getColumnFormatter().addStyleName(4, Styles.text_center);
 		
-		queueTable.getRowFormatter().addStyleName(0, Styles.squest_header);
+		queueTable.getRowFormatter().addStyleName(0, Styles.table_header);
 		queueTable.getRowFormatter().addStyleName(0, Styles.gradient);
-		queueTable.addStyleName(Styles.squest_table);
+		queueTable.addStyleName(Styles.table);
 		
 		//Assemble main panel
 		Hyperlink link = new Hyperlink("Back", HomePage.NAME);
 		mainPanel.add(link);
+		Label label = new Label("Bounties");
+		label.addStyleName(Styles.page_title);
+		mainPanel.add(label);
 		mainPanel.add(questTable);
 		mainPanel.add(queueTable);
 		mainPanel.add(currentBar);

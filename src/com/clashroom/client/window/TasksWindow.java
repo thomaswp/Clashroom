@@ -17,6 +17,7 @@ import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TasksWindow extends Window {
@@ -39,16 +40,19 @@ public class TasksWindow extends Window {
 	}
 	
 	public void setup() {
+		Label label = new Label("Bounties");
+		label.addStyleName(Styles.text_title);
+		mainPanel.add(label);
+		
 		//Create tables for quests
 		queueTable.setText(0, 0, "Title");
-		queueTable.setText(0, 1, "Start");
-		queueTable.setText(0, 2, "End");
-		queueTable.setText(0, 3, "Time Left");
+		queueTable.setText(0, 1, "Time Left");
 		
 		// Add styles to elements in the quest tables
-		queueTable.getRowFormatter().addStyleName(0, Styles.squest_header);
+		queueTable.getRowFormatter().addStyleName(0, Styles.table_header);
 		queueTable.getRowFormatter().addStyleName(0, Styles.gradient);
-		queueTable.addStyleName(Styles.squest_table);
+		queueTable.addStyleName(Styles.table);
+		queueTable.setCellSpacing(0);
 		
 		//Assemble main panel
 		mainPanel.add(queueTable);
@@ -98,7 +102,7 @@ public class TasksWindow extends Window {
 			for (int i = 0; i < queueTable.getCellCount(0); i++){
 				queueTable.setText(1, i, "");
 			}
-			queueTable.setText(1, 1, "Add some quests!");
+			queueTable.setText(1, 0, "Add some quests!");
 			currentBar.setProgress(0);
 			totalBar.setProgress(0);
 		} else {
@@ -111,15 +115,11 @@ public class TasksWindow extends Window {
 			for (int i = 0; i < queue.size() && i < WIDGET_LIMIT; i++){
 				int x = i + 1;
 				//Title
-				queueTable.setText(x, 0, queue.get(i).getTitle().substring(0, 10)+"...");
-				//Start time
-				queueTable.setText(x, 1, dtf.format(new Date(startTime)));
+				queueTable.setText(x, 0, queue.get(i).getTitle());
 				startTime += queue.get(i).getDuration();
-				//End time
-				queueTable.setText(x, 2, dtf.format(new Date(startTime)));
 				long timeLeft = startTime - new Date().getTime();
 				//Time left
-				queueTable.setText(x, 3, dtf2.format(new Date(timeLeft-(19*60*60*1000))));
+				queueTable.setText(x, 1, dtf2.format(new Date(timeLeft-(19*60*60*1000))));
 				
 				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
 				
