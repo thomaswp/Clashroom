@@ -3,12 +3,18 @@ package com.clashroom.client.teacher;
 import java.util.ArrayList;
 
 import com.clashroom.client.FlowControl;
+import com.clashroom.client.services.QuestRetrieverService;
+import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.shared.entity.ItemEntity;
+import com.clashroom.shared.entity.QuestEntity;
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -27,13 +33,16 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 public class CreateQuestWidget extends Composite implements ChangeHandler,FocusHandler, 
 ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	
+		private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
+            .create(QuestRetrieverService.class);
+	
 		private final Button addRemoveItem = new Button("Add Item");
 	    private final ListBox autoGenerateCode = new ListBox();
 	    private final Button availableAMPM = new Button("AM");
 	    private final TextBox awardedXP = new TextBox();
 	    private final TextBox codeInput = new TextBox();
 	    private final ListBox completionType = new ListBox();
-	    private final ArrayList<String> createdQuests = new ArrayList<String>();
+	    private ArrayList<QuestEntity> createdQuests = new ArrayList<QuestEntity>();
 	    private final DatePicker dateAvailable = new DatePicker();
 	    private final DatePicker dateUnavailable = new DatePicker();
 	    private final HorizontalPanel hPanel = new HorizontalPanel();
@@ -91,15 +100,10 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
         itemsAvailableList.add("Health Potion");
         itemsAvailableList.add("Smoke Bomb");
         itemsAvailableList.add("10x Kunai");
-
-        createdQuests.add("Quest for a Dragon");
-        createdQuests.add("Teach dragon");
-        createdQuests.add("Tears of Allah");
-        createdQuests.add("Find lost dragon");
         
         attachListeners();
         itemListsPop();
-        questListPop();
+        
 
         addWidgets();
         setUpWidgets();
@@ -112,7 +116,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 
 	@Override
 	public void onSubmitComplete(SubmitCompleteEvent event) {	
-		FlowControl.go(new AvailableQuestsPage());
+		FlowControl.go(new CreatedQuestsPage());
 	}
 
 	@Override
@@ -214,6 +218,10 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	        if (questAvailability.isItemSelected(3)) {
 	            label11.setText("Please select a prerequisite quest");
 	            questPrereq.setVisible(true);
+	            
+	            if(createdQuests.size() < 1){
+	            	questListPop();
+	            }	            
 	        } else {
 	            label11.setText("");
 	            questPrereq.setVisible(false);
@@ -363,9 +371,33 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
     }
     
     private void questListPop() {
-        for (String quest : createdQuests) {
-            questPrereq.addItem(quest);
+    	
+    	if (questRetrieverSvc == null) 
+        { 
+        	questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
         }
+          
+          	// Set up the callback object.
+        	AsyncCallback<ArrayList<QuestEntity>> callback = new
+        	AsyncCallback<ArrayList<QuestEntity>>() {
+          
+          @Override public void onFailure(Throwable caught) {
+          System.err.println("Error: RPC Call Failed");
+          caught.printStackTrace(); 
+         }
+          
+          @Override public void onSuccess(ArrayList<QuestEntity>result) 
+          { 
+        	  createdQuests = result;
+        	  
+        	  for (QuestEntity quest : createdQuests) {
+                  questPrereq.addItem(quest.getQuestName());
+              }
+        	  
+          } };
+          
+          questRetrieverSvc.retrieveQuests(callback);
+          
     }
 
     private void setUpWidgets() {
