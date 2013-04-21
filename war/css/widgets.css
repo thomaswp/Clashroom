@@ -12,12 +12,12 @@
 }
 
 .sideQuestWidget {
-	font-size:10px;
+	font-size:12px;
 	width:100%;
 }
 
 .studentQuests {
-	font-size:10px;
+	font-size:12px;
 	width:100%;
 }
 
@@ -36,6 +36,7 @@
 .gwt-ProgressBar-shell .gwt-ProgressBar-text {
   padding: 0px;
   margin: 0px;
-  color: #000;
+  color: #888;
+  font-weight:bold;
   line-height:20px;
 }

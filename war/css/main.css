@@ -1,9 +1,14 @@
-body {
+html {
 	background: #efefef;
 	margin:0;
 	padding:0;
 	font-family:'Arial', sans-serif;
 	font-size:12px;
+}
+
+#main {
+	background: #efefef;
+	padding:5px;
 }
 
 
@@ -16,16 +21,20 @@ body {
 	text-align:center;
 }
 
+.align_right {
+	text-align:right;
+}
+
 .title {
-	font-family: 'Cagliostro', sans-serif;
+	font-family: 'Oswald', sans-serif;
 	color:#fff;
-	font-size:32px;
+	font-size:38px;
 	font-variant:small-caps;
 	text-shadow:0 -1px 0px rgba(0,0,0,0.2);
 }
 
 .page_title {
-	font-family: 'Cagliostro', sans-serif;
+	font-family: 'Oswald', sans-serif;
 	color:#888;
 	font-size:48px;
 	font-variant:small-caps;
@@ -70,15 +79,19 @@ body {
 
 .flexTable button:hover {
 	opacity:.9;
+	cursor:pointer;
 }
 
 .flexTable_header {
-	font-family: 'Cagliostro', sans-serif;
+	font-family: 'Oswald', sans-serif;
 	color:#fff;
 	text-transform:uppercase;
-	text-shadow:0 -1px 0px rgba(0,0,0,0.2);
-	font-weight:bold;
+	font-size:14px;
+	line-height:14px;
+	letter-spacing:2px;
+	text-shadow:0 -1px 0px rgba(0,0,0,0.15);
 }
 
 .flexTable_header td {
+	text-align:center;
 }

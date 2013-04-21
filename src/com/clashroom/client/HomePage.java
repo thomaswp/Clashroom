@@ -52,6 +52,7 @@ public class HomePage extends Page {
 		box.addStyleName("column");
 		box.addStyleName("side");
 		link = new Hyperlink("Activity", "");
+		link.addStyleName(Styles.text_title);
 		box.add(link);
 		
 		TasksWindow sqw = new TasksWindow();

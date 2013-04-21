@@ -175,7 +175,7 @@ public class SideQuestPage extends Page {
 			//Title
 			questTable.setText(x, 0, quests.get(i).getTitle());
 			//Description
-			questTable.setText(x, 1, quests.get(i).getDesc().substring(0, 30)+"...");
+			questTable.setText(x, 1, quests.get(i).getDesc().substring(0, 50)+"...");
 			//Reward
 			questTable.setText(x, 2, Integer.toString(quests.get(i).getReward()));
 			DateTimeFormat dtf2 = DateTimeFormat.getFormat(PredefinedFormat.HOUR24_MINUTE_SECOND);

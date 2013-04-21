@@ -48,6 +48,7 @@ public class UserInfoPage extends Page {
 	private void setupUI() {
 		Window.setTitle("My Info");
 		userInfoWidget = new UserInfo();
+		userInfoWidget.addStyleName(NAME);
 		initWidget(userInfoWidget);
 	}
 	

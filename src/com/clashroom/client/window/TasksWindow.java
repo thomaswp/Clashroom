@@ -49,6 +49,7 @@ public class TasksWindow extends Window {
 		queueTable.setText(0, 1, "Time Left");
 		
 		// Add styles to elements in the quest tables
+		queueTable.getColumnFormatter().addStyleName(1, Styles.text_right);
 		queueTable.getRowFormatter().addStyleName(0, Styles.table_header);
 		queueTable.getRowFormatter().addStyleName(0, Styles.gradient);
 		queueTable.addStyleName(Styles.table);
