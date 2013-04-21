@@ -2,7 +2,9 @@ package com.clashroom.client.battle;
 
 import java.util.LinkedList;
 
+import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
+import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.battle.Battle;
@@ -29,6 +31,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -116,7 +119,12 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		Window.setTitle("Battle");
 
 		VerticalPanel panel = new VerticalPanel();
+		panel.addStyleName(NAME);
 		initWidget(panel);
+		
+		Hyperlink link = new Hyperlink("<", ListBattlePage.NAME);
+		link.addStyleName(Styles.back_button);
+		panel.add(link);
 
 		info = new Label();
 		panel.add(info);

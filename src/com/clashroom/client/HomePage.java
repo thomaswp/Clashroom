@@ -43,7 +43,7 @@ public class HomePage extends Page {
 		box.setWidth("50.5%");
 		QuestsWindow qw = new QuestsWindow();
 		box.add(qw);
-		link = new Hyperlink("Battles", ListBattlePage.NAME);
+		link = new Hyperlink("Arena Listings", ListBattlePage.NAME);
 		link.addStyleName(Styles.text_title);
 		box.add(link);
 		main.add(box);
@@ -51,7 +51,7 @@ public class HomePage extends Page {
 		box = new VerticalPanel();
 		box.addStyleName("column");
 		box.addStyleName("side");
-		link = new Hyperlink("Activity", "");
+		link = new Hyperlink("Town Herald", "");
 		link.addStyleName(Styles.text_title);
 		box.add(link);
 		

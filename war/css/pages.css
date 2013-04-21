@@ -3,7 +3,6 @@
 	width:600px;
 	margin:30px auto;
 	background:#ccc;
-	position:relative;
 	box-shadow:0px 1px 1px 1px rgba(0,0,0,0.25);
 }
 
@@ -65,6 +64,18 @@
 	margin:-10px 0 0 -60px;
 }
 
+/* --- BATTLES LIST --- */
+.ListBattles {
+	width:800px;
+	margin:20px auto;
+}
+
+/* --- BATTLE PAGE --- */
+.Battle {
+	width:800px;
+	margin:20px auto;
+}
+
 /* --- TASKS --- */
 .sideQuests {
 	width:800px;
@@ -73,5 +84,4 @@
 
 .sideQuests table {
 	width:100%;
-	border:2px solid #ccc;
 }

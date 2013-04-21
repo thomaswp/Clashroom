@@ -2,7 +2,9 @@ package com.clashroom.client.battle;
 
 import java.util.List;
 
+import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
+import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.battle.BattleFactory;
@@ -15,6 +17,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ListBattlePage extends Page {
 
@@ -35,9 +39,21 @@ public class ListBattlePage extends Page {
 		
 		Window.setTitle("Select Battle");
 		
+		VerticalPanel panel = new VerticalPanel();
+		panel.addStyleName(NAME);
+		Hyperlink link = new Hyperlink("<", HomePage.NAME);
+		link.addStyleName(Styles.back_button);
+		panel.add(link);
+		Label title = new Label("Battles");
+		title.addStyleName(Styles.page_title);
+		panel.add(title);
+		
 		final FlexTable table = new FlexTable();
-		table.setWidth("600px");
-		initWidget(table);
+		table.addStyleName(Styles.table);
+		table.getRowFormatter().addStyleName(0,Styles.gradient);
+		table.getRowFormatter().addStyleName(0, Styles.table_header);
+		panel.add(table);
+		initWidget(panel);
 		
 		String[] headers = new String[] {
 				"Date", "Battle", "Challengers", "Victor", "Exp Gained"

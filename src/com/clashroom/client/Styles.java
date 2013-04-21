@@ -20,4 +20,8 @@ public class Styles {
 	public static final String profile_lvl = "profile_lvl";
 	public static final String profile_portrait = "profile_portrait";
 	public static final String profile_stats = "profile_stats";
+	
+	public static final String back_button = "back_button";
+	
+	public static final String position_relative = "relative";
 }

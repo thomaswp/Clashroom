@@ -11,6 +11,24 @@ html {
 	padding:5px;
 }
 
+.back_button a {
+	position:absolute;
+	top:20px;
+	left:20px;
+	background:#a3daec;
+	line-height:40px;
+	padding:0 20px;
+	display:block;
+	color:#fff;
+	text-decoration:none;
+	font-size:30px;
+	font-weight:bold;
+}
+
+.relative {
+	position:relative;
+}
+
 
 /* --- TEXT STYLES --- */
 .bold {
@@ -31,6 +49,16 @@ html {
 	font-size:38px;
 	font-variant:small-caps;
 	text-shadow:0 -1px 0px rgba(0,0,0,0.2);
+}
+
+.title a {
+	color:#fff;
+	text-decoration:none;
+}
+
+.title a:hover {
+	color:#fff;
+	text-decoration:underline;
 }
 
 .page_title {
