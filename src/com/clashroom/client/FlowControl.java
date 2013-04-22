@@ -5,17 +5,14 @@ import java.util.LinkedList;
 import com.clashroom.client.battle.BattlePage;
 import com.clashroom.client.battle.ListBattlePage;
 import com.clashroom.client.task.SideQuestPage;
-import com.clashroom.client.teacher.AvailableQuestsPage;
 import com.clashroom.client.teacher.CreateQuestPage;
+import com.clashroom.client.teacher.CreatedQuestsPage;
 import com.clashroom.client.teacher.QuestDetailPage;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.shared.Debug;
-import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class FlowControl {
 
@@ -67,8 +64,8 @@ public class FlowControl {
 			go(new HomePage(token));
 		} else if (token.startsWith(SideQuestPage.NAME)) {
 			go(new SideQuestPage(token));
-		} else if(token.startsWith(AvailableQuestsPage.NAME)){
-        	go(new AvailableQuestsPage(token));
+		} else if(token.startsWith(CreatedQuestsPage.NAME)){
+        	go(new CreatedQuestsPage(token));
         } else if(token.startsWith(QuestDetailPage.NAME)){
         	go(new QuestDetailPage(token));
         } else if (token.startsWith(CreateQuestPage.NAME)){
