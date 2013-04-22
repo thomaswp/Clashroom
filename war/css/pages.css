@@ -66,13 +66,13 @@
 
 /* --- BATTLES LIST --- */
 .ListBattles {
-	width:800px;
+	width:100%;
 	margin:20px auto;
 }
 
 /* --- BATTLE PAGE --- */
 .Battle {
-	width:800px;
+	width:100%;
 	margin:20px auto;
 }
 
