@@ -40,7 +40,7 @@ public class HomePage extends Page {
 		box = new VerticalPanel();
 		box.addStyleName("column");
 		box.addStyleName("center");
-		box.setWidth("50.5%");
+		box.setWidth("50%");
 		QuestsWindow qw = new QuestsWindow();
 		box.add(qw);
 		link = new Hyperlink("Arena Listings", ListBattlePage.NAME);
