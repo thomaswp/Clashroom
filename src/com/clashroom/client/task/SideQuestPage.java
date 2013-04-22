@@ -79,9 +79,9 @@ public class SideQuestPage extends Page {
 		queueTable.addStyleName(Styles.table);
 		
 		//Assemble main panel
-		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-		link.addStyleName(Styles.back_button);
-		mainPanel.add(link);
+//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
+//		link.addStyleName(Styles.back_button);
+//		mainPanel.add(link);
 		Label label = new Label("Bounties");
 		label.addStyleName(Styles.page_title);
 		mainPanel.add(label);

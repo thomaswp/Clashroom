@@ -122,9 +122,9 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		panel.addStyleName(NAME);
 		initWidget(panel);
 		
-		Hyperlink link = new Hyperlink("<", ListBattlePage.NAME);
-		link.addStyleName(Styles.back_button);
-		panel.add(link);
+//		Hyperlink link = new Hyperlink("<", ListBattlePage.NAME);
+//		link.addStyleName(Styles.back_button);
+//		panel.add(link);
 
 		info = new Label();
 		panel.add(info);

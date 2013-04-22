@@ -51,9 +51,9 @@ public class UserInfoPage extends Page {
 	
 	private void setupUI() {
 		VerticalPanel panel = new VerticalPanel();
-		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-		link.addStyleName(Styles.back_button);
-		panel.add(link);
+//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
+//		link.addStyleName(Styles.back_button);
+//		panel.add(link);
 		Window.setTitle("My Info");
 		userInfoWidget = new UserInfo();
 		userInfoWidget.addStyleName(Styles.position_relative);

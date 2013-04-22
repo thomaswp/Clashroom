@@ -4,6 +4,7 @@ import com.clashroom.client.battle.ListBattlePage;
 import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.client.window.QuestsWindow;
 import com.clashroom.client.window.TasksWindow;
+import com.clashroom.client.window.UserInfoWindow;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -33,7 +34,8 @@ public class HomePage extends Page {
 		box.addStyleName("side");
 		Hyperlink link = new Hyperlink("Profile", UserInfoPage.NAME);
 		link.addStyleName(Styles.text_title);
-		box.add(link);
+		//box.add(link);
+		box.add(new UserInfoWindow());
 		box.setWidth("24%");
 		main.add(box);
 		
@@ -45,7 +47,8 @@ public class HomePage extends Page {
 		box.add(qw);
 		link = new Hyperlink("Arena Listings", ListBattlePage.NAME);
 		link.addStyleName(Styles.text_title);
-		box.add(link);
+		//box.add(link);
+		box.add(new ListBattlePage());
 		main.add(box);
 		
 		box = new VerticalPanel();

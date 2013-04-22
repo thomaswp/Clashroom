@@ -37,15 +37,15 @@ public class ListBattlePage extends Page {
 	public ListBattlePage(String token) {
 		super(token);
 		
-		Window.setTitle("Select Battle");
+//		Window.setTitle("Select Battle");
 		
 		VerticalPanel panel = new VerticalPanel();
 		panel.addStyleName(NAME);
-		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-		link.addStyleName(Styles.back_button);
-		panel.add(link);
+//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
+//		link.addStyleName(Styles.back_button);
+//		panel.add(link);
 		Label title = new Label("Battles");
-		title.addStyleName(Styles.page_title);
+		title.addStyleName(Styles.text_title);
 		panel.add(title);
 		
 		final FlexTable table = new FlexTable();

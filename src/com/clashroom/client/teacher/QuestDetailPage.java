@@ -132,9 +132,9 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");
 		vPanel.addStyleName(NAME);
-		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-		link.addStyleName(Styles.back_button);
-		mainPanel.add(link);
+//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
+//		link.addStyleName(Styles.back_button);
+//		mainPanel.add(link);
 		mainPanel.add(vPanel);
         initWidget(mainPanel);
     }
