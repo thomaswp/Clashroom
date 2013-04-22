@@ -1,6 +1,8 @@
 package com.clashroom.client.teacher;
 
+import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
+import com.clashroom.client.Styles;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
 import com.clashroom.shared.entity.QuestEntity;
@@ -86,17 +88,22 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
-		vPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
 		questName = new Label();
+		questName.addStyleName(Styles.text_title);
 		questDesc = new Label();
+		questDesc.addStyleName(Styles.quest_desc);
 		questXpGained = new Label();
 		questLevelRequirment = new Label();
+		questLevelRequirment.addStyleName(Styles.quest_lvl);
 		questItemsAwarded = new Label();
 		questDateAvailable = new Label();
+		questDateAvailable.addStyleName(Styles.quest_date);
 		questDateUnavailable = new Label();
+		questDateUnavailable.addStyleName(Styles.quest_date);
 		codeEntryMsg = new Label();
 		codeEntryMsg.setVisible(false);
+		codeEntryMsg.addStyleName(Styles.quest_message);
 		itemsListTable = new FlexTable();
 		submit = new Button("Submit Code");
 		submit.setVisible(false);
@@ -105,12 +112,16 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		submit.addClickHandler(this);
 		
+		VerticalPanel rewards = new VerticalPanel();
+		rewards.addStyleName(Styles.quest_rewards);
+		rewards.add(questXpGained);
+		rewards.add(questItemsAwarded);
+		rewards.add(itemsListTable);
+		
 		vPanel.add(questName);
 		vPanel.add(questDesc);
-		vPanel.add(questXpGained);
+		vPanel.add(rewards);
 		vPanel.add(questLevelRequirment);
-		vPanel.add(questItemsAwarded);
-		vPanel.add(itemsListTable);
 		vPanel.add(questDateAvailable);
 		vPanel.add(questDateUnavailable);
 		hPanel.add(enterCode);
@@ -118,17 +129,24 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		hPanel.add(codeEntryMsg);
 		vPanel.add(hPanel);
 		
-        initWidget(vPanel);
+		VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.setWidth("100%");
+		vPanel.addStyleName(NAME);
+		Hyperlink link = new Hyperlink("<", HomePage.NAME);
+		link.addStyleName(Styles.back_button);
+		mainPanel.add(link);
+		mainPanel.add(vPanel);
+        initWidget(mainPanel);
     }
 	
 	private void setUpContent(QuestEntity aQuest){
 		Window.setTitle("Quest Details: " + aQuest.getQuestName());
 		
-		questName.setText("Quest Name: " + aQuest.getQuestName());
-		questDesc.setText("Quest Description: " +aQuest.getQuestDescription());
-		questXpGained.setText("Expereince Gained: "+ aQuest.getExperienceRewarded());
-		questLevelRequirment.setText("Required Level for Quest: "+ aQuest.getLevelRequirement());
-		questItemsAwarded.setText("Items Earned: ");
+		questName.setText(aQuest.getQuestName());
+		questDesc.setText(aQuest.getQuestDescription());
+		questXpGained.setText("Expereince: "+ aQuest.getExperienceRewarded());
+		questLevelRequirment.setText("Level "+ aQuest.getLevelRequirement());
+		questItemsAwarded.setText("Items: ");
 		
 		for(int i = 0; i < aQuest.getItemsRewarded().size(); i++){
 			itemsListTable.setWidget(i, 0, 
@@ -136,7 +154,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 			//TODO Have these has hyperlinks go to Pages of items
 		}
 		questDateAvailable.setText("This quest will be available: " + aQuest.getDateAvailable());
-		questDateUnavailable.setText("This quest will be no more on: " + aQuest.getDateUnavailable());
+		questDateUnavailable.setText(aQuest.getDateUnavailable());
 		
 		completionTypeHandler(aQuest);
 	}
@@ -155,7 +173,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 			if(enterCode.getText().equals(aQuest.getCompletionCode())){
 				//aQuest.completeQuest();
 				//TODO: Have Quest update on the server as completed	
-				codeEntryMsg.setText("Congratulations!: " + aQuest.getVictoryText());
+				codeEntryMsg.setText(aQuest.getVictoryText());
 			}else{
 				codeEntryMsg.setText("Sorry the Code you eneterd was incorrect. Please try again.");
 			}

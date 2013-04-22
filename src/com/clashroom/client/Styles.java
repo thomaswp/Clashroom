@@ -21,6 +21,12 @@ public class Styles {
 	public static final String profile_portrait = "profile_portrait";
 	public static final String profile_stats = "profile_stats";
 	
+	public static final String quest_desc = "quest_desc";
+	public static final String quest_lvl = "quest_lvl";
+	public static final String quest_rewards = "quest_rewards";
+	public static final String quest_date = "quest_date";
+	public static final String quest_message = "quest_message";
+	
 	public static final String back_button = "back_button";
 	
 	public static final String position_relative = "relative";

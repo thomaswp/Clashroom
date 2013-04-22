@@ -70,16 +70,20 @@ public class QuestsWindow extends Composite {
 		}        
         
 		String[] headers = new String[] {
-				"Quest Name", "Description", "Reward", "Completion Type"
+				"Quest Name", "Description", "Reward", "Type"
 		};
 		
 		for (int i = 0; i < headers.length; i++) {
 			studentQuests.setText(0, i, headers[i]);
+			if (i == 0) studentQuests.getColumnFormatter().setWidth(i, "25%");
+			else if (i==1) studentQuests.getColumnFormatter().setWidth(i, "50%");
+			else if (i==2) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
+			else if (i==3) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
 		}
-		
         for (int i = 0; i < availableQuests.size(); i++) 
         {	
         	studentQuests.setWidget(i + 1, 0, new QuestInnerWindow(availableQuests.get(i)));
+        	studentQuests.getFlexCellFormatter().setColSpan(i+1, 0, 4);
         }
         
     }

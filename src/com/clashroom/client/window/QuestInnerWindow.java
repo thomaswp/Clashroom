@@ -39,20 +39,25 @@ public final static String NAME = "questInnerWindow";
 		String codeType = null; //TODO eventually will switch to show an icon
 		
 		if(questEntity.getCompletionCode() != null){
-			codeType = "Secret Code";
+			codeType = "Code";
 		}
 		String[] questInfo = new String[] {
-				questEntity.getQuestName(),questEntity.getQuestDescription(),questEntity.getExperienceRewarded()+"", codeType
+				questEntity.getQuestName(),questEntity.getQuestDescription().substring(0, 35)+"...",questEntity.getExperienceRewarded()+"", codeType
 		};
 
 		for (int i = 0; i < questInfo.length; i++) {
 			questTable.setText(0, i, questInfo[i]);
+			if (i == 0) questTable.getColumnFormatter().setWidth(i, "25%");
+			else if (i==1) questTable.getColumnFormatter().setWidth(i, "50%");
+			else if (i==2) questTable.getColumnFormatter().setWidth(i, "12.5%");
+			else if (i==3) questTable.getColumnFormatter().setWidth(i, "12.5%");
 		}
 	}
 	
 	private void setUpUI(){
 		questTable = new FlexTable();
 		focusPanel.add(questTable);
+		questTable.setWidth("100%");
 		initWidget(focusPanel);
 	}
 
