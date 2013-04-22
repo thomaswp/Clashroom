@@ -14,4 +14,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface QuestRetrieverService extends RemoteService {
     ArrayList<QuestEntity> retrieveQuests();
     QuestEntity retrieveAQuest(long questId);
+    String addDummyQuest();//For testing delete later
 }

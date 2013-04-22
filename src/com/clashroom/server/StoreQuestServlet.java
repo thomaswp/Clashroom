@@ -134,5 +134,4 @@ public class StoreQuestServlet extends HttpServlet {
 
         return randomString;
     }
-
 }

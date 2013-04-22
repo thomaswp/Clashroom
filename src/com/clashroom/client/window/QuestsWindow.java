@@ -1,10 +1,15 @@
 package com.clashroom.client.window;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.PersistenceManager;
 
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.server.PMF;
+import com.clashroom.server.StoreQuestServlet;
 import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -47,7 +52,7 @@ public class QuestsWindow extends Composite {
 	   @Override public void onSuccess(ArrayList<QuestEntity>result) 
 	   { 
 	     availableQuests = result; 
-	     listStudentQuests(/*availableQuests*/);
+	     listStudentQuests();
 	   } };
 	    
 	   	setUpUI(); 
@@ -55,8 +60,14 @@ public class QuestsWindow extends Composite {
 	    questRetrieverSvc.retrieveQuests(callback);        
 	}
 	
-	public void listStudentQuests(/*ArrayList<QuestEntity> availableQuests*/) {
-        //availableQuests = this.availableQuests;
+	public void listStudentQuests() {
+		/*
+		 * Will be taken out later. Meant to just check if any quests
+		 * exists and if they don't create one and slap it in.
+		 */
+		if(availableQuests.size() < 1){
+			createDummyQuest();
+		}        
         
 		String[] headers = new String[] {
 				"Quest Name", "Description", "Reward", "Completion Type"
@@ -89,5 +100,31 @@ public class QuestsWindow extends Composite {
 		studentQuests.setCellSpacing(0);
 		main.add(studentQuests);
 		initWidget(main);
+	}
+	
+	private void createDummyQuest(){
+		
+		if (questRetrieverSvc == null) 
+		   { 
+		     questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
+		   }
+		          
+		   // Set up the callback object.
+		   AsyncCallback<String> callback = new
+		   AsyncCallback<String>() {
+		          
+		   @Override 
+		   public void onFailure(Throwable caught) {
+		   System.err.println("Error: RPC Call Failed");
+		   	caught.printStackTrace(); 
+		   }
+		          
+		   @Override 
+		   public void onSuccess(String result) 
+		   { 
+			   
+		   } };
+		    
+		    questRetrieverSvc.addDummyQuest(callback); 	
 	}
 }

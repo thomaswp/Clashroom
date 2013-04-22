@@ -67,4 +67,30 @@ public class QuestRetrieverServiceImpl extends RemoteServiceServlet
 		
 		return aQuestEntity;
 	}
+	
+	/*
+     * This is a temporary method that will be used to create dummy
+     * quests. It will be deleted when the project is near completion.
+     */
+	@Override
+	public String addDummyQuest() {
+		List<String> dummyList = new ArrayList();
+    	dummyList.add("Scroll of Wisdom");
+    	
+    	QuestEntity dummyQuest = new QuestEntity("Train your Dragon", "Now that you have a dragon you must train it! Go to Temple Belk to obtain the dragon scroll", "ycmb",
+                100, 0,
+                "4-21-13 10:37pm",
+                "This quest will not expire",
+                "Congratulations! You have trained your dragon and managed to teach it a new skill. You should be proud, but do not rejoice for too long for tougher quests await.","",
+                dummyList);
+    	
+    	 PersistenceManager pm = PMF.get().getPersistenceManager();
+    	 
+         try {
+             pm.makePersistent(dummyQuest);
+         } finally {
+             pm.close();
+         }
+		return "Dummy Quest Added";	
+	}
 }
