@@ -1,0 +1,2 @@
+serviceClass: com.clashroom.client.services.UserInfoService
+path: A52A62343A9142D6E4B6773BF6306444.gwt.rpc

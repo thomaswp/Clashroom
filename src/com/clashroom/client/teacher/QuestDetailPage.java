@@ -1,11 +1,13 @@
 package com.clashroom.client.teacher;
 
-import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.entity.QuestEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -14,7 +16,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -32,6 +33,12 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
             .create(QuestRetrieverService.class);
 	
+	private static UserInfoServiceAsync userRetrieverSvc = GWT
+			.create(UserInfoService.class);
+	
+	private static UserInfoServiceAsync userStorerSvc = GWT
+			.create(UserInfoService.class);
+	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private Label questName;
@@ -45,6 +52,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	private Button submit;
 	private TextBox enterCode;
 	private Label codeEntryMsg;
+	private UserEntity currentUser;
 	
 	
 	private QuestEntity aQuest = null;
@@ -58,14 +66,31 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		long id = getLongParameter("id");
 		
-		 if (questRetrieverSvc == null) 
-	        { 
-	        	questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-	        }
+		if(userRetrieverSvc == null){
+			userRetrieverSvc = GWT.create(UserInfoService.class);
+		}
+		
+		if (questRetrieverSvc == null) { 
+	        questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
+	    }
+		
+		AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.err.println("Error: RPC Call Failed");
+		    	caught.printStackTrace();		
+			}
+
+			@Override
+			public void onSuccess(UserEntity result) {
+				currentUser = result;				
+			}
+			
+		};
 	          
 	          	// Set up the callback object.
-	     AsyncCallback<QuestEntity> callback = new
-	     AsyncCallback<QuestEntity>() {
+	     AsyncCallback<QuestEntity> callback = new AsyncCallback<QuestEntity>() {
 	          
 	     @Override 
 	     public void onFailure(Throwable caught) {
@@ -80,7 +105,8 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	     } };
 	     
    	  		setupUI();
-	          questRetrieverSvc.retrieveAQuest(id, callback);
+	        questRetrieverSvc.retrieveAQuest(id, callback);
+	        userRetrieverSvc.getUser(callBack);
 	          
 	}
 	
@@ -170,9 +196,28 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	public void onClick(ClickEvent event) {
 		codeEntryMsg.setVisible(true);
 		if(event.getSource().equals(submit)){
+			currentUser.addCompletedQuest(getLongParameter("id"));
+			
 			if(enterCode.getText().equals(aQuest.getCompletionCode())){
-				//aQuest.completeQuest();
-				//TODO: Have Quest update on the server as completed	
+				
+				if(userStorerSvc == null){
+					userStorerSvc = GWT.create(UserInfoService.class);
+				}
+				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						System.err.println("Error: RPC Call Failed");
+				    	caught.printStackTrace();						
+					}
+
+					@Override
+					public void onSuccess(Void result) {
+						
+					}
+					
+				};
+				userStorerSvc.setUser(currentUser, callback);
 				codeEntryMsg.setText(aQuest.getVictoryText());
 			}else{
 				codeEntryMsg.setText("Sorry the Code you eneterd was incorrect. Please try again.");

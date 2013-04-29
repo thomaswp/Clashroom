@@ -6,6 +6,8 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.clashroom.shared.battle.skills.Skill;
 /*
  * Item Entity, the teacher will be allowed to make items for students
  * to obtain
@@ -22,6 +24,17 @@ public class ItemEntity implements Serializable {
 	
 	@Persistent
 	private String desctiption;
+	
+	@Persistent
+	private Skill skill;
+	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
+	
+	public ItemEntity(){
+		
+	}
 	
 	public String getName() {
 		return name;
@@ -47,16 +60,16 @@ public class ItemEntity implements Serializable {
 		this.id = id;
 	}
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
-	
-	public ItemEntity(){
-		
-	}
-	
 	public ItemEntity(String aName, String aDescription){
 		this.name = aName;
 		this.desctiption = aDescription;
+	}
+	
+	public void setSkill(Skill aSkill){
+		skill = aSkill;
+	}
+	
+	public Skill getSkill(){
+		return skill;
 	}
 }
