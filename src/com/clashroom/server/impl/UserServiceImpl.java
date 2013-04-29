@@ -56,4 +56,23 @@ implements UserInfoService {
 		pm.close();
 	}
 
+	@Override
+	public void addExp(int exp) {
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		
+		if (user == null) return;
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "email == %s", user.getEmail());
+		
+		if (entity == null) {
+			throw new RuntimeException("No UserEntity");
+		}
+		System.out.println(exp);
+		entity.getDragon().addExp(exp);
+		entity.setDragon(pm.detachCopy(entity.getDragon()));
+		
+		pm.makePersistent(entity);
+	}
 }

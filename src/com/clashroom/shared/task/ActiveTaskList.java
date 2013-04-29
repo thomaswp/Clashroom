@@ -4,7 +4,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.entity.ActiveBountyEntity;
+import com.clashroom.shared.entity.UserEntity;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ActiveTaskList implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +19,7 @@ public class ActiveTaskList implements Serializable {
 	private LinkedList<ActiveTask> list;
 	private LinkedList<ActiveTask> history;
 	private Long eId;
+	private Long userID;
 	
 	public ActiveTaskList() {
 		list = new LinkedList<ActiveTask>();
@@ -30,6 +36,7 @@ public class ActiveTaskList implements Serializable {
 		aqStart = entity.getActiveQuests().getAqStart();
 		start = entity.getActiveQuests().getStart();
 		eId = entity.getId();
+		userID = entity.getUserId();
 	}
 	
 	public boolean isEmpty(){
@@ -82,8 +89,21 @@ public class ActiveTaskList implements Serializable {
 		return list;
 	}
 	
-	public void completeQuest(){
-		System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
+	public void completeQuest(UserInfoServiceAsync userInfoService){
+		
+		userInfoService.addExp(getActiveQuest().getReward(), new AsyncCallback<Void>(){
+
+			@Override
+			public void onSuccess(Void result) {
+				System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("Dat shit is broke");
+			}
+			
+		});
 		list.removeFirst();
 		aqStart = new Date().getTime();
 	}
@@ -119,6 +139,14 @@ public class ActiveTaskList implements Serializable {
 	
 	public void setId(Long id) {
 		eId = id;
+	}
+	
+	public Long getUserID(){
+		return userID;
+	}
+	
+	public void setUserID(Long id){
+		userID = id;
 	}
 
 }

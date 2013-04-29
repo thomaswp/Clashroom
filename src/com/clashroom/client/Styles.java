@@ -8,6 +8,7 @@ public class Styles {
 	public static final String text_title = "title";
 	
 	public static final String page_title = "page_title";
+	public static final String page_subtitle = "page_subtitle";
 	
 	public static final String gradient = "gradient_blue";
 	
@@ -19,7 +20,10 @@ public class Styles {
 	public static final String profile_name = "profile_name";
 	public static final String profile_lvl = "profile_lvl";
 	public static final String profile_portrait = "profile_portrait";
+	public static final String profile_portrait_window = "profile_portrait_window";
 	public static final String profile_stats = "profile_stats";
+	
+	public static final String profile_window = "profile_window";
 	
 	public static final String quest_desc = "quest_desc";
 	public static final String quest_lvl = "quest_lvl";

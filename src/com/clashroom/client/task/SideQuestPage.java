@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
+import com.clashroom.client.FlowControl;
 import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.TaskService;
 import com.clashroom.client.services.TaskServiceAsync;
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.widget.ProgressBar;
+import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTask;
 import com.clashroom.shared.task.ActiveTaskList;
 import com.clashroom.shared.task.Task;
@@ -38,7 +43,9 @@ public class SideQuestPage extends Page {
 	private ProgressBar totalBar = new ProgressBar();
 	private ArrayList<Task> quests;// = new ArrayList<Quest>();
 	private ActiveTaskList aql = new ActiveTaskList();
-	private TaskServiceAsync questService = GWT.create(TaskService.class);
+	private static TaskServiceAsync questService = GWT.create(TaskService.class);
+	private static UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
+	private UserEntity user;
 	
 	public SideQuestPage() {
 		this(NAME);
@@ -85,9 +92,21 @@ public class SideQuestPage extends Page {
 		Label label = new Label("Bounties");
 		label.addStyleName(Styles.page_title);
 		mainPanel.add(label);
+		label = new Label("Available Bounties");
+		label.addStyleName(Styles.page_subtitle);
+		mainPanel.add(label);
 		mainPanel.add(questTable);
+		label = new Label("Queued Bounties");
+		label.addStyleName(Styles.page_subtitle);
+		mainPanel.add(label);
 		mainPanel.add(queueTable);
+		label = new Label("Current Progress");
+		label.addStyleName(Styles.page_subtitle);
+		mainPanel.add(label);
 		mainPanel.add(currentBar);
+		label = new Label("Total Progress");
+		label.addStyleName(Styles.page_subtitle);
+		mainPanel.add(label);
 		mainPanel.add(totalBar);
 		
 		//Associate the main panel with the HTML host page
@@ -102,10 +121,27 @@ public class SideQuestPage extends Page {
 			}
 		};
 		refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
+		
+		userInfoService.getUser(new AsyncCallback<UserEntity>() {
+			@Override
+			public void onSuccess(UserEntity result) {
+				if (!result.isSetup()) {
+					FlowControl.go(new SetupPage(result));
+				} else {
+					user = result;
+					getAvailableQuests();
+					getActiveQuests(user.getId());
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+		});
 	
 		//Request data from datastore
-		getAvailableQuests();
-		getActiveQuests();
+
 	}
 	
 	//Clones a Quest from the QuestList and adds it to the active QuestQueue
@@ -123,7 +159,7 @@ public class SideQuestPage extends Page {
 	
 	//Requests datastore to persist the AQl
 	public void persistAQL(){
-		questService.persistAQL(aql, new AsyncCallback<String>() {
+		questService.persistAQL(user.getId(), aql, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				System.out.println(result);
@@ -154,8 +190,8 @@ public class SideQuestPage extends Page {
 	}
 	
 	//Requests datastore for the list of Active quests
-	public void getActiveQuests() {
-		questService.getActiveQuests(new AsyncCallback<ActiveTaskList>() {
+	public void getActiveQuests(Long userID) {
+		questService.getActiveQuests(userID, new AsyncCallback<ActiveTaskList>() {
 			@Override
 			public void onSuccess(ActiveTaskList result) {
 				aql = result;
@@ -236,7 +272,7 @@ public class SideQuestPage extends Page {
 				
 				//Check for active Quest for completion
 				if (aql.activeTimeLeft() <= 0){
-					aql.completeQuest();
+					aql.completeQuest(userInfoService);
 					queueTable.removeRow(queueTable.getRowCount()-1);
 					return;
 				}

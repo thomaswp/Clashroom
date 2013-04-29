@@ -14,8 +14,8 @@ public interface TaskService extends RemoteService {
 	ArrayList<Task> getAvailableQuests() throws IllegalArgumentException;
 	
 	//Requests datastore for the list of active quests
-	ActiveTaskList getActiveQuests() throws IllegalArgumentException;
+	ActiveTaskList getActiveQuests(Long userID) throws IllegalArgumentException;
 	
 	//Requests datastore to persist the given active quest list
-	String persistAQL(ActiveTaskList aql) throws IllegalArgumentException;
+	String persistAQL(Long userID, ActiveTaskList aql) throws IllegalArgumentException;
 }

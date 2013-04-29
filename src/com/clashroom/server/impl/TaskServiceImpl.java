@@ -30,24 +30,27 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	}
 	
 	@Override
-	public ActiveTaskList getActiveQuests() throws IllegalArgumentException {
+	public ActiveTaskList getActiveQuests(Long userID) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		List<ActiveBountyEntity> entities = QueryUtils.query(pm, ActiveBountyEntity.class, "");
-		ActiveTaskList aql = new ActiveTaskList();
-		for (ActiveBountyEntity e : entities){
-			aql = new ActiveTaskList(e);
+		ActiveBountyEntity abe = QueryUtils.queryUnique(pm, ActiveBountyEntity.class, "userID==%s", userID);
+		if (abe == null){
+			abe = new ActiveBountyEntity();
+			abe.setUser(userID);
 		}
+		ActiveTaskList atl = new ActiveTaskList(abe);
 		pm.close();
-		return aql;
+		return atl;
 		
 	}
 
 	@Override
-	public String persistAQL(ActiveTaskList aql) throws IllegalArgumentException {
+	public String persistAQL(Long userID, ActiveTaskList aql) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		ActiveBountyEntity entity = new ActiveBountyEntity();
 		if (aql.getId() != null) {
 			entity = pm.getObjectById(ActiveBountyEntity.class, aql.getId());
+		} else {
+			entity.setUser(userID);
 		}
 		entity.setActiveQuests(aql);
 		try {
