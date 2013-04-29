@@ -1,5 +1,8 @@
 package com.clashroom.server.impl;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
 
 import com.clashroom.client.services.UserInfoService;
@@ -9,6 +12,7 @@ import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.UserEntity;
 
+import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -39,6 +43,20 @@ implements UserInfoService {
 		pm.close();
 		
 		return entity;
+	}
+	
+	@Override
+	public List<UserEntity> getAllUsers() {
+		LinkedList<UserEntity> entities = new LinkedList<UserEntity>();
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<UserEntity> attachedEntities = QueryUtils.query(pm, UserEntity.class, "");
+		
+		for (UserEntity entity : attachedEntities) {
+			entities.add(pm.detachCopy(entity));
+		}
+		
+		return entities;
 	}
 
 	@Override
