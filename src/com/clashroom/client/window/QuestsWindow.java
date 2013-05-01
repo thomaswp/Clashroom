@@ -8,9 +8,12 @@ import javax.jdo.PersistenceManager;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.server.PMF;
 import com.clashroom.server.StoreQuestServlet;
 import com.clashroom.shared.entity.QuestEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -31,18 +34,41 @@ public class QuestsWindow extends Composite {
 	private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
             .create(QuestRetrieverService.class);
 	
+	private static UserInfoServiceAsync userRetrieverSvc = GWT
+			.create(UserInfoService.class);
+	
 	private ArrayList<QuestEntity> availableQuests;
+	private UserEntity currentUser;
 	private FlexTable studentQuests;
 	
 	public QuestsWindow(){
+		
+	   if(userRetrieverSvc == null){
+			userRetrieverSvc = GWT.create(UserInfoService.class);
+	   }
+		
 	   if (questRetrieverSvc == null) 
 	   { 
 	     questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
 	   }
+	   
+	   AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.err.println("Error: RPC Call Failed");
+		    	caught.printStackTrace();		
+			}
+
+			@Override
+			public void onSuccess(UserEntity result) {
+				currentUser = result;				
+			}
+			
+		};
 	          
 	   // Set up the callback object.
-	   AsyncCallback<ArrayList<QuestEntity>> callback = new
-	   AsyncCallback<ArrayList<QuestEntity>>() {
+	   AsyncCallback<ArrayList<QuestEntity>> callback = new AsyncCallback<ArrayList<QuestEntity>>() {
 	          
 	   @Override public void onFailure(Throwable caught) {
 	   System.err.println("Error: RPC Call Failed");
@@ -51,12 +77,12 @@ public class QuestsWindow extends Composite {
 	          
 	   @Override public void onSuccess(ArrayList<QuestEntity>result) 
 	   { 
-	     availableQuests = result; 
+	     availableQuests = filterCompletedQuests(result,currentUser); 
 	     listStudentQuests();
 	   } };
 	    
 	   	setUpUI(); 
-	   
+	   	userRetrieverSvc.getUser(callBack);
 	    questRetrieverSvc.retrieveQuests(callback);        
 	}
 	
@@ -130,5 +156,25 @@ public class QuestsWindow extends Composite {
 		   } };
 		    
 		    questRetrieverSvc.addDummyQuest(callback); 	
+	}
+	
+	/*
+	 * Method to filter out quests that the user has already completed.
+	 */
+	private ArrayList<QuestEntity> filterCompletedQuests(ArrayList<QuestEntity> 
+		listToFilter,UserEntity currentUser){
+		
+		ArrayList<Long> userCompletedQuests = new ArrayList<Long>();
+		userCompletedQuests = (ArrayList<Long>) currentUser.getCompletedQuests();
+		
+		for(Long id: userCompletedQuests){
+			for(QuestEntity quest: listToFilter){
+				if(id == quest.getId()){
+					listToFilter.remove(quest);
+				}
+			}
+		}
+		
+		return listToFilter;
 	}
 }
