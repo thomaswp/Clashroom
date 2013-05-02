@@ -10,4 +10,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface ItemRetrieverService extends RemoteService {
 	ArrayList<ItemEntity> retrieveItems();
 	ItemEntity retrieveAnItem(long itemId);
+	void addItems(); //For testing, maybe delete later unless the game will come with a set or already existing items
 }

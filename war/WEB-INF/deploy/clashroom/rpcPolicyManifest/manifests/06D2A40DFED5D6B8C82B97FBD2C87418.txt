@@ -1,0 +1,2 @@
+serviceClass: com.clashroom.client.services.ItemRetrieverService
+path: FE0465EA133C6E6D1232552088260A3D.gwt.rpc

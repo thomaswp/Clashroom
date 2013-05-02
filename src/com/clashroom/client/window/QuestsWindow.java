@@ -6,6 +6,9 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.clashroom.client.Styles;
+import com.clashroom.client.resources.ServicesUtils;
+import com.clashroom.client.services.ItemRetrieverService;
+import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
 import com.clashroom.client.services.UserInfoService;
@@ -37,6 +40,9 @@ public class QuestsWindow extends Composite {
 	private static UserInfoServiceAsync userRetrieverSvc = GWT
 			.create(UserInfoService.class);
 	
+	private static ItemRetrieverServiceAsync itemCreatorSvc = GWT
+			.create(ItemRetrieverService.class);
+	
 	private ArrayList<QuestEntity> availableQuests;
 	private UserEntity currentUser;
 	private FlexTable studentQuests;
@@ -46,11 +52,11 @@ public class QuestsWindow extends Composite {
 	   if(userRetrieverSvc == null){
 			userRetrieverSvc = GWT.create(UserInfoService.class);
 	   }
-		
+		/*
 	   if (questRetrieverSvc == null) 
 	   { 
 	     questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-	   }
+	   }*/
 	   
 	   AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
 
@@ -62,11 +68,12 @@ public class QuestsWindow extends Composite {
 
 			@Override
 			public void onSuccess(UserEntity result) {
-				currentUser = result;				
+				currentUser = result;	
+				availableQuests = filterCompletedQuests(ServicesUtils.retrieveAllQuests(),currentUser);
 			}
 			
 		};
-	          
+	     /*     
 	   // Set up the callback object.
 	   AsyncCallback<ArrayList<QuestEntity>> callback = new AsyncCallback<ArrayList<QuestEntity>>() {
 	          
@@ -79,11 +86,12 @@ public class QuestsWindow extends Composite {
 	   { 
 	     availableQuests = filterCompletedQuests(result,currentUser); 
 	     listStudentQuests();
-	   } };
+	   } };*/
 	    
 	   	setUpUI(); 
 	   	userRetrieverSvc.getUser(callBack);
-	    questRetrieverSvc.retrieveQuests(callback);        
+	   	 
+	    //questRetrieverSvc.retrieveQuests(callback);        
 	}
 	
 	public void listStudentQuests() {
@@ -156,6 +164,10 @@ public class QuestsWindow extends Composite {
 		   } };
 		    
 		    questRetrieverSvc.addDummyQuest(callback); 	
+	}
+	
+	private void createItems(){
+		
 	}
 	
 	/*

@@ -10,7 +10,12 @@ import javax.jdo.Query;
 import com.clashroom.client.services.ItemRetrieverService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
+import com.clashroom.shared.battle.skills.FireBreathSkill;
+import com.clashroom.shared.battle.skills.FireballSkill;
+import com.clashroom.shared.battle.skills.HealSkill;
+import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.ItemEntity;
+import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements ItemRetrieverService {
@@ -51,6 +56,36 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
 			pm.close();
 		}
 		return null;
+	}
+
+	@Override
+	public void addItems() {
+		List<ItemEntity> itemList = new ArrayList<ItemEntity>();
+		Skill fireBall = new FireballSkill();
+		Skill fireBreath = new FireBreathSkill();
+		Skill heal = new HealSkill();
+    	
+    	ItemEntity fireBallScroll = new ItemEntity("Fire Ball Scroll","Reading this scroll will" +
+    			"cause your dragon to release a fire ball attack",fireBall);
+    	
+    	ItemEntity fireBreathScroll = new ItemEntity("Fire Breath Scroll","Reading this scroll will have your dragon release" +
+    			"a fire breath attack",fireBreath);
+    	
+    	ItemEntity healScroll = new ItemEntity("Scroll of Healing","Reading this scroll will" +
+    			"health your dragon",heal);
+    	
+    	itemList.add(fireBallScroll);
+    	itemList.add(fireBreathScroll);
+    	itemList.add(healScroll);
+    	
+    	 PersistenceManager pm = PMF.get().getPersistenceManager();
+    	 
+         try {
+        	 pm.makePersistentAll(itemList);
+        	 
+         } finally {
+             pm.close();
+         }		
 	}
 
 }

@@ -60,9 +60,10 @@ public class ItemEntity implements Serializable {
 		this.id = id;
 	}
 
-	public ItemEntity(String aName, String aDescription){
+	public ItemEntity(String aName, String aDescription,Skill skill){
 		this.name = aName;
 		this.desctiption = aDescription;
+		this.skill = skill;
 	}
 	
 	public void setSkill(Skill aSkill){
