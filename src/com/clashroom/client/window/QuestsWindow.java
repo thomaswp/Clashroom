@@ -52,11 +52,11 @@ public class QuestsWindow extends Composite {
 	   if(userRetrieverSvc == null){
 			userRetrieverSvc = GWT.create(UserInfoService.class);
 	   }
-		/*
+		
 	   if (questRetrieverSvc == null) 
 	   { 
 	     questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-	   }*/
+	   }
 	   
 	   AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
 
@@ -69,11 +69,10 @@ public class QuestsWindow extends Composite {
 			@Override
 			public void onSuccess(UserEntity result) {
 				currentUser = result;	
-				availableQuests = filterCompletedQuests(ServicesUtils.retrieveAllQuests(),currentUser);
 			}
 			
 		};
-	     /*     
+	         
 	   // Set up the callback object.
 	   AsyncCallback<ArrayList<QuestEntity>> callback = new AsyncCallback<ArrayList<QuestEntity>>() {
 	          
@@ -86,12 +85,11 @@ public class QuestsWindow extends Composite {
 	   { 
 	     availableQuests = filterCompletedQuests(result,currentUser); 
 	     listStudentQuests();
-	   } };*/
+	   } };
 	    
 	   	setUpUI(); 
 	   	userRetrieverSvc.getUser(callBack);
-	   	 
-	    //questRetrieverSvc.retrieveQuests(callback);        
+	    questRetrieverSvc.retrieveQuests(callback);        
 	}
 	
 	public void listStudentQuests() {
@@ -102,6 +100,7 @@ public class QuestsWindow extends Composite {
 		if(availableQuests.size() < 1){
 			createDummyQuest();
 		}        
+        createItems();
         
 		String[] headers = new String[] {
 				"Quest Name", "Description", "Reward", "Type"
@@ -140,6 +139,9 @@ public class QuestsWindow extends Composite {
 		initWidget(main);
 	}
 	
+	/*
+	 * For testing purposes, will eventually delete
+	 */
 	private void createDummyQuest(){
 		
 		if (questRetrieverSvc == null) 
@@ -165,9 +167,33 @@ public class QuestsWindow extends Composite {
 		    
 		    questRetrieverSvc.addDummyQuest(callback); 	
 	}
-	
+	/*
+	 * For testing purposes, will eventually delete
+	 */
 	private void createItems(){
 		
+		if (itemCreatorSvc == null) 
+		   { 
+		     itemCreatorSvc = GWT.create(ItemRetrieverService.class); 
+		   }
+		          
+		   // Set up the callback object.
+		   AsyncCallback<Void> callback = new
+		   AsyncCallback<Void>() {
+		          
+		   @Override 
+		   public void onFailure(Throwable caught) {
+		   System.err.println("Error: RPC Call Failed");
+		   	caught.printStackTrace(); 
+		   }
+		          
+		   @Override 
+		   public void onSuccess(Void result) 
+		   { 
+			   
+		   } };
+		    
+		    itemCreatorSvc.addItems(callback); 	
 	}
 	
 	/*

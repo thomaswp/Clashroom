@@ -7,7 +7,12 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.clashroom.shared.battle.skills.AttackSkill;
+import com.clashroom.shared.battle.skills.FireBreathSkill;
+import com.clashroom.shared.battle.skills.FireballSkill;
+import com.clashroom.shared.battle.skills.HealSkill;
 import com.clashroom.shared.battle.skills.Skill;
+import com.clashroom.shared.battle.skills.SkillTypes;
 /*
  * Item Entity, the teacher will be allowed to make items for students
  * to obtain
@@ -26,7 +31,7 @@ public class ItemEntity implements Serializable {
 	private String desctiption;
 	
 	@Persistent
-	private Skill skill;
+	private SkillTypes skill;
 	
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -60,17 +65,31 @@ public class ItemEntity implements Serializable {
 		this.id = id;
 	}
 
-	public ItemEntity(String aName, String aDescription,Skill skill){
+	public ItemEntity(String aName, String aDescription,SkillTypes aSkill){
 		this.name = aName;
 		this.desctiption = aDescription;
-		this.skill = skill;
+		this.skill = aSkill;
 	}
 	
-	public void setSkill(Skill aSkill){
+	public void setSkill(SkillTypes aSkill){
 		skill = aSkill;
 	}
 	
-	public Skill getSkill(){
+	public SkillTypes getSkill(){
 		return skill;
+	}
+	
+	public Skill getRealSkill(){
+		switch(skill){
+		case ATTACK:
+			return new AttackSkill();
+		case FIREBALL:
+			return new FireballSkill();
+		case FIREBREATH:
+			return new FireBreathSkill();
+		case HEAL:
+			return new HealSkill();
+		}
+		return null;
 	}
 }
