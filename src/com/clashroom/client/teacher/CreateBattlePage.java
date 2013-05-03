@@ -1,5 +1,7 @@
 package com.clashroom.client.teacher;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
@@ -7,7 +9,11 @@ import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.allen_sauer.gwt.dnd.client.drop.VerticalPanelDropController;
 import com.allen_sauer.gwt.dnd.client.util.DOMUtil;
+import com.clashroom.client.FlowControl;
 import com.clashroom.client.Page;
+import com.clashroom.client.battle.BattlePage;
+import com.clashroom.client.services.BattleService;
+import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.widget.VerticalPanelWithSpacer;
@@ -25,15 +31,19 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class CreateBattlePage extends Page {
 
 	public final static String NAME = "CreateBattle";
 
 	private UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
+	private BattleServiceAsync battleService = GWT.create(BattleService.class);
 
 	private PickupDragController dragController;
 
+	private HashMap<Label, Long> labelMap = new HashMap<Label, Long>();
+	
 	private VerticalPanel vPanelUsers, vPanelTeamA, vPanelTeamB;
 	private Button buttonCreate;
 
@@ -105,15 +115,11 @@ public class CreateBattlePage extends Page {
 	}
 
 	public void populateUI(List<UserEntity> users) {
-		//		int row = 1;
-		//		for (UserEntity user : users) {
-		//			String name = Formatter.format("%s/%s (%s %s)", user.getUsername(), user.getDragon().getName(), user.getFirstName(), user.getLastName());
-		//			table.setText(row, 0, name);
-		//			row++;
-		//		}
 		
 		for (UserEntity user : users) {
-			Label label = new Label(user.getUsername(), false);
+			Label label = new Label(Formatter.format("%s (%s)", 
+					user.getUsername(), user.getDragon().getName()), false);
+			labelMap.put(label, user.getId());
 			vPanelUsers.add(label);
 			dragController.makeDraggable(label);
 		}
@@ -122,7 +128,42 @@ public class CreateBattlePage extends Page {
 		buttonCreate.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				List<Long> teamAIds = new LinkedList<Long>();
+				List<Long> teamBIds = new LinkedList<Long>();
 				
+				for (int i = 0; i < vPanelTeamA.getWidgetCount(); i++) {
+					Widget widget = vPanelTeamA.getWidget(i);
+					if (labelMap.containsKey(widget)) {
+						teamAIds.add(labelMap.get(widget));
+					}
+				}
+				for (int i = 0; i < vPanelTeamB.getWidgetCount(); i++) {
+					Widget widget = vPanelTeamB.getWidget(i);
+					if (labelMap.containsKey(widget)) {
+						teamBIds.add(labelMap.get(widget));
+					}
+				}
+				if (teamAIds.isEmpty() || teamBIds.isEmpty()) return;
+				
+				buttonCreate.setEnabled(false);
+				
+				battleService.createBattle(teamAIds, teamBIds, new AsyncCallback<Long>() {
+					@Override
+					public void onSuccess(Long result) {
+						if (result == null) {
+							buttonCreate.setEnabled(true);
+							Debug.write("Failure!");
+						} else {
+							FlowControl.go(new BattlePage(result));
+						}
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						buttonCreate.setEnabled(true);
+						caught.printStackTrace();
+					}
+				});
 			}
 		});
 	}

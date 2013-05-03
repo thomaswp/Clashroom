@@ -7,6 +7,7 @@ import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.Battle;
 import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.actions.ActionDeath;
@@ -73,7 +74,6 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		return NAME + "?id=" + id;
 	}
 	
-
 	public BattlePage(BattleEntity entity) {
 		super(getToken(entity.getId()));
 		
@@ -83,12 +83,20 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		setupBattle();
 	}
 
+	public BattlePage(long id) {
+		super(getToken(id));
+		Debug.write(getToken());
+		setupPage();
+		fetchBattle(id);
+	}
+	
 	public BattlePage(String token) {
 		super(token);
-		
 		setupPage();
-		
-		Long id = getLongParameter("id");
+		fetchBattle(getLongParameter("id"));
+	}
+	
+	private void fetchBattle(Long id) {
 		if (id != null) {
 			entityId = id;
 
@@ -101,8 +109,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 
 				@Override
 				public void onFailure(Throwable caught) {
-					// TODO Auto-generated method stub
-
+					caught.printStackTrace();
 				}
 			});
 		}

@@ -13,4 +13,5 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface BattleService extends RemoteService {
 	BattleEntity getBattle(long id) throws IllegalArgumentException;
 	List<BattleEntity> getBattles() throws IllegalArgumentException;
+	Long createBattle(List<Long> teamAIds, List<Long> teamBIds);
 }

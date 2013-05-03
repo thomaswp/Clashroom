@@ -8,6 +8,7 @@ import javax.jdo.PersistenceManager;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.UserEntity;
@@ -62,13 +63,18 @@ implements UserInfoService {
 	@Override
 	public void setUser(UserEntity user) {
 		//if (user.getId() == null) throw new RuntimeException("No id!");
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		if (QueryUtils.query(pm, UserEntity.class, "email==%s", user.getEmail()).size() != 0) {
+			Debug.write("User already exists");
+			return;
+		}
 		
 		DragonEntity dragon = user.getDragon();
 		
 		DragonClass dragonClass = DragonClass.getById(dragon.getDragonClassId());
 		dragonClass.setUp(dragon);
 
-		PersistenceManager pm = PMF.get().getPersistenceManager();
 		pm.makePersistent(user);
 		pm.flush();
 		pm.close();

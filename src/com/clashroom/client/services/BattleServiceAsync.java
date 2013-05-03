@@ -10,4 +10,5 @@ public interface BattleServiceAsync {
 			throws IllegalArgumentException;
 	void getBattles(AsyncCallback<List<BattleEntity>> callback)
 			throws IllegalArgumentException;
+	void createBattle(List<Long> teamAIds, List<Long> teamBIds, AsyncCallback<Long> callback);
 }
