@@ -176,7 +176,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		for(int i = 0; i < aQuest.getItemsRewarded().size(); i++){
 			itemsListTable.setWidget(i, 0, 
-					new Hyperlink(aQuest.getItemsRewarded().get(i),"url"));
+					new Hyperlink(String.valueOf(aQuest.getItemsRewarded().get(i)),"url"));
 			//TODO Have these has hyperlinks go to Pages of items
 		}
 		questDateAvailable.setText("This quest will be available: " + aQuest.getDateAvailable());

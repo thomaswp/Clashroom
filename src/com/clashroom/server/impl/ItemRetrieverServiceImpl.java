@@ -38,7 +38,7 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
 		}finally{
 			pm.close();
 		}
-		return null;
+		return itemList;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
 		}finally{
 			pm.close();
 		}
-		return null;
+		return anItemEntity;
 	}
 
 	@Override
