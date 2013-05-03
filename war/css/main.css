@@ -49,6 +49,17 @@ html {
 	font-size:38px;
 	font-variant:small-caps;
 	text-shadow:0 -1px 0px rgba(0,0,0,0.2);
+	letter-spacing:.1em;
+}
+
+.subtitle {
+	font-family: 'Oswald', sans-serif;
+	color:#fff;
+	font-size:18px;
+	text-transform:uppercase;
+	text-shadow:0 -1px 0px rgba(0,0,0,0.2);
+	letter-spacing:.3em;
+	margin:0 0 20px 0;
 }
 
 .title a {

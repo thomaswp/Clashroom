@@ -148,9 +148,10 @@ public class TasksWindow extends Window {
 				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
 				
 				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0){
+				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
 					aql.completeQuest(userInfoService);
 					queueTable.removeRow(queueTable.getRowCount()-1);
+					persistAQL();
 					return;
 				}
 			}
@@ -174,6 +175,22 @@ public class TasksWindow extends Window {
 	@Override
 	public void click() {
 		FlowControl.go(SideQuestPage.NAME);
+	}
+	
+	//Requests datastore to persist the AQl
+	public void persistAQL(){
+		questService.persistAQL(user.getId(), aql, new AsyncCallback<String>() {
+			@Override
+			public void onSuccess(String result) {
+				System.out.println(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				System.out.println("failed to persist aql");
+				caught.printStackTrace();
+			}
+		});
 	}
 
 }

@@ -11,6 +11,7 @@ import com.clashroom.client.widget.AnimatedProgressBar;
 import com.clashroom.client.widget.ProgressBar;
 import com.clashroom.client.widget.ProgressBar.TextFormatter;
 import com.clashroom.shared.Formatter;
+import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -83,7 +84,7 @@ public class UserInfoWindow extends Window {
 		panel.add(labelLevel);
 		
 		userName = new Label();
-		userName.addStyleName(Styles.text_title);
+		userName.addStyleName(Styles.text_subtitle);
 		panel.add(userName);
 		
 		progressBarExp = new AnimatedProgressBar();
@@ -164,6 +165,16 @@ public class UserInfoWindow extends Window {
 		image.setUrl("img/" + user.getDragon().getDragonClass().getImageName());
 		labelDragonName.setText(user.getDragon().getName());
 		userName.setText(user.getUsername());
+		labelLevel.setText("" + user.getDragon().getLevel());
+		progressBarExp.setMinProgress(0);
+		progressBarExp.setMaxProgress(DragonClass.getNextLevelExp(user.getDragon().getLevel()));
+		progressBarExp.animateSetProgress(user.getDragon().getExperience());
+		
+		labelHp.setValue((int)user.getDragon().getMaxHp());
+		labelMp.setValue((int)user.getDragon().getMaxMp());
+		labelStr.setValue((int)user.getDragon().getStrength());
+		labelAgi.setValue((int)user.getDragon().getAgility());
+		labelInt.setValue((int)user.getDragon().getIntelligence());
 	}
 
 	@Override

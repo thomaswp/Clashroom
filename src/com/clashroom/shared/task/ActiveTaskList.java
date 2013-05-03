@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.ActiveBountyEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
@@ -91,11 +92,14 @@ public class ActiveTaskList implements Serializable {
 	
 	public void completeQuest(UserInfoServiceAsync userInfoService){
 		
+		Debug.write("Doin ma callbacks");
 		userInfoService.addExp(getActiveQuest().getReward(), new AsyncCallback<Void>(){
 
 			@Override
 			public void onSuccess(Void result) {
+				Debug.write(getActiveQuest());
 				System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
+				list.removeFirst();
 			}
 
 			@Override
@@ -104,7 +108,6 @@ public class ActiveTaskList implements Serializable {
 			}
 			
 		});
-		list.removeFirst();
 		aqStart = new Date().getTime();
 	}
 	

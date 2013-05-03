@@ -6,6 +6,7 @@ public class Styles {
 	public static final String text_right = "align_right";
 	public static final String text_bold = "bold";
 	public static final String text_title = "title";
+	public static final String text_subtitle = "subtitle";
 	
 	public static final String page_title = "page_title";
 	public static final String page_subtitle = "page_subtitle";

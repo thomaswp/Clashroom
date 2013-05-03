@@ -271,7 +271,7 @@ public class SideQuestPage extends Page {
 				queueTable.setWidget(x, 6, removeQuestButton(i));
 				
 				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0){
+				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
 					aql.completeQuest(userInfoService);
 					queueTable.removeRow(queueTable.getRowCount()-1);
 					return;

@@ -5,6 +5,7 @@ import javax.jdo.PersistenceManager;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.UserEntity;
@@ -61,6 +62,8 @@ implements UserInfoService {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		
+		Debug.write("Exp: %d", exp);
+		
 		if (user == null) return;
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -69,7 +72,6 @@ implements UserInfoService {
 		if (entity == null) {
 			throw new RuntimeException("No UserEntity");
 		}
-		System.out.println(exp);
 		entity.getDragon().addExp(exp);
 		entity.setDragon(pm.detachCopy(entity.getDragon()));
 		
