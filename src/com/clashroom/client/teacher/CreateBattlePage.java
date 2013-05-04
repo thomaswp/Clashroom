@@ -1,5 +1,6 @@
 package com.clashroom.client.teacher;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.widget.VerticalPanelWithSpacer;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
+import com.clashroom.shared.battle.Battle;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,6 +34,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.tractionsoftware.gwt.user.client.ui.UTCDateBox;
+import com.tractionsoftware.gwt.user.client.ui.UTCTimeBox;
 
 public class CreateBattlePage extends Page {
 
@@ -42,10 +46,12 @@ public class CreateBattlePage extends Page {
 
 	private PickupDragController dragController;
 
-	private HashMap<Label, Long> labelMap = new HashMap<Label, Long>();
+	private HashMap<Label, UserEntity> labelMap = new HashMap<Label, UserEntity>();
 	
 	private VerticalPanel vPanelUsers, vPanelTeamA, vPanelTeamB;
 	private Button buttonCreate;
+	private UTCTimeBox timeBox;
+	private UTCDateBox dateBox;
 
 	public CreateBattlePage(String token) {
 		super(token);
@@ -106,6 +112,21 @@ public class CreateBattlePage extends Page {
 		parent.add(vPanelTeamB);
 		hPanel.add(parent);
 		
+		HorizontalPanel datePanel = new HorizontalPanel();
+		dateBox = new UTCDateBox();
+		dateBox.setValue(System.currentTimeMillis());
+		datePanel.add(new Label("Date: "));
+		datePanel.add(dateBox);
+		vPanelHost.add(datePanel);
+		
+		
+		HorizontalPanel timePanel = new HorizontalPanel();
+		timeBox = new UTCTimeBox();
+		timeBox.setValue(System.currentTimeMillis() - dateBox.getValue());
+		timePanel.add(new Label("Time: "));
+		timePanel.add(timeBox);
+		vPanelHost.add(timePanel);
+		
 		buttonCreate = new Button("Create Battle");
 		buttonCreate.setEnabled(false);
 		vPanelHost.add(buttonCreate);
@@ -119,7 +140,7 @@ public class CreateBattlePage extends Page {
 		for (UserEntity user : users) {
 			Label label = new Label(Formatter.format("%s (%s)", 
 					user.getUsername(), user.getDragon().getName()), false);
-			labelMap.put(label, user.getId());
+			labelMap.put(label, user);
 			vPanelUsers.add(label);
 			dragController.makeDraggable(label);
 		}
@@ -131,30 +152,40 @@ public class CreateBattlePage extends Page {
 				List<Long> teamAIds = new LinkedList<Long>();
 				List<Long> teamBIds = new LinkedList<Long>();
 				
+				List<UserEntity> teamA = new LinkedList<UserEntity>();
 				for (int i = 0; i < vPanelTeamA.getWidgetCount(); i++) {
 					Widget widget = vPanelTeamA.getWidget(i);
 					if (labelMap.containsKey(widget)) {
-						teamAIds.add(labelMap.get(widget));
+						UserEntity entity = labelMap.get(widget);
+						teamAIds.add(entity.getId());
+						teamA.add(entity);
 					}
 				}
+				List<UserEntity> teamB = new LinkedList<UserEntity>();
 				for (int i = 0; i < vPanelTeamB.getWidgetCount(); i++) {
 					Widget widget = vPanelTeamB.getWidget(i);
 					if (labelMap.containsKey(widget)) {
-						teamBIds.add(labelMap.get(widget));
+						UserEntity entity = labelMap.get(widget);
+						teamBIds.add(entity.getId());
+						teamB.add(entity);
 					}
 				}
 				if (teamAIds.isEmpty() || teamBIds.isEmpty()) return;
 				
 				buttonCreate.setEnabled(false);
 				
-				battleService.createBattle(teamAIds, teamBIds, new AsyncCallback<Long>() {
+				String teamAName = Battle.getTeamName(teamA);
+				String teamBName = Battle.getTeamName(teamB);
+				Date date = new Date(dateBox.getValue() + timeBox.getValue());
+				battleService.scheduleBattle(teamAName, teamAIds, teamBName, teamBIds, date, 
+						new AsyncCallback<Long>() {
 					@Override
 					public void onSuccess(Long result) {
 						if (result == null) {
 							buttonCreate.setEnabled(true);
 							Debug.write("Failure!");
 						} else {
-							FlowControl.go(new BattlePage(result));
+							FlowControl.go(new CreateBattlePage(NAME));
 						}
 					}
 					

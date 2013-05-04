@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionDeath;
 import com.clashroom.shared.battle.actions.ActionFinish;
 import com.clashroom.shared.battle.actions.ActionSkill;
@@ -13,8 +14,10 @@ import com.clashroom.shared.battle.actions.ActionSkillTargetAll;
 import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.battlers.DragonBattler;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.battle.skills.Skill.Target;
+import com.clashroom.shared.entity.UserEntity;
 
 public class Battle {
 	private Random random;
@@ -43,6 +46,15 @@ public class Battle {
 	
 	public List<Battler> getTeamB() {
 		return teamB;
+	}
+	
+	public static String getTeamName(List<UserEntity> team) {
+		String teamName = "";
+		for (UserEntity userEntity : team) {
+			DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
+			teamName = Formatter.appendList(teamName, db.name);
+		}
+		return teamName;
 	}
 	
 	public BattleAction getNextPostBattleAction() {

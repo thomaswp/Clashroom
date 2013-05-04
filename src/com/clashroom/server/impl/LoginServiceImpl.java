@@ -33,6 +33,9 @@ LoginService {
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 			UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "email==%s", user.getEmail());
 			loginInfo.setHasAccount(entity != null);
+			if (entity != null) {
+				loginInfo.setUserId(entity.getId());
+			}
 			pm.close();
 		} else {
 			loginInfo.setLoggedIn(false);

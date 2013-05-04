@@ -40,6 +40,12 @@ public class BattleEntity implements Serializable {
 	private LinkedList<Long> playerIds = new LinkedList<Long>();
 	
 	@Persistent
+	private LinkedList<Long> teamAIds = new LinkedList<Long>();
+	
+	@Persistent
+	private LinkedList<Long> teamBIds = new LinkedList<Long>();
+	
+	@Persistent
 	private Integer teamAExp = 0;
 	
 	@Persistent
@@ -48,8 +54,9 @@ public class BattleEntity implements Serializable {
 	@Deprecated
 	public BattleEntity() { }
 	
-	public BattleEntity(BattleFactory battleFactory) {
+	public BattleEntity(BattleFactory battleFactory, Date date) {
 		this.battleFactory = battleFactory;
+		this.date = date;
 		
 		Battle battle = battleFactory.generateBattle();
 		BattleAction action = battle.nextAction();
@@ -71,18 +78,18 @@ public class BattleEntity implements Serializable {
 		}
 		if (teamAVictor) teamBExp = (int)(teamBExp * LOSE_EXP_FACTOR);
 		
-		date = new Date();
-		
 		for (Battler battler : battleFactory.getTeamA()) {
 			if (battler instanceof DragonBattler) {
-				playerIds.add(((DragonBattler) battler).playerId);
+				teamAIds.add(((DragonBattler) battler).playerId);
 			}
 		}
 		for (Battler battler : battleFactory.getTeamB()) {
 			if (battler instanceof DragonBattler) {
-				playerIds.add(((DragonBattler) battler).playerId);
+				teamBIds.add(((DragonBattler) battler).playerId);
 			}
 		}
+		playerIds.addAll(teamAIds);
+		playerIds.addAll(teamBIds);
 	}
 
 	public Long getId() {
@@ -107,6 +114,14 @@ public class BattleEntity implements Serializable {
 
 	public Integer getTeamBExp() {
 		return teamBExp;
+	}
+
+	public LinkedList<Long> getTeamAIds() {
+		return teamAIds;
+	}
+
+	public LinkedList<Long> getTeamBIds() {
+		return teamBIds;
 	}
 	
 }

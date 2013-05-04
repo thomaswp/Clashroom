@@ -1,6 +1,7 @@
 package com.clashroom.server.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import com.clashroom.client.services.BattleService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
 import com.clashroom.shared.Formatter;
+import com.clashroom.shared.battle.Battle;
 import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.actions.ActionExp;
 import com.clashroom.shared.battle.battlers.Battler;
@@ -17,6 +19,7 @@ import com.clashroom.shared.battle.battlers.DragonBattler;
 import com.clashroom.shared.battle.battlers.GoblinBattler;
 import com.clashroom.shared.entity.BattleEntity;
 import com.clashroom.shared.entity.DragonEntity;
+import com.clashroom.shared.entity.QueuedBattleEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -62,8 +65,52 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 	}
 	
 	@Override
+	public List<QueuedBattleEntity> getScheduledBattles() {
+		ArrayList<QueuedBattleEntity> entities = new ArrayList<QueuedBattleEntity>();
+		
+		User user = UserServiceFactory.getUserService().getCurrentUser();
+		if (user == null) {
+			return entities;
+		}
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		UserEntity userEntity = QueryUtils.queryUnique(pm, UserEntity.class, "email==%s", user.getEmail());
+		
+		List<QueuedBattleEntity> queryEntities = QueryUtils.query(
+				pm, QueuedBattleEntity.class, "playerIds.contains(%s)", 
+				userEntity.getId(), userEntity.getId());
+		for (QueuedBattleEntity entity : queryEntities) {
+			entities.add(pm.detachCopy(entity));
+		}
+		pm.close();
+		return entities;
+	}
+	
+	@Override
+	public Long scheduleBattle(String teamAName, List<Long> teamAIds, 
+			String teamBName, List<Long> teamBIds, Date time) {
+		QueuedBattleEntity qb = new QueuedBattleEntity(teamAName, teamAIds, teamBName, teamBIds, time);
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		pm.makePersistent(qb);
+		pm.close();
+		return qb.getId();
+	}
+	
+	@Override
 	public Long createBattle(List<Long> teamAIds, List<Long> teamBIds) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
+		Long id = createBattleImpl(pm, teamAIds, teamBIds, new Date());
+		pm.close();
+		return id;
+	}
+
+
+	public static void createBattleImpl(PersistenceManager pm, QueuedBattleEntity qb) {
+		createBattleImpl(pm, qb.getTeamAIds(), qb.getTeamBIds(), qb.getTime());
+	}
+	
+	public static Long createBattleImpl(PersistenceManager pm, List<Long> teamAIds, 
+			List<Long> teamBIds, Date time) {
 		LinkedList<UserEntity> teamAEntities = new LinkedList<UserEntity>();
 		LinkedList<UserEntity> teamBEntities = new LinkedList<UserEntity>();
 		
@@ -81,36 +128,33 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		
 		LinkedList<Battler> teamA = new LinkedList<Battler>(), teamB = new LinkedList<Battler>();
 		
-		String teamAName = "";
+		String teamAName = Battle.getTeamName(teamAEntities);
 		for (UserEntity userEntity : teamAEntities) {
 			DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
 			teamA.add(db);
-			teamAName = Formatter.appendList(teamAName, db.name);
 		}
 		
-		String teamBName = "";
+		String teamBName = Battle.getTeamName(teamBEntities);
 		for (UserEntity userEntity : teamBEntities) {
 			DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
 			teamB.add(db);
-			teamBName = Formatter.appendList(teamBName, db.name);
 		}
 				
 		if (teamA.isEmpty() || teamB.isEmpty()) return null;
 		
 		BattleFactory factory = new BattleFactory(teamAName, teamA, teamBName, teamB);
-		BattleEntity battleEntity = new BattleEntity(factory);
+		BattleEntity battleEntity = new BattleEntity(factory, time);
 		
 		gainExp(pm, teamAEntities, teamA, battleEntity.getTeamAExp(), factory);
 		gainExp(pm, teamBEntities, teamB, battleEntity.getTeamBExp(), factory);
 		
 		pm.makePersistent(battleEntity);
 		pm.flush();
-		pm.close();
 		
 		return battleEntity.getId();
 	}
 	
-	private void gainExp(PersistenceManager pm, List<UserEntity> users, 
+	private static void gainExp(PersistenceManager pm, List<UserEntity> users, 
 			List<Battler> team, int exp, BattleFactory factory) {
 		for (int i = 0; i < users.size(); i++) {
 			UserEntity userEntity = users.get(i);

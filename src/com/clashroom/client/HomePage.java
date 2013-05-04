@@ -1,7 +1,7 @@
 package com.clashroom.client;
 
-import com.clashroom.client.battle.ListBattlePage;
 import com.clashroom.client.user.UserInfoPage;
+import com.clashroom.client.window.ListBattleWindow;
 import com.clashroom.client.window.QuestsWindow;
 import com.clashroom.client.window.TasksWindow;
 import com.clashroom.client.window.UserInfoWindow;
@@ -45,10 +45,10 @@ public class HomePage extends Page {
 		box.setWidth("50%");
 		QuestsWindow qw = new QuestsWindow();
 		box.add(qw);
-		link = new Hyperlink("Arena Listings", ListBattlePage.NAME);
+		link = new Hyperlink("Arena Listings", ListBattleWindow.NAME);
 		link.addStyleName(Styles.text_title);
 		//box.add(link);
-		box.add(new ListBattlePage());
+		box.add(new ListBattleWindow());
 		main.add(box);
 		
 		box = new VerticalPanel();
