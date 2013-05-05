@@ -1,6 +1,8 @@
 package com.clashroom.shared.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -34,13 +36,12 @@ public class DragonEntity implements Serializable {
 	@Persistent
 	private int dragonClassId;
 	
+	@Persistent
+	private List<Integer> skills = new LinkedList<Integer>();
+	
 	public DragonClass getDragonClass() {
 		return DragonClass.getById(dragonClassId);
 	}
-	
-//	public UserEntity getPlayer(PersistenceManager pm) {
-//		return QueryUtils.queryUnique(pm, UserEntity.class, "dragonId == %s", id);
-//	}
 
 	public void addExp(int exp) {
 		DragonClass dragonClass = getDragonClass();
@@ -131,5 +132,14 @@ public class DragonEntity implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public List<Integer> getSkills() {
+		return skills;
+	}
+
+	public void setSkills(List<Integer> skills) {
+		if (skills == null) skills = new LinkedList<Integer>();
+		this.skills = skills;
 	}	
 }

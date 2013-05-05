@@ -7,6 +7,7 @@ import com.clashroom.client.Styles;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.user.UserInfoPage;
+import com.clashroom.shared.Constant;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -67,14 +68,13 @@ public class UserInfoWindow extends Window {
 	}
 	
 	private void populate() {
-		image.setUrl("img/" + user.getDragon().getDragonClass().getImageName());
+		image.setUrl(Constant.IMG_BATTLER + user.getDragon().getDragonClass().getImageName());
 		labelDragonName.setText(user.getDragon().getName());
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Profile";
 	}
 
 	@Override

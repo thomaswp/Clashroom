@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.clashroom.client.FlowControl;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.shared.Constant;
 import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.core.shared.GWT;
@@ -68,7 +69,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	                                    "How shall you know the quest is complete?");
 	    private final Label label4 = new Label();
 	    private final Label label5 = new Label();
-	    private final Label label6 = new Label("Experience gained from quest");
+	    private final Label label6 = new Label(Constant.TERM_EXP + " gained from quest");
 	    private final Label label7 = new Label("Items obtained from quest:");
 	    private final Label label8 = new Label(
 	                                    "How shall adveturers know of this quest?");

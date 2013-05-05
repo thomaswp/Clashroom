@@ -9,9 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.clashroom.shared.entity.ActiveBountyEntity;
+import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.TaskEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTaskList;
 import com.clashroom.shared.task.Task;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 public class TestServlet extends HttpServlet {
 	
@@ -20,8 +25,23 @@ public class TestServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/html");
-		createTestQuests(resp);
+		//createTestQuests(resp);
+		addSp();
 		//resp.getWriter().println(createQueue());
+	}
+	
+	public void addSp() {
+		UserService userService = UserServiceFactory.getUserService();
+		User user = userService.getCurrentUser();
+		
+		if (user == null) return;
+		
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "email == %s", user.getEmail());
+		entity.setSkillPoints(entity.getSkillPoints() + 1);
+		
+		pm.makePersistent(entity);
+		pm.close();
 	}
 	
 	public String createQueue(){

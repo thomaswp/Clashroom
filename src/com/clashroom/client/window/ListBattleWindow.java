@@ -1,5 +1,7 @@
 package com.clashroom.client.window;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +12,7 @@ import com.clashroom.client.Styles;
 import com.clashroom.client.battle.BattlePage;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
+import com.clashroom.shared.Constant;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.battlers.Battler;
@@ -53,7 +56,7 @@ public class ListBattleWindow extends Composite {
 		initWidget(panel);
 		
 		String[] headers = new String[] {
-				"Date", "Battle", "Challengers", "Victor", "Exp Gained"
+				"Date", "Battle", "Challengers", "Victor", Constant.TERM_EXP_SHORT + " Gained"
 		};
 		
 		for (int i = 0; i < headers.length; i++) {
@@ -63,6 +66,12 @@ public class ListBattleWindow extends Composite {
 		battleService.getBattles(new AsyncCallback<List<BattleEntity>>() {
 			@Override
 			public void onSuccess(List<BattleEntity> result) {
+				Collections.sort(result, new Comparator<BattleEntity>() {
+					@Override
+					public int compare(BattleEntity o1, BattleEntity o2) {
+						return o1.getDate().compareTo(o2.getDate());
+					}
+				});
 				int row = 1;
 				for (int i = 0; i < result.size(); i++) {
 					BattleEntity entity = result.get(i);
@@ -105,6 +114,12 @@ public class ListBattleWindow extends Composite {
 			
 			@Override
 			public void onSuccess(List<QueuedBattleEntity> result) {
+				Collections.sort(result, new Comparator<QueuedBattleEntity>() {
+					@Override
+					public int compare(QueuedBattleEntity o1, QueuedBattleEntity o2) {
+						return o1.getTime().compareTo(o2.getTime());
+					}
+				});
 				int row = table.getRowCount() + 1;
 				for (int i = 0; i < result.size(); i++) {
 					QueuedBattleEntity entity = result.get(i);

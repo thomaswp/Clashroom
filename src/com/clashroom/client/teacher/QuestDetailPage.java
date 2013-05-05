@@ -5,6 +5,7 @@ import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.shared.Constant;
 import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -144,7 +145,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		questName.setText(aQuest.getQuestName());
 		questDesc.setText(aQuest.getQuestDescription());
-		questXpGained.setText("Expereince: "+ aQuest.getExperienceRewarded());
+		questXpGained.setText(Constant.TERM_EXP + ": "+ aQuest.getExperienceRewarded());
 		questLevelRequirment.setText("Level "+ aQuest.getLevelRequirement());
 		questItemsAwarded.setText("Items: ");
 		

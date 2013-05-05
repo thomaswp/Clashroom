@@ -11,4 +11,5 @@ public interface UserInfoService extends RemoteService {
 	public UserEntity getUser();
 	public void setUser(UserEntity user);
 	public List<UserEntity> getAllUsers();
+	public void learnSkill(int id);
 }

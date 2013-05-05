@@ -1,7 +1,13 @@
 package com.clashroom.shared.battle.dragons;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
+import com.clashroom.shared.battle.skills.ActiveSkill;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.DragonEntity;
 
@@ -16,6 +22,19 @@ public abstract class DragonClass {
 	
 	public HashMap<Skill, Integer> getSkillTree() {
 		return skillTree;
+	}
+	
+	private Comparator<Skill> skillComparator = new Comparator<Skill>() {
+		@Override
+		public int compare(Skill o1, Skill o2) {
+			return skillTree.get(o1) - skillTree.get(o2);
+		}
+	};
+	public List<Skill> getSkills() {
+		List<Skill> skills = new ArrayList<Skill>(); 
+		skills.addAll(skillTree.keySet());
+		Collections.sort(skills, skillComparator);
+		return skills;
 	}
 	
 	private final static DragonClass[] dragons = new DragonClass[] { 

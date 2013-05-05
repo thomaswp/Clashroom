@@ -8,8 +8,9 @@ import java.util.Random;
 
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.skills.AttackSkill;
+import com.clashroom.shared.battle.skills.ActiveSkill;
+import com.clashroom.shared.battle.skills.ActiveSkill.Target;
 import com.clashroom.shared.battle.skills.Skill;
-import com.clashroom.shared.battle.skills.Skill.Target;
 
 public abstract class Battler implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -26,7 +27,7 @@ public abstract class Battler implements Serializable{
 	public double expFactor = 1;
 	
 	protected transient LinkedList<Battler> tempBattlers = new LinkedList<Battler>();
-	protected transient LinkedList<Skill> tempSkills = new LinkedList<Skill>(); 
+	protected transient LinkedList<ActiveSkill> tempSkills = new LinkedList<ActiveSkill>(); 
 	
 	public transient Object tag;
 	
@@ -47,7 +48,7 @@ public abstract class Battler implements Serializable{
 		hp = maxHp;
 		mp = maxMp;
 		tempBattlers = new LinkedList<Battler>();
-		tempSkills = new LinkedList<Skill>();
+		tempSkills = new LinkedList<ActiveSkill>();
 	}
 	
 	public int getExpReward() {
@@ -66,10 +67,10 @@ public abstract class Battler implements Serializable{
 		return (int)((Math.random() * (maxGain - minGain) + minGain) * (level + 0));
 	}
 	
-	protected Battler selectTarget(List<Battler> targets, Skill skill, Random random) {
+	protected Battler selectTarget(List<Battler> targets, ActiveSkill skill, Random random) {
 		if (targets.size() == 0) return null;
 		int index;
-		if (targets.size() > 2 && skill.target == Target.Splash) {
+		if (targets.size() > 2 && skill.getTarget() == Target.Splash) {
 			index = 1 + random.nextInt(targets.size() - 2);
 		} else {
 			index = random.nextInt(targets.size());
@@ -77,11 +78,11 @@ public abstract class Battler implements Serializable{
 		return targets.get(index);
 	}
 	
-	public Battler selectEnemyTarget(List<Battler> targets, Skill skill, Random random) {
+	public Battler selectEnemyTarget(List<Battler> targets, ActiveSkill skill, Random random) {
 		return selectTarget(targets, skill, random);
 	}
 	
-	public Battler selectAllyTarget(List<Battler> targets, Skill skill, Random random) {
+	public Battler selectAllyTarget(List<Battler> targets, ActiveSkill skill, Random random) {
 		tempBattlers.clear();
 		for (Battler battler : targets) {
 			if (battler.hp < battler.maxHp) tempBattlers.add(battler);
@@ -89,9 +90,9 @@ public abstract class Battler implements Serializable{
 		return selectTarget(tempBattlers, skill, random);
 	}
 	
-	public boolean skillValid(Skill skill, boolean selfHealed, boolean alliesHealed) {
-		if (skill.targetAllies) {
-			if (skill.target == Target.Self) {
+	public boolean skillValid(ActiveSkill skill, boolean selfHealed, boolean alliesHealed) {
+		if (skill.targetsAllies()) {
+			if (skill.getTarget() == Target.Self) {
 				return !selfHealed;
 			} else {
 				return !alliesHealed;
@@ -100,7 +101,7 @@ public abstract class Battler implements Serializable{
 		return true;
 	}
 	
-	public Skill selectSkill(Random random, List<Battler> allies, List<Battler> enemies) {
+	public ActiveSkill selectSkill(Random random, List<Battler> allies, List<Battler> enemies) {
 		tempSkills.clear();
 		boolean alliesHealed = true;
 		for (Battler battler : allies) {
@@ -108,8 +109,11 @@ public abstract class Battler implements Serializable{
 		}
 		boolean selfHealed = hp == maxHp;
 		for (Skill skill : skills) {
-			if (skill.mpCost <= mp && skillValid(skill, selfHealed, alliesHealed)) {
-				tempSkills.add(skill);
+			if (skill.isActive()) {
+				ActiveSkill activeSkill = skill.asActive();
+				if (activeSkill.getMpCost() <= mp && skillValid(activeSkill, selfHealed, alliesHealed)) {
+					tempSkills.add(activeSkill);
+				}
 			}
 		}
 		//if (tempSkills.size() == 0) return null;
