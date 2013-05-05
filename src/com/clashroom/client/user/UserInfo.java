@@ -68,6 +68,7 @@ public class UserInfo extends Composite {
 		HorizontalPanel hPanel = new HorizontalPanel();
 		hPanel.addStyleName(learned ? Styles.profile_skill_learned :
 			Styles.profile_skill_unlearned);
+		if (skill.isActive()) hPanel.addStyleName(Styles.profile_skill_active);
 		hPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		Image image = new Image(Constant.IMG_ICON + skill.getIcon());
 		image.setWidth("100%");
@@ -81,7 +82,7 @@ public class UserInfo extends Composite {
 		hPanelName.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		vPanelText.add(hPanelName);
 		
-		Label labelName = new Label(skill.getName());
+		Label labelName = new Label(skill.getName(), false);
 		labelName.addStyleName(Styles.profile_skill_name);
 		hPanelName.add(labelName);
 		Label labelDescription = new Label(skill.getDescription());

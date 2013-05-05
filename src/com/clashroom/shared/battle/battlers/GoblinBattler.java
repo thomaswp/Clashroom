@@ -4,6 +4,9 @@ import com.clashroom.shared.Formatter;
 
 public class GoblinBattler extends Battler {
 	private static final long serialVersionUID = 1L;
+
+	@Deprecated
+	public GoblinBattler() {}
 	
 	public GoblinBattler(int level) {
 		name = "Goblin";
@@ -16,13 +19,15 @@ public class GoblinBattler extends Battler {
 		generateMaxHP();
 		generateMaxMP();
 	}
-	
-	@Deprecated
-	public GoblinBattler() {}
 
 	@Override
 	protected String getDescription() {
 		return Formatter.format("Level %d %s", level, name);
+	}
+
+	@Override
+	protected Battler copyChild() {
+		return new GoblinBattler();
 	}
 	
 }

@@ -122,6 +122,7 @@ implements UserInfoService {
 		user.setDragon(dragon);
 		pm.makePersistent(user);
 		
+		pm.flush();
 		pm.close();
 	}
 }

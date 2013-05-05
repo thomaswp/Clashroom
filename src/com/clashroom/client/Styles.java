@@ -23,6 +23,7 @@ public class Styles {
 	public static final String profile_skills = "profile_skills";
 	public static final String profile_skill_border = "profile_skill_border";
 	public static final String profile_skill_name = "profile_skill_name";
+	public static final String profile_skill_active = "profile_skill_active";
 	public static final String profile_skill_learned = "profile_skill_learned";
 	public static final String profile_skill_unlearned = "profile_skill_unlearned";
 	

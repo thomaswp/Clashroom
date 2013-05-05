@@ -40,6 +40,10 @@
 	background:#efefef;
 }
 
+.profile_portrait img {
+	margin:-10px 0 0 -60px;
+}
+
 .profile_stats {
 	width:50%;
 	position:absolute;
@@ -80,9 +84,13 @@
 	height: 75px;
 	border-radius: 15px;
 	overflow:hidden;
-	box-shadow:0 -1px 0px 0px rgba(0,0,0,0.2);
 	background:#efefef;
+	margin: 8px;
+}
+
+.profile_skills .profile_skill_active .profile_skill_border {
 	margin: 5px;
+	border: 3px outset #666666;
 }
 
 .profile_skill_unlearned .gwt-Image {
@@ -91,10 +99,6 @@
     -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
     -webkit-transition: all .6s ease; /* Fade to color for Chrome and Safari */
     -webkit-backface-visibility: hidden; /* Fix for transition flickering */
-}
-
-.profile_portrait img {
-	margin:-10px 0 0 -60px;
 }
 
 /* --- BATTLES LIST --- */

@@ -33,11 +33,20 @@ public class DragonBattler extends Battler {
 			skills.add(Skill.getById(id));
 		}
 	}
+	
+	
 
 	@Override
 	protected String getDescription() {
 		return Formatter.format("%s, Level %d", 
 				name, level);
+	}
+
+	@Override
+	public Battler copyChild() {
+		DragonBattler db = new DragonBattler();
+		db.playerId = playerId;
+		return db;
 	}
 
 }

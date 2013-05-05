@@ -8,7 +8,7 @@ public abstract class Skill implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public enum Attribute {
-		Strength, Agility, Intelligence
+		Strength, Agility, Intelligence, None
 	}
 	
 	//<-- Don't change the order from here
@@ -18,11 +18,12 @@ public abstract class Skill implements Serializable {
 	private static HashMap<Class<?>, Integer> skillIds = 
 			new HashMap<Class<?>, Integer>();
 	
-	private static ActiveSkill[] skills = new ActiveSkill[] {
+	private static Skill[] skills = new Skill[] {
 		new AttackSkill(),
 		new FireballSkill(),
 		new FireBreathSkill(),
 		new HealSkill(),
+		new EggShellSkill(),
 		//Add new skills down here
 	};
 	//--> to here
@@ -90,6 +91,10 @@ public abstract class Skill implements Serializable {
 	public ActiveSkill asActive() {
 		return (ActiveSkill)this;
 	}
+
+	public PassiveSkill asPassive() {
+		return (PassiveSkill)this;
+	}
 	
 	public boolean showSkill() {
 		return true;
@@ -100,6 +105,7 @@ public abstract class Skill implements Serializable {
 		case Strength: return battler.strength;
 		case Agility: return battler.agility;
 		case Intelligence: return battler.intelligence;
+		case None: return 0;
 		}
 		return 0;
 	}

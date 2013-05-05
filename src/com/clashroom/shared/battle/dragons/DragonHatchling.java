@@ -2,6 +2,7 @@ package com.clashroom.shared.battle.dragons;
 
 import java.util.HashMap;
 
+import com.clashroom.shared.battle.skills.EggShellSkill;
 import com.clashroom.shared.battle.skills.FireBreathSkill;
 import com.clashroom.shared.battle.skills.FireballSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill;
@@ -53,6 +54,7 @@ public class DragonHatchling extends DragonClass {
 	@Override
 	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
 		skillTree.put(new FireballSkill(), 1);
+		skillTree.put(new EggShellSkill(), 2);
 		skillTree.put(new FireBreathSkill(), 8);
 	}
 }
