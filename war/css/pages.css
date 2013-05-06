@@ -40,7 +40,26 @@
 	background:#efefef;
 }
 
+.profile_portrait_window {
+	width:200px;
+	height:200px;
+	border-radius:100px;
+	overflow:hidden;
+	box-shadow:0 -1px 0px 0px rgba(0,0,0,0.2);
+	margin:20px auto;
+	background:#efefef;
+}
+
+.profile_window {
+	position:relative;
+	width:100%;
+}
+
 .profile_portrait img {
+	margin:-10px 0 0 -60px;
+}
+
+.profile_portrait_window img {
 	margin:-10px 0 0 -60px;
 }
 

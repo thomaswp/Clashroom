@@ -120,7 +120,7 @@ public class ListBattleWindow extends Composite {
 						return o1.getTime().compareTo(o2.getTime());
 					}
 				});
-				int row = table.getRowCount() + 1;
+				int row = table.getRowCount();
 				for (int i = 0; i < result.size(); i++) {
 					QueuedBattleEntity entity = result.get(i);
 					
