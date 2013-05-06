@@ -59,6 +59,12 @@ implements UserInfoService {
 
 	@Override
 	public void addExp(int exp) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		addExpImpl(pm, exp);
+		pm.close();
+	}
+	
+	public static void addExpImpl(PersistenceManager pm, int exp) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		
@@ -66,7 +72,6 @@ implements UserInfoService {
 		
 		if (user == null) return;
 		
-		PersistenceManager pm = PMF.get().getPersistenceManager();
 		UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "email == %s", user.getEmail());
 		
 		if (entity == null) {

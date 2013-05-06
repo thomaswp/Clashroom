@@ -149,10 +149,29 @@ public class TasksWindow extends Window {
 				
 				//Check for active Quest for completion
 				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-					aql.completeQuest(userInfoService);
-					queueTable.removeRow(queueTable.getRowCount()-1);
-					persistAQL();
-					return;
+					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							System.out.println("Dat shit broke");
+						}
+
+						@Override
+						public void onSuccess(String result) {
+							System.out.println(result);
+							aql.removeFirst();
+							queueTable.removeRow(queueTable.getRowCount()-1);
+							currentBar.setProgress(0);
+							if (aql.getAllQuests().size() < 1){
+								totalBar.setProgress(0);
+							}
+						}
+						
+					});
+//					aql.completeQuest();
+//					queueTable.removeRow(queueTable.getRowCount()-1);
+//					persistAQL();
+//					return;
 				}
 			}
 			updateProgressBar();

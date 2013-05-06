@@ -90,24 +90,29 @@ public class ActiveTaskList implements Serializable {
 		return list;
 	}
 	
-	public void completeQuest(UserInfoServiceAsync userInfoService){
+	public void completeQuest(){
 		
-		Debug.write("Doin ma callbacks");
-		userInfoService.addExp(getActiveQuest().getReward(), new AsyncCallback<Void>(){
-
-			@Override
-			public void onSuccess(Void result) {
-				Debug.write(getActiveQuest());
-				System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
-				list.removeFirst();
-			}
-
-			@Override
-			public void onFailure(Throwable caught) {
-				System.out.println("Dat shit is broke");
-			}
-			
-		});
+//		Debug.write("Doin ma callbacks");
+//		userInfoService.addExp(getActiveQuest().getReward(), new AsyncCallback<Void>(){
+//
+//			@Override
+//			public void onSuccess(Void result) {
+//				Debug.write(getActiveQuest());
+//				System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
+//				list.removeFirst();
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				System.out.println("Dat shit is broke");
+//			}
+//			
+//		});
+		aqStart = new Date().getTime();
+	}
+	
+	public void removeFirst() {
+		list.removeFirst();
 		aqStart = new Date().getTime();
 	}
 	

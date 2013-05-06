@@ -60,6 +60,24 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		}
 		return "AQL persisted";
 	}
+	
+	@Override
+	public String completeQuest(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		UserServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
+		atl.removeFirst();
+		
+		ActiveBountyEntity entity = new ActiveBountyEntity();
+		entity = pm.getObjectById(ActiveBountyEntity.class, atl.getId());
+		entity.setActiveQuests(atl);
+		try {
+			pm.makePersistent(entity);
+		} finally {
+			pm.close();
+		}
+		return "Bounty completed";
+	}
+	
 
 
 }

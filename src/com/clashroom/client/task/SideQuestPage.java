@@ -272,9 +272,25 @@ public class SideQuestPage extends Page {
 				
 				//Check for active Quest for completion
 				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-					aql.completeQuest(userInfoService);
-					queueTable.removeRow(queueTable.getRowCount()-1);
-					return;
+					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							System.out.println("Dat shit broke");
+						}
+
+						@Override
+						public void onSuccess(String result) {
+							System.out.println(result);
+							aql.removeFirst();
+							queueTable.removeRow(queueTable.getRowCount()-1);
+							
+						}
+						
+					});
+//					aql.completeQuest(userInfoService);
+//					queueTable.removeRow(queueTable.getRowCount()-1);
+//					return;
 				}
 			}
 			updateProgressBar();

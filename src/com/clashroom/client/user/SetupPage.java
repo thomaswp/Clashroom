@@ -53,6 +53,7 @@ public class SetupPage extends Page {
 		Window.setTitle("Setup");
 	
 		form = new SetupUser();
+		form.addStyleName(NAME);
 		initWidget(form);
 	}
 	
