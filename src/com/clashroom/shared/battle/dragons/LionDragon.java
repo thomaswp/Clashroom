@@ -2,6 +2,7 @@ package com.clashroom.shared.battle.dragons;
 
 import java.util.HashMap;
 
+import com.clashroom.shared.battle.skills.ActiveSkill;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class LionDragon extends DragonClass {

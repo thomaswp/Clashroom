@@ -10,6 +10,7 @@ public class LoginInfo implements Serializable {
 	private String emailAddress;
 	private String nickname;
 	private boolean hasAccount = false;
+	private long userId;
 
 	public boolean isLoggedIn() {
 		return loggedIn;
@@ -57,5 +58,13 @@ public class LoginInfo implements Serializable {
 
 	public void setHasAccount(boolean hasAccount) {
 		this.hasAccount = hasAccount;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long id) {
+		this.userId = id;
 	}
 }

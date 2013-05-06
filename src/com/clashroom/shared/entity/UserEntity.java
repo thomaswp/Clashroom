@@ -29,6 +29,9 @@ public class UserEntity implements Serializable {
 	@Embedded
 	private DragonEntity dragonEntity;
 	
+	@Persistent
+	private Integer skillPoints = 0;
+	
 	public boolean isSetup() {
 		return id != null;
 	}
@@ -108,5 +111,14 @@ public class UserEntity implements Serializable {
 	
 	public void setDragon(DragonEntity dragon) {
 		this.dragonEntity = dragon;
+	}
+	
+	public Integer getSkillPoints() {
+		if (skillPoints == null) return 0;
+		return skillPoints;
+	}
+	
+	public void setSkillPoints(int skillPoints) {
+		this.skillPoints = skillPoints; 
 	}
 }

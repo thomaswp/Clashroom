@@ -3,6 +3,7 @@ package com.clashroom.client.user;
 import com.clashroom.client.resources.MyResources;
 import com.clashroom.client.widget.AnimatedProgressBar;
 import com.clashroom.client.widget.MomentumScrollPanel;
+import com.clashroom.shared.Constant;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.entity.DragonEntity;
@@ -201,7 +202,7 @@ public class SetupUser extends Composite {
 		final HTML htmlDragonDescription = new HTML("", true);
 		verticalPanel_3.add(htmlDragonDescription);
 		
-		Label lblHp = new Label("Hp:");
+		Label lblHp = new Label(Constant.STAT_HP + ":");
 		lblHp.setStyleName("prompt");
 		verticalPanel_3.add(lblHp);
 		lblHp.setWidth("50px");
@@ -209,7 +210,7 @@ public class SetupUser extends Composite {
 		final AnimatedProgressBar progressBarHp = new AnimatedProgressBar(0.0, 1.0, 0.0);
 		verticalPanel_3.add(progressBarHp);
 		
-		Label lblMp = new Label("Mp:");
+		Label lblMp = new Label(Constant.STAT_MP +":");
 		lblMp.setStyleName("prompt");
 		verticalPanel_3.add(lblMp);
 		lblMp.setWidth("50px");
@@ -217,7 +218,7 @@ public class SetupUser extends Composite {
 		final AnimatedProgressBar progressBarMp = new AnimatedProgressBar(0.0, 1.0, 0.0);
 		verticalPanel_3.add(progressBarMp);
 		
-		Label lblNewLabel_1 = new Label("Strength:");
+		Label lblNewLabel_1 = new Label(Constant.STAT_STR + ":");
 		lblNewLabel_1.setStyleName("prompt");
 		verticalPanel_3.add(lblNewLabel_1);
 		lblNewLabel_1.setWidth("50px");
@@ -225,7 +226,7 @@ public class SetupUser extends Composite {
 		final AnimatedProgressBar progressBarStr = new AnimatedProgressBar(0, 1, 0);
 		verticalPanel_3.add(progressBarStr);
 		
-		Label lblAgility = new Label("Agility:");
+		Label lblAgility = new Label(Constant.STAT_AGI + ":");
 		lblAgility.setStyleName("prompt");
 		verticalPanel_3.add(lblAgility);
 		lblAgility.setWidth("50px");
@@ -233,7 +234,7 @@ public class SetupUser extends Composite {
 		final AnimatedProgressBar progressBarAgi = new AnimatedProgressBar(0.0, 1.0, 0.0);
 		verticalPanel_3.add(progressBarAgi);
 		
-		Label lblIntelligence = new Label("Intelligence:");
+		Label lblIntelligence = new Label(Constant.STAT_INT + ":");
 		lblIntelligence.setStyleName("prompt");
 		verticalPanel_3.add(lblIntelligence);
 		lblIntelligence.setWidth("50px");
@@ -269,7 +270,7 @@ public class SetupUser extends Composite {
 		horizontalPanel_6.add(imageDragonBig);
 		
 		for (final DragonClass dragonClass : DragonClass.getAllClasses()) {
-			Image image = new Image("img/" + dragonClass.getImageName());
+			Image image = new Image(Constant.IMG_BATTLER + dragonClass.getImageName());
 			image.setWidth("150px");
 			VerticalPanel vPanel = new VerticalPanel();
 			Label label = new Label(dragonClass.getName());
@@ -297,7 +298,7 @@ public class SetupUser extends Composite {
 					progressBarStr.animateSetProgress(dragonClass.getStrengthFactor());
 					progressBarAgi.animateSetProgress(dragonClass.getAgilityFactor());
 					progressBarInt.animateSetProgress(dragonClass.getIntelligenceFactor());
-					imageDragonBig.setUrl("img/" + dragonClass.getImageName());
+					imageDragonBig.setUrl(Constant.IMG_BATTLER + dragonClass.getImageName());
 				}
 			});
 			

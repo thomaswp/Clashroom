@@ -4,13 +4,13 @@ import java.util.LinkedList;
 
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.skills.Skill;
+import com.clashroom.shared.battle.skills.ActiveSkill;
 
 public class ActionSkill extends BattleAction {
 	private static final long serialVersionUID = 1L;
 	
 	public Battler attacker;
-	public Skill skill;
+	public ActiveSkill skill;
 	public LinkedList<Damage> damages = new LinkedList<ActionSkill.Damage>();
 	public boolean missed;
 	
@@ -18,7 +18,7 @@ public class ActionSkill extends BattleAction {
 		return damages.get(0);
 	}
 	
-	public ActionSkill(Battler attacker, Skill skill, boolean missed, Damage damage) {
+	public ActionSkill(Battler attacker, ActiveSkill skill, boolean missed, Damage damage) {
 		super();
 		this.attacker = attacker;
 		this.skill = skill;
@@ -33,7 +33,7 @@ public class ActionSkill extends BattleAction {
 		if (missed) {
 			damageString = "and missed!";
 		} else {
-			damageString = skill.targetAllies ? "healing " : "dealing ";
+			damageString = skill.targetsAllies() ? "healing " : "dealing ";
 			for (int i = 0; i < damages.size(); i++) {
 				if (i > 0) damageString += i == damages.size() - 1 ? " and " : ", ";
 				Damage damage = damages.get(i);

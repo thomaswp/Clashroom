@@ -7,6 +7,7 @@ import com.clashroom.shared.battle.skills.HealSkill;
 public class FairyBattler extends Battler {
 	private static final long serialVersionUID = 1L;
 	
+	@Deprecated
 	public FairyBattler() { }
 	
 	public FairyBattler(int level) {
@@ -28,4 +29,8 @@ public class FairyBattler extends Battler {
 		return Formatter.format("Level %d %s", level, name);
 	}
 
+	@Override
+	protected Battler copyChild() {
+		return new FairyBattler();
+	}
 }

@@ -56,6 +56,7 @@ public class UserInfoPage extends Page {
 //		panel.add(link);
 		Window.setTitle("My Info");
 		userInfoWidget = new UserInfo();
+		userInfoWidget.setUserService(userInfoService);
 		userInfoWidget.addStyleName(Styles.position_relative);
 		userInfoWidget.setWidth("600px");
 		panel.addStyleName(NAME);

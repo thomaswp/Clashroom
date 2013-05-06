@@ -1,6 +1,7 @@
 package com.clashroom.shared.battle;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,8 +39,14 @@ public class BattleFactory implements Serializable {
 	}
 
 	public Battle generateBattle() {
-		return new Battle(teamAName, teamA, 
-				teamBName, teamB, seed, postBattleActions);
+		return new Battle(teamAName, copyTeam(teamA), 
+				teamBName, copyTeam(teamB), seed, postBattleActions);
+	}
+	
+	private static List<Battler> copyTeam(List<Battler> team) {
+		ArrayList<Battler> teamNew = new ArrayList<Battler>();
+		for (Battler battler : team) teamNew.add(battler.copy());
+		return teamNew;
 	}
 	
 	public void addPostBattleAction(BattleAction battleAction) {
@@ -56,5 +63,6 @@ public class BattleFactory implements Serializable {
 		seed = (long)(Math.random() * Long.MAX_VALUE);
 	}
 	
+	@Deprecated
 	public BattleFactory() { }
 }

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.clashroom.shared.Debug;
+import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionDeath;
 import com.clashroom.shared.battle.actions.ActionFinish;
 import com.clashroom.shared.battle.actions.ActionSkill;
@@ -13,8 +15,10 @@ import com.clashroom.shared.battle.actions.ActionSkillTargetAll;
 import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.skills.Skill;
-import com.clashroom.shared.battle.skills.Skill.Target;
+import com.clashroom.shared.battle.battlers.DragonBattler;
+import com.clashroom.shared.battle.skills.ActiveSkill;
+import com.clashroom.shared.battle.skills.ActiveSkill.Target;
+import com.clashroom.shared.entity.UserEntity;
 
 public class Battle {
 	private Random random;
@@ -43,6 +47,15 @@ public class Battle {
 	
 	public List<Battler> getTeamB() {
 		return teamB;
+	}
+	
+	public static String getTeamName(List<UserEntity> team) {
+		String teamName = "";
+		for (UserEntity userEntity : team) {
+			DragonBattler db = new DragonBattler(userEntity.getDragon(), userEntity.getId());
+			teamName = Formatter.appendList(teamName, db.name);
+		}
+		return teamName;
 	}
 	
 	public BattleAction getNextPostBattleAction() {
@@ -106,7 +119,9 @@ public class Battle {
 	
 	public BattleAction nextAction() {
 		if (queuedActions.size() > 0) {
-			return queuedActions.removeFirst();
+			BattleAction action =  queuedActions.removeFirst();
+			//Debug.write(action.toBattleString());
+			return action;
 		}
 		
 		Battler attacker = battlers.get(0);
@@ -120,10 +135,10 @@ public class Battle {
 		List<Battler> allies = getLivingAllies(attacker);
 		List<Battler> enemies = getLivingEnemies(attacker);
 		
-		Skill skill = attacker.selectSkill(random, allies, enemies);
+		ActiveSkill skill = attacker.selectSkill(random, allies, enemies);
 		List<Battler> targets;
 		Battler target = null;
-		if (skill.targetAllies) {
+		if (skill.targetsAllies()) {
 			targets = allies;
 			target = attacker.selectAllyTarget(targets, skill, random);
 		} else {
@@ -133,20 +148,20 @@ public class Battle {
 		
 		
 		BattleAction action;
-		if (skill.target == Target.Self) {
+		if (skill.getTarget() == Target.Self) {
 			ActionSkill attack = skill.getAttack(attacker, attacker, random);
 			action = attack;
 			doDamage(attack.getPrimaryDamage());
-		} else if (skill.target == Target.One) {
+		} else if (skill.getTarget() == Target.One) {
 			ActionSkill attack = skill.getAttack(attacker, target, random);
 			action = attack;
 			doDamage(attack.getPrimaryDamage());
-		} else if (skill.target == Target.Splash) {
+		} else if (skill.getTarget() == Target.Splash) {
 			ActionSkill attack = skill.getAttack(attacker, target, random);
 			action = attack;
 			doDamage(attack.getPrimaryDamage());
 			if (!attack.missed) {
-				List<Battler> allTargets = skill.targetAllies ? getAllAllies(attacker) :
+				List<Battler> allTargets = skill.targetsAllies() ? getAllAllies(attacker) :
 					getAllEnemies(attacker);
 				int index = allTargets.indexOf(target);
 				for (int i = index - 1; i < index + 2; i += 2) {
@@ -168,7 +183,7 @@ public class Battle {
 			action = new ActionSkillTargetAll(attacker, skill, attacks);
 			//action = new ActionSkill(attacker, new AttackSkill(), true, new Damage(targets.get(0), 0));
 		}
-		attacker.mp -= skill.mpCost;
+		attacker.mp -= skill.getMpCost();
 		
 		tempBattlers.clear();
 		for (Battler b : battlers) {
@@ -184,6 +199,7 @@ public class Battle {
 		battlers.removeFirst();
 		battlers.add(attacker);
 		
+		//Debug.write(action.toBattleString());
 		return action;
 	}
 	

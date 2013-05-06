@@ -1,6 +1,8 @@
 package com.clashroom.client.battle;
 
 import java.util.ArrayList;
+
+import com.clashroom.shared.Constant;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
@@ -11,9 +13,9 @@ import com.google.gwt.user.client.ui.Image;
 
 public class BattlerSprite extends BatchedSprite {
 	
-	public final static String IMG_DIR = "/img/";
-	public final static String IMG_DIR_RED = IMG_DIR + "red/";
-	public final static String IMG_DIR_GREEN = IMG_DIR + "green/";
+	public final static String IMG_DIR = Constant.IMG_BATTLER;
+	public final static String IMG_DIR_RED = Constant.IMG_BATTLER_RED;
+	public final static String IMG_DIR_GREEN = Constant.IMG_BATTLER_GREEN;
 	
 	private final static int ATTACK_TIME = 400;
 	private final static int HURT_TIME = 400;
