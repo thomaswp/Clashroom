@@ -2,6 +2,7 @@ package com.clashroom.client;
 
 import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.client.window.ListBattleWindow;
+import com.clashroom.client.window.NewsfeedWindow;
 import com.clashroom.client.window.QuestsWindow;
 import com.clashroom.client.window.TasksWindow;
 import com.clashroom.client.window.UserInfoWindow;
@@ -54,9 +55,8 @@ public class HomePage extends Page {
 		box = new VerticalPanel();
 		box.addStyleName("column");
 		box.addStyleName("side");
-		link = new Hyperlink("Town Herald", "");
-		link.addStyleName(Styles.text_title);
-		box.add(link);
+		
+		box.add(new NewsfeedWindow());
 		
 		TasksWindow sqw = new TasksWindow();
 		box.add(sqw);

@@ -19,8 +19,11 @@ import com.clashroom.shared.battle.battlers.DragonBattler;
 import com.clashroom.shared.battle.battlers.GoblinBattler;
 import com.clashroom.shared.entity.BattleEntity;
 import com.clashroom.shared.entity.DragonEntity;
+import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.QueuedBattleEntity;
 import com.clashroom.shared.entity.UserEntity;
+import com.clashroom.shared.news.BattleNews;
+import com.clashroom.shared.news.NewsfeedItem;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
@@ -149,6 +152,10 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		gainExp(pm, teamBEntities, teamB, battleEntity.getTeamBExp(), factory);
 		
 		pm.makePersistent(battleEntity);
+		
+		NewsfeedEntity item = new NewsfeedEntity(new BattleNews(battleEntity));
+		pm.makePersistent(item);
+		
 		pm.flush();
 		
 		return battleEntity.getId();

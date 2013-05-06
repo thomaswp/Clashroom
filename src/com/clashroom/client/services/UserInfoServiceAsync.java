@@ -3,6 +3,7 @@ package com.clashroom.client.services;
 import java.util.List;
 
 import com.clashroom.shared.entity.UserEntity;
+import com.clashroom.shared.news.NewsfeedItem;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface UserInfoServiceAsync {
@@ -11,4 +12,5 @@ public interface UserInfoServiceAsync {
 	public void addExp(int exp, AsyncCallback<Void> callback);
 	public void getAllUsers(AsyncCallback<List<UserEntity>> callback);
 	public void learnSkill(int id, AsyncCallback<Void> callback);
+	public void getNews(List<Long> users, int count, AsyncCallback<List<NewsfeedItem>> callback);
 }

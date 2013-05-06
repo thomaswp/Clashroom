@@ -1,5 +1,8 @@
 package com.clashroom.server.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,7 +15,9 @@ import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.DragonEntity;
+import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.UserEntity;
+import com.clashroom.shared.news.NewsfeedItem;
 
 import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.users.User;
@@ -126,6 +131,31 @@ implements UserInfoService {
 		pm.close();
 	}
 
+	@Override
+	public List<NewsfeedItem> getNews(List<Long> users, int count) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		
+		List<NewsfeedEntity> entities = new ArrayList<NewsfeedEntity>();
+		for (Long userId : users) {
+			entities.addAll(QueryUtils.query(pm, NewsfeedEntity.class, "playerIds.contains(%s)", userId));
+		}
+		
+		//TODO: Better implementation than just grabbing everything...
+		Collections.sort(entities, new Comparator<NewsfeedEntity>() {
+			@Override
+			public int compare(NewsfeedEntity o1, NewsfeedEntity o2) {
+				return o1.getDate().compareTo(o2.getDate());
+			}
+		});
+		
+		List<NewsfeedItem> items = new ArrayList<NewsfeedItem>();
+		for (int i = 0; i < count && i < entities.size(); i++) {
+			items.add(entities.get(i).getItem());
+		}
+		
+		pm.close();
+		return items;
+	}
 
 	@Override
 	public void addExp(int exp) {
