@@ -42,7 +42,7 @@ public final static String NAME = "questInnerWindow";
 			codeType = "Code";
 		}
 		String[] questInfo = new String[] {
-				questEntity.getQuestName(),questEntity.getQuestDescription().substring(0, 35)+"...",questEntity.getExperienceRewarded()+"", codeType
+				questEntity.getQuestName(),questEntity.getQuestDescription().substring(0, 10)+"...",questEntity.getExperienceRewarded()+" xp", codeType
 		};
 
 		for (int i = 0; i < questInfo.length; i++) {

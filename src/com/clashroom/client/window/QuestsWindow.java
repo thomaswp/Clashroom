@@ -99,7 +99,7 @@ public class QuestsWindow extends Composite {
 		if(availableQuests.size() < 1){
 			createDummyQuest();
 		}        
-        createItems();
+        //createItems();
         
 		String[] headers = new String[] {
 				"Quest Name", "Description", "Reward", "Type"
