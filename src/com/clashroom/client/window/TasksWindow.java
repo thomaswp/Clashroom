@@ -7,8 +7,12 @@ import com.clashroom.client.FlowControl;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.TaskService;
 import com.clashroom.client.services.TaskServiceAsync;
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.task.SideQuestPage;
+import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.widget.ProgressBar;
+import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTask;
 import com.clashroom.shared.task.ActiveTaskList;
 import com.google.gwt.core.shared.GWT;
@@ -32,7 +36,9 @@ public class TasksWindow extends Window {
 	private ProgressBar currentBar = new ProgressBar();
 	private ProgressBar totalBar = new ProgressBar();
 	private ActiveTaskList aql = new ActiveTaskList();
-	private TaskServiceAsync questService = GWT.create(TaskService.class);
+	private static TaskServiceAsync questService = GWT.create(TaskService.class);
+	private static UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
+	private UserEntity user;
 	
 	public TasksWindow() {
 		super();
@@ -75,14 +81,31 @@ public class TasksWindow extends Window {
 			}
 		};
 		refreshTimer.scheduleRepeating(REFRESH_INTERVAL);
-	
+		
+		userInfoService.getUser(new AsyncCallback<UserEntity>() {
+			@Override
+			public void onSuccess(UserEntity result) {
+				if (!result.isSetup()) {
+					FlowControl.go(new SetupPage(result));
+				} else {
+					user = result;
+					getActiveQuests(user.getId());
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+		});
+		
 		//Request data from datastore
-		getActiveQuests();
+		//getActiveQuests(user.getId());
 	}
 	
 	//Requests datastore for the list of Active quests
-	public void getActiveQuests() {
-		questService.getActiveQuests(new AsyncCallback<ActiveTaskList>() {
+	public void getActiveQuests(Long userID) {
+		questService.getActiveQuests(userID, new AsyncCallback<ActiveTaskList>() {
 			@Override
 			public void onSuccess(ActiveTaskList result) {
 				aql = result;
@@ -125,10 +148,30 @@ public class TasksWindow extends Window {
 				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
 				
 				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0){
-					aql.completeQuest();
-					queueTable.removeRow(queueTable.getRowCount()-1);
-					return;
+				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
+					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							System.out.println("Dat shit broke");
+						}
+
+						@Override
+						public void onSuccess(String result) {
+							System.out.println(result);
+							aql.removeFirst();
+							queueTable.removeRow(queueTable.getRowCount()-1);
+							currentBar.setProgress(0);
+							if (aql.getAllQuests().size() < 1){
+								totalBar.setProgress(0);
+							}
+						}
+						
+					});
+//					aql.completeQuest();
+//					queueTable.removeRow(queueTable.getRowCount()-1);
+//					persistAQL();
+//					return;
 				}
 			}
 			updateProgressBar();
@@ -142,10 +185,20 @@ public class TasksWindow extends Window {
 		totalBar.setMaxProgress(aql.getTotalDuration());
 		totalBar.setProgress(aql.getTotalDuration() - aql.totalTimeLeft());
 	}
+
+	@Override
+	public String getName() {
+		return NAME;
+	}
+
+	@Override
+	public void click() {
+		FlowControl.go(SideQuestPage.NAME);
+	}
 	
 	//Requests datastore to persist the AQl
 	public void persistAQL(){
-		questService.persistAQL(aql, new AsyncCallback<String>() {
+		questService.persistAQL(user.getId(), aql, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				System.out.println(result);
@@ -157,16 +210,6 @@ public class TasksWindow extends Window {
 				caught.printStackTrace();
 			}
 		});
-	}
-
-	@Override
-	public String getName() {
-		return NAME;
-	}
-
-	@Override
-	public void click() {
-		FlowControl.go(SideQuestPage.NAME);
 	}
 
 }

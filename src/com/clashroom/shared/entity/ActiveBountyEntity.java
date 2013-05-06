@@ -17,6 +17,9 @@ public class ActiveBountyEntity {
 	@Persistent(serialized="true")
 	private ActiveTaskList activeQuests;
 	
+	@Persistent
+	private Long userID;
+	
 	public ActiveBountyEntity() {
 		activeQuests = new ActiveTaskList();
 	}
@@ -35,5 +38,13 @@ public class ActiveBountyEntity {
 	
 	public Long getId(){
 		return id;
+	}
+	
+	public Long getUserId(){
+		return userID;
+	}
+	
+	public void setUser(long id){
+		userID = id;
 	}
 }

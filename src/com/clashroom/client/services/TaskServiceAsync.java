@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public interface TaskServiceAsync {
 	void getAvailableQuests(AsyncCallback<ArrayList<Task>> callback) throws IllegalArgumentException;
-	void getActiveQuests(AsyncCallback<ActiveTaskList> callback) throws IllegalArgumentException;
-	void persistAQL(ActiveTaskList aql, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void getActiveQuests(Long userID, AsyncCallback<ActiveTaskList> callback) throws IllegalArgumentException;
+	void persistAQL(Long userID, ActiveTaskList aql, AsyncCallback<String> callback) throws IllegalArgumentException;
+	void completeQuest(Long userID, ActiveTaskList atl, AsyncCallback<String> callback) throws IllegalArgumentException;
 }

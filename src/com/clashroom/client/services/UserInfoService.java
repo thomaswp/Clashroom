@@ -13,6 +13,6 @@ public interface UserInfoService extends RemoteService {
 	public void setUser(UserEntity user);
 	public void addExp(int exp);
 	public List<UserEntity> getAllUsers();
-	public void learnSkill(int id);
+	public void learnSkill(int id); 
 	public List<NewsfeedItem> getNews(List<Long> users, int count);
 }

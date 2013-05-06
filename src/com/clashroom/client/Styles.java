@@ -30,6 +30,7 @@ public class Styles {
 	public static final String profile_skill_learned = "profile_skill_learned";
 	public static final String profile_skill_unlearned = "profile_skill_unlearned";
 	
+	
 	public static final String profile_window = "profile_window";
 	
 	public static final String quest_desc = "quest_desc";

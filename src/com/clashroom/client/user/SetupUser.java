@@ -1,5 +1,6 @@
 package com.clashroom.client.user;
 
+import com.clashroom.client.Styles;
 import com.clashroom.client.resources.MyResources;
 import com.clashroom.client.widget.AnimatedProgressBar;
 import com.clashroom.client.widget.MomentumScrollPanel;
@@ -55,7 +56,7 @@ public class SetupUser extends Composite {
 		verticalPanel.setSize("600px", "auto");
 		
 		Label lblWelcomeToClashroom = new Label("Welcome to Clashroom!");
-		lblWelcomeToClashroom.setStyleName("headerLabel");
+		lblWelcomeToClashroom.setStyleName(Styles.page_title);
 		verticalPanel.add(lblWelcomeToClashroom);
 		
 		decoratedTabPanel = new DecoratedTabPanel();

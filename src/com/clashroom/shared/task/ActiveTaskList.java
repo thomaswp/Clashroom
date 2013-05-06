@@ -4,7 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.ActiveBountyEntity;
+import com.clashroom.shared.entity.UserEntity;
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ActiveTaskList implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -14,6 +20,7 @@ public class ActiveTaskList implements Serializable {
 	private LinkedList<ActiveTask> list;
 	private LinkedList<ActiveTask> history;
 	private Long eId;
+	private Long userID;
 	
 	public ActiveTaskList() {
 		list = new LinkedList<ActiveTask>();
@@ -30,6 +37,7 @@ public class ActiveTaskList implements Serializable {
 		aqStart = entity.getActiveQuests().getAqStart();
 		start = entity.getActiveQuests().getStart();
 		eId = entity.getId();
+		userID = entity.getUserId();
 	}
 	
 	public boolean isEmpty(){
@@ -83,7 +91,27 @@ public class ActiveTaskList implements Serializable {
 	}
 	
 	public void completeQuest(){
-		System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
+		
+//		Debug.write("Doin ma callbacks");
+//		userInfoService.addExp(getActiveQuest().getReward(), new AsyncCallback<Void>(){
+//
+//			@Override
+//			public void onSuccess(Void result) {
+//				Debug.write(getActiveQuest());
+//				System.out.println("Recieved " + getActiveQuest().getReward() + " experience points!");
+//				list.removeFirst();
+//			}
+//
+//			@Override
+//			public void onFailure(Throwable caught) {
+//				System.out.println("Dat shit is broke");
+//			}
+//			
+//		});
+		aqStart = new Date().getTime();
+	}
+	
+	public void removeFirst() {
 		list.removeFirst();
 		aqStart = new Date().getTime();
 	}
@@ -119,6 +147,14 @@ public class ActiveTaskList implements Serializable {
 	
 	public void setId(Long id) {
 		eId = id;
+	}
+	
+	public Long getUserID(){
+		return userID;
+	}
+	
+	public void setUserID(Long id){
+		userID = id;
 	}
 
 }
