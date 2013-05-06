@@ -16,7 +16,6 @@ public class CreateQuestPage extends Page {
 	
 	private CreateQuestWidget createQuestWidget;
 	
-	private ArrayList<QuestEntity> createdQuests;
 
     public CreateQuestPage() {
         this(NAME);

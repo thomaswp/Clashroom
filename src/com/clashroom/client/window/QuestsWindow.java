@@ -6,7 +6,6 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 
 import com.clashroom.client.Styles;
-import com.clashroom.client.resources.ServicesUtils;
 import com.clashroom.client.services.ItemRetrieverService;
 import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
@@ -83,7 +82,7 @@ public class QuestsWindow extends Composite {
 	          
 	   @Override public void onSuccess(ArrayList<QuestEntity>result) 
 	   { 
-	     availableQuests = filterCompletedQuests(result,currentUser); 
+	     availableQuests = result; 
 	     listStudentQuests();
 	   } };
 	    
@@ -113,12 +112,15 @@ public class QuestsWindow extends Composite {
 			else if (i==2) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
 			else if (i==3) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
 		}
-        for (int i = 0; i < availableQuests.size(); i++) 
-        {	
-        	studentQuests.setWidget(i + 1, 0, new QuestInnerWindow(availableQuests.get(i)));
-        	studentQuests.getFlexCellFormatter().setColSpan(i+1, 0, 4);
-        }
-        
+		
+		for(int i = 0; i < availableQuests.size(); i++){
+			
+			if(!currentUser.getCompletedQuests().contains(availableQuests.get(i).getId())){
+				studentQuests.setWidget(i + 1, 0, new QuestInnerWindow(availableQuests.get(i)));
+		    	studentQuests.getFlexCellFormatter().setColSpan(i+1, 0, 4);
+			}
+		}
+		       
     }
 	public String getName(){
     	return NAME;
@@ -194,25 +196,5 @@ public class QuestsWindow extends Composite {
 		   } };
 		    
 		    itemCreatorSvc.addItems(callback); 	
-	}
-	
-	/*
-	 * Method to filter out quests that the user has already completed.
-	 */
-	private ArrayList<QuestEntity> filterCompletedQuests(ArrayList<QuestEntity> 
-		listToFilter,UserEntity currentUser){
-		
-		ArrayList<Long> userCompletedQuests = new ArrayList<Long>();
-		userCompletedQuests = (ArrayList<Long>) currentUser.getCompletedQuests();
-		
-		for(Long id: userCompletedQuests){
-			for(QuestEntity quest: listToFilter){
-				if(id == quest.getId()){
-					listToFilter.remove(quest);
-				}
-			}
-		}
-		
-		return listToFilter;
 	}
 }

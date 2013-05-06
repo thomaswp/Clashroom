@@ -10,11 +10,13 @@ import javax.jdo.Query;
 import com.clashroom.client.services.ItemRetrieverService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
+import com.clashroom.shared.battle.skills.AttackSkill;
 import com.clashroom.shared.battle.skills.FireBreathSkill;
 import com.clashroom.shared.battle.skills.FireballSkill;
 import com.clashroom.shared.battle.skills.HealSkill;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.ItemEntity;
+import com.clashroom.shared.entity.ItemType;
 import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -64,15 +66,19 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
 		Skill fireBall = new FireballSkill();
 		Skill fireBreath = new FireBreathSkill();
 		Skill heal = new HealSkill();
+		Skill attack = new AttackSkill();
     	
     	ItemEntity fireBallScroll = new ItemEntity("Fire Ball Scroll","Reading this scroll will" +
-    			"cause your dragon to release a fire ball attack",fireBall);
+    			" cause your dragon to release a fire ball attack",fireBall,ItemType.ACTIVE,"img");
     	
     	ItemEntity fireBreathScroll = new ItemEntity("Fire Breath Scroll","Reading this scroll will have your dragon release" +
-    			"a fire breath attack",fireBreath);
+    			" a fire breath attack",fireBreath,ItemType.PASSIVE,"img");
     	
     	ItemEntity healScroll = new ItemEntity("Scroll of Healing","Reading this scroll will" +
-    			"health your dragon",heal);
+    			" heal your dragon",heal,ItemType.PASSIVE,"img");
+    	
+    	ItemEntity sneakAttack = new ItemEntity("Invisibily Amulet","Using this amulet" +
+    			" will allow your dragon to pull off a stealthy sneak attack",attack,ItemType.ACTIVE,"img");
     	
     	itemList.add(fireBallScroll);
     	itemList.add(fireBreathScroll);

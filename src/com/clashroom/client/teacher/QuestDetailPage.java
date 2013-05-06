@@ -1,11 +1,17 @@
 package com.clashroom.client.teacher;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
+import com.clashroom.client.services.ItemRetrieverService;
+import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.QuestEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
@@ -33,11 +39,11 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
             .create(QuestRetrieverService.class);
 	
-	private static UserInfoServiceAsync userRetrieverSvc = GWT
+	private static UserInfoServiceAsync userSvc = GWT
 			.create(UserInfoService.class);
 	
-	private static UserInfoServiceAsync userStorerSvc = GWT
-			.create(UserInfoService.class);
+	private static ItemRetrieverServiceAsync itemSvc = GWT
+			.create(ItemRetrieverService.class);
 	
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
@@ -53,6 +59,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	private TextBox enterCode;
 	private Label codeEntryMsg;
 	private UserEntity currentUser;
+	private ArrayList<ItemEntity> questItems = new ArrayList<ItemEntity>();
 	
 	
 	private QuestEntity aQuest = null;
@@ -66,8 +73,8 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		long id = getLongParameter("id");
 		
-		if(userRetrieverSvc == null){
-			userRetrieverSvc = GWT.create(UserInfoService.class);
+		if(userSvc == null){
+			userSvc = GWT.create(UserInfoService.class);
 		}
 		
 		if (questRetrieverSvc == null) { 
@@ -101,13 +108,12 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	          @Override 
 	     public void onSuccess(QuestEntity result){ 
 	        	  aQuest = result;
-	        	  setUpContent(aQuest);
 	     } };
 	     
    	  		setupUI();
 	        questRetrieverSvc.retrieveAQuest(id, callback);
-	        userRetrieverSvc.getUser(callBack);
-	          
+	        getQuestItems();
+	        userSvc.getUser(callBack);	
 	}
 	
 	public void setupUI() {
@@ -170,16 +176,19 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		questName.setText(aQuest.getQuestName());
 		questDesc.setText(aQuest.getQuestDescription());
-		questXpGained.setText("Expereince: "+ aQuest.getExperienceRewarded());
+		questXpGained.setText("Expereince: "+ aQuest.getExperienceRewarded() + " xp");
 		questLevelRequirment.setText("Level "+ aQuest.getLevelRequirement());
 		questItemsAwarded.setText("Items: ");
 		
-		for(int i = 0; i < aQuest.getItemsRewarded().size(); i++){
+		
+		for(int i = 0; i < questItems.size(); i++){
+			if(aQuest.getItemsRewarded().contains(questItems.get(i).getId())){
 			itemsListTable.setWidget(i, 0, 
-					new Hyperlink(String.valueOf(aQuest.getItemsRewarded().get(i)),"url"));
+					new Hyperlink(questItems.get(i).getName(),"url"));
+			}
 			//TODO Have these has hyperlinks go to Pages of items
 		}
-		questDateAvailable.setText("This quest will be available: " + aQuest.getDateAvailable());
+		questDateAvailable.setText("This quest will be available: " + aQuest.getDateAvailable() + " -");
 		questDateUnavailable.setText(aQuest.getDateUnavailable());
 		
 		completionTypeHandler(aQuest);
@@ -192,16 +201,45 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		}
 		
 	}
+	
+	private void getQuestItems(){
+		
+		if(itemSvc == null){
+			itemSvc = GWT.create(ItemRetrieverService.class);
+		}
+		AsyncCallback<ArrayList<ItemEntity>> callback = new AsyncCallback<ArrayList<ItemEntity>>() {
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.err.println("Error: RPC Call Failed");
+		    	caught.printStackTrace();						
+			}
+			
+			@Override
+			public void onSuccess(ArrayList<ItemEntity> result) {
+				
+				questItems = result;
+				setUpContent(aQuest);
+			}
+			
+		};
+			itemSvc.retrieveItems(callback);
+		
+	}
 	@Override
 	public void onClick(ClickEvent event) {
 		codeEntryMsg.setVisible(true);
 		if(event.getSource().equals(submit)){
-			currentUser.addCompletedQuest(getLongParameter("id"));
 			
 			if(enterCode.getText().equals(aQuest.getCompletionCode())){
 				
-				if(userStorerSvc == null){
-					userStorerSvc = GWT.create(UserInfoService.class);
+				currentUser.addCompletedQuest(getLongParameter("id"));
+				for(Long itemID: aQuest.getItemsRewarded()){
+					currentUser.addItemToInventory(itemID);
+				}
+				
+				if(userSvc == null){
+					userSvc = GWT.create(UserInfoService.class);
 				}
 				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
 
@@ -217,39 +255,12 @@ public class QuestDetailPage extends Page implements ClickHandler {
 					}
 					
 				};
-				userStorerSvc.setUser(currentUser, callback);
+				userSvc.setUser(currentUser, callback);
 				codeEntryMsg.setText(aQuest.getVictoryText());
 			}else{
 				codeEntryMsg.setText("Sorry the Code you eneterd was incorrect. Please try again.");
 			}
 		}
 	}
-	private static class MyDialog extends DialogBox {
-		private VerticalPanel vPanel;
-		private Label msg;
-		Button ok;
-		
-	    public MyDialog(String title,String messege) {
-	      // Set the dialog box's caption.
-	      setText(title);
-	      msg = new Label(messege);
-	      vPanel = new VerticalPanel();
-	      ok = new Button("OK");
-	      ok.setPixelSize(100, 100);
-	      // DialogBox is a SimplePanel, so you have to set its widget property to
-	      // whatever you want its contents to be.
-	      
-	      vPanel.add(msg);
-	      vPanel.add(ok);
-	      
-	      ok.addClickHandler(new ClickHandler() {
-	        public void onClick(ClickEvent event) {
-	          MyDialog.this.hide();
-	        }
-	      });
-	      setWidget(vPanel);
-	    }
-	  }
-
 }
 

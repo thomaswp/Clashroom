@@ -3,6 +3,7 @@ package com.clashroom.client;
 import java.util.LinkedList;
 
 import com.clashroom.client.battle.BattlePage;
+import com.clashroom.client.battle.BattlePrepPage;
 import com.clashroom.client.battle.ListBattlePage;
 import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.teacher.CreateQuestPage;
@@ -70,6 +71,8 @@ public class FlowControl {
         	go(new QuestDetailPage(token));
         } else if (token.startsWith(CreateQuestPage.NAME)){
         	go(new CreateQuestPage(token));
+        } else if (token.startsWith(BattlePrepPage.NAME)){
+        	go(new BattlePrepPage(token));
         } else {
 			History.back();
 			throw new RuntimeException("No such page " + token);
