@@ -25,9 +25,16 @@ public class TestServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/html");
-		//createTestQuests(resp);
-		addSp();
-		//resp.getWriter().println(createQueue());
+		String d = req.getParameter("do");
+		if ("task".equals(d)) {
+			createTestQuests(resp);
+			resp.getWriter().println(createQueue());
+		} else if ("sp".equals(d)) {
+			addSp();
+			resp.getWriter().println("+1 sp");
+		} else {
+			resp.getWriter().println("use ?do=something");
+		}
 	}
 	
 	public void addSp() {

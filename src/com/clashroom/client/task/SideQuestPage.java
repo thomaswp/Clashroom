@@ -281,9 +281,13 @@ public class SideQuestPage extends Page {
 
 						@Override
 						public void onSuccess(String result) {
-							System.out.println(result);
+							System.out.println("Page: " + result);
 							aql.removeFirst();
 							queueTable.removeRow(queueTable.getRowCount()-1);
+							currentBar.setProgress(0);
+							if (aql.getAllQuests().size() < 1){
+								totalBar.setProgress(0);
+							}
 							
 						}
 						

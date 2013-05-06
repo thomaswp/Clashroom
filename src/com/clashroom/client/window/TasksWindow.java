@@ -158,7 +158,7 @@ public class TasksWindow extends Window {
 
 						@Override
 						public void onSuccess(String result) {
-							System.out.println(result);
+							System.out.println("Window: " +  result);
 							aql.removeFirst();
 							queueTable.removeRow(queueTable.getRowCount()-1);
 							currentBar.setProgress(0);
