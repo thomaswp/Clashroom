@@ -11,6 +11,7 @@ import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.client.window.ItemInnerWindow;
 import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.QuestEntity;
 import com.clashroom.shared.entity.UserEntity;
@@ -184,9 +185,8 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		for(int i = 0; i < questItems.size(); i++){
 			if(aQuest.getItemsRewarded().contains(questItems.get(i).getId())){
 			itemsListTable.setWidget(i, 0, 
-					new Hyperlink(questItems.get(i).getName(),"url"));
+					new ItemInnerWindow(questItems.get(i)));
 			}
-			//TODO Have these has hyperlinks go to Pages of items
 		}
 		questDateAvailable.setText("This quest will be available: " + aQuest.getDateAvailable() + " -");
 		questDateUnavailable.setText(aQuest.getDateUnavailable());
