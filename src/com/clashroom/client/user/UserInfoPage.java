@@ -5,6 +5,7 @@ import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;

@@ -20,6 +20,7 @@ import com.clashroom.shared.entity.ItemEntity.ItemType;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements ItemRetrieverService {
+	private static final long serialVersionUID = 1L;
 
 	@Override
 	public ArrayList<ItemEntity> retrieveItems() {

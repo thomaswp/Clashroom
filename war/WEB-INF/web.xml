@@ -2,7 +2,16 @@
 
 	<!-- Servlets -->
 
+	<servlet>
+		<servlet-name>RetrieveItemServlet</servlet-name>
+		<servlet-class>com.clashroom.server.impl.ItemRetrieverServiceImpl</servlet-class>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>RetrieveItemServlet</servlet-name>
+		<url-pattern>/clashroom/retrieveItem</url-pattern>
+	</servlet-mapping>
+	
 	<servlet>
 		<servlet-name>QuestRetrieverServiceImpl</servlet-name>
 		<servlet-class>com.clashroom.server.impl.QuestRetrieverServiceImpl</servlet-class>

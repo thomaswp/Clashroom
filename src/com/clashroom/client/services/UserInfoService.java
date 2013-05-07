@@ -15,4 +15,5 @@ public interface UserInfoService extends RemoteService {
 	public List<UserEntity> getAllUsers();
 	public void learnSkill(int id); 
 	public List<NewsfeedItem> getNews(List<Long> users, int count);
+	void completeQuest(long id);
 }

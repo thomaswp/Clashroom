@@ -13,4 +13,5 @@ public interface UserInfoServiceAsync {
 	public void getAllUsers(AsyncCallback<List<UserEntity>> callback);
 	public void learnSkill(int id, AsyncCallback<Void> callback);
 	public void getNews(List<Long> users, int count, AsyncCallback<List<NewsfeedItem>> callback);
+	public void completeQuest(long id, AsyncCallback<Void> callback);
 }

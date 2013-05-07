@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.annotations.Embedded;
@@ -27,10 +28,10 @@ public class UserEntity implements Serializable {
 	private String email;
 	
 	@Persistent
-	private List<Long> itemInventory;
+	private List<Long> itemInventory = new ArrayList<Long>();
 	
 	@Persistent
-	private List<Long> completedQuests;
+	private List<Long> completedQuests = new ArrayList<Long>();
 	
 	@Persistent(defaultFetchGroup="true")
 	@Embedded

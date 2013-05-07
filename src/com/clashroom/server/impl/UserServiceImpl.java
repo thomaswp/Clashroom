@@ -3,6 +3,7 @@ package com.clashroom.server.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,8 +17,10 @@ import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.NewsfeedEntity;
+import com.clashroom.shared.entity.QuestEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.news.NewsfeedItem;
+import com.clashroom.shared.news.QuestNews;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -180,5 +183,34 @@ implements UserInfoService {
 		entity.setDragon(pm.detachCopy(entity.getDragon()));
 		
 		pm.makePersistent(entity);
+	}
+	
+	@Override 
+	public void completeQuest(long id) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			UserEntity user = getUser();
+			if (user == null) throw new RuntimeException("No user");
+			
+			QuestEntity quest = QueryUtils.queryUnique(pm, QuestEntity.class, "id==%s", id);
+			if (quest == null) throw new RuntimeException("No quest with id :" + id);
+			
+			
+			user.addCompletedQuest(id);
+			user.setCompletedQuests(user.getCompletedQuests());
+			for(Long itemID: quest.getItemsRewarded()){
+				user.addItemToInventory(itemID);
+			}
+			user.setItemsIventory(user.getItemInventory());
+			
+			QuestNews qn = new QuestNews(new Date(), quest.getQuestName(), user.getUsername(), user.getId());
+			NewsfeedEntity ne = new NewsfeedEntity(qn);
+			pm.makePersistent(ne);
+			
+			pm.makePersistent(user);
+		} finally {
+			pm.close();
+		}
+		
 	}
 }

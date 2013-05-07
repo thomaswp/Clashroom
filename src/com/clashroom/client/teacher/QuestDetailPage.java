@@ -231,7 +231,10 @@ public class QuestDetailPage extends Page implements ClickHandler {
 			
 			if(enterCode.getText().equals(aQuest.getCompletionCode())){
 				
-				currentUser.addCompletedQuest(getLongParameter("id"));
+				Long id = getLongParameter("id");
+				if (id == null) return;
+				
+				currentUser.addCompletedQuest(id);
 				for(Long itemID: aQuest.getItemsRewarded()){
 					currentUser.addItemToInventory(itemID);
 				}
@@ -239,21 +242,18 @@ public class QuestDetailPage extends Page implements ClickHandler {
 				if(userSvc == null){
 					userSvc = GWT.create(UserInfoService.class);
 				}
-				AsyncCallback<Void> callback = new AsyncCallback<Void>() {
+				userSvc.completeQuest(id, new AsyncCallback<Void>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
-						System.err.println("Error: RPC Call Failed");
-				    	caught.printStackTrace();						
+						caught.printStackTrace();
 					}
 
 					@Override
 					public void onSuccess(Void result) {
 						
 					}
-					
-				};
-				userSvc.setUser(currentUser, callback);
+				});
 				codeEntryMsg.setText(aQuest.getVictoryText());
 			}else{
 				codeEntryMsg.setText("Sorry the Code you eneterd was incorrect. Please try again.");
