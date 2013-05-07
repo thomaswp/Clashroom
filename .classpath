@@ -5,7 +5,7 @@
 	<classpathentry kind="lib" path="appengine-utils-client-1.0.jar"/>
 	<classpathentry kind="lib" path="gwt-dnd-3.2.3.jar"/>
 	<classpathentry kind="lib" path="gwt-traction-1.5.2.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (2)"/>
-	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT (2)"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

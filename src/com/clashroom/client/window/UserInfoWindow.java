@@ -45,7 +45,10 @@ public class UserInfoWindow extends Window {
 	public UserInfoWindow() {
 		super();
 		setupUI();
-		
+		update();
+	}
+	
+	public void update() {
 		userInfoService.getUser(new AsyncCallback<UserEntity>() {
 			@Override
 			public void onSuccess(UserEntity result) {

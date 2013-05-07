@@ -72,6 +72,7 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		entity.setActiveQuests(atl);
 		try {
 			pm.makePersistent(entity);
+			pm.flush();
 		} finally {
 			pm.close();
 		}

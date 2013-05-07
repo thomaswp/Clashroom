@@ -75,14 +75,11 @@ public class NewsfeedWindow extends Composite {
 			table.setText(0, i, headers[i]);
 		}
 		
-		Debug.write("and... " + result.size());
 		int row = 1;
 		for (NewsfeedItem item : result) {
 			int col = 0;
-			Debug.write(row);
 			table.setText(row, col++, dateFormat.format(item.getDate()));
 			table.setWidget(row, col++, item.getInfoWidget());
-			Debug.write(row);
 			row++;
 		}
 	}

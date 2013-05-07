@@ -12,6 +12,7 @@ import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.widget.ProgressBar;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTask;
 import com.clashroom.shared.task.ActiveTaskList;
@@ -39,10 +40,16 @@ public class TasksWindow extends Window {
 	private static TaskServiceAsync questService = GWT.create(TaskService.class);
 	private static UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
 	private UserEntity user;
+	private Timer refreshTimer;
+	private Runnable onQuestCompletedListener;
 	
 	public TasksWindow() {
 		super();
 		setup();
+	}
+	
+	public void setOnQuestCompletedListener(Runnable onQuestCompletedListener) {
+		this.onQuestCompletedListener = onQuestCompletedListener;
 	}
 	
 	public void setup() {
@@ -74,7 +81,7 @@ public class TasksWindow extends Window {
 		initWidget(focusPanel);
 		
 		//Setup timer to refresh automatically
-		Timer refreshTimer = new Timer() {
+		refreshTimer = new Timer() {
 			@Override
 			public void run() {
 				updateQueue();
@@ -101,6 +108,12 @@ public class TasksWindow extends Window {
 		
 		//Request data from datastore
 		//getActiveQuests(user.getId());
+	}
+	
+	@Override
+	protected void onUnload() {
+		super.onUnload();
+		refreshTimer.cancel();
 	}
 	
 	//Requests datastore for the list of Active quests
@@ -164,6 +177,9 @@ public class TasksWindow extends Window {
 							currentBar.setProgress(0);
 							if (aql.getAllQuests().size() < 1){
 								totalBar.setProgress(0);
+							}
+							if (onQuestCompletedListener != null) {
+								onQuestCompletedListener.run(); 
 							}
 						}
 						

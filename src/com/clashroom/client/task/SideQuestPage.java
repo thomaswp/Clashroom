@@ -46,6 +46,7 @@ public class SideQuestPage extends Page {
 	private static TaskServiceAsync questService = GWT.create(TaskService.class);
 	private static UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
 	private UserEntity user;
+	private Timer refreshTimer;
 	
 	public SideQuestPage() {
 		this(NAME);
@@ -114,7 +115,7 @@ public class SideQuestPage extends Page {
 		initWidget(mainPanel);
 		
 		//Setup timer to refresh automatically
-		Timer refreshTimer = new Timer() {
+		refreshTimer = new Timer() {
 			@Override
 			public void run() {
 				updateQueue();
@@ -142,6 +143,11 @@ public class SideQuestPage extends Page {
 	
 		//Request data from datastore
 
+	}
+	
+	@Override
+	public void cleanup() {
+		refreshTimer.cancel();
 	}
 	
 	//Clones a Quest from the QuestList and adds it to the active QuestQueue

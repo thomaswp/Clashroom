@@ -36,7 +36,8 @@ public class HomePage extends Page {
 		Hyperlink link = new Hyperlink("Profile", UserInfoPage.NAME);
 		link.addStyleName(Styles.text_title);
 		//box.add(link);
-		box.add(new UserInfoWindow());
+		final UserInfoWindow userInfoWindow = new UserInfoWindow();
+		box.add(userInfoWindow);
 		box.setWidth("24%");
 		main.add(box);
 		
@@ -59,6 +60,12 @@ public class HomePage extends Page {
 		box.add(new NewsfeedWindow());
 		
 		TasksWindow sqw = new TasksWindow();
+		sqw.setOnQuestCompletedListener(new Runnable() {
+			@Override
+			public void run() {
+				userInfoWindow.update();
+			}
+		});
 		box.add(sqw);
 		box.setWidth("24%");
 		main.add(box);
