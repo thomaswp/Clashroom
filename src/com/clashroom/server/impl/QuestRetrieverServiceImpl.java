@@ -82,7 +82,7 @@ public class QuestRetrieverServiceImpl extends RemoteServiceServlet
                 "4-21-13 10:37pm",
                 "This quest will not expire",
                 "Congratulations! You have trained your dragon and managed to teach it a new skill. You should be proud, but do not rejoice for too long for tougher quests await.","",
-                dummyList);
+                dummyList,100);
     	
     	 PersistenceManager pm = PMF.get().getPersistenceManager();
     	 

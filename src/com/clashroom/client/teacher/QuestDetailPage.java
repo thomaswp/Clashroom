@@ -234,6 +234,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 			if(enterCode.getText().equals(aQuest.getCompletionCode())){
 				
 				currentUser.addCompletedQuest(getLongParameter("id"));
+				currentUser.addCoin(aQuest.getCoinAwarded());
 				for(Long itemID: aQuest.getItemsRewarded()){
 					currentUser.addItemToInventory(itemID);
 				}

@@ -21,7 +21,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FocusPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -37,10 +37,11 @@ public class BattlePrepPage extends Page {
 	
 	
 	private UserEntity currentUser;
-	private ItemEntity selectedActiveItem;
-	private ItemEntity selectedPassiveItem;
+	private ItemEntity selectedActiveItem = new ItemEntity();
+	private ItemEntity selectedPassiveItem = new ItemEntity();
 	private ArrayList<ItemEntity> activeItems = new ArrayList<ItemEntity>();
 	private ArrayList<ItemEntity> passiveItems = new ArrayList<ItemEntity>();
+	private ArrayList<ItemFocusPanel> allItemPanels = new ArrayList<ItemFocusPanel>();
 	private FlexTable passiveItemsTable;
 	private FlexTable activeItemsTable;
 	private VerticalPanel vPanel;
@@ -108,11 +109,15 @@ public class BattlePrepPage extends Page {
 		}
 		
 		for(int i = 0; i < activeItems.size(); i++){
-			activeItemsTable.setWidget(i % 5, 0, new ItemFocusPanel(activeItems.get(i)));
+			ItemFocusPanel tempPanel = new ItemFocusPanel(activeItems.get(i));
+			allItemPanels.add(tempPanel);
+			activeItemsTable.setWidget(i % 5, 0,tempPanel);
 		}
 		
 		for(int i =0; i < passiveItems.size(); i++){
-			passiveItemsTable.setWidget(i % 5, 0, new ItemFocusPanel(passiveItems.get(i)));
+			ItemFocusPanel tempPanel = new ItemFocusPanel(passiveItems.get(i));
+			allItemPanels.add(tempPanel);
+			passiveItemsTable.setWidget(i % 5, 0,tempPanel);
 		}
 	}
 	
@@ -140,39 +145,65 @@ public class BattlePrepPage extends Page {
 			itemSvc.retrieveItems(callback);		
 	}
 	
-	private class ItemFocusPanel extends Composite implements MouseOverHandler, ClickHandler {
+	private class ItemFocusPanel extends Composite implements MouseOverHandler, ClickHandler{
 		
 		private ItemEntity item;
 		private FocusPanel focusPanel;
+		private ItemEntity blankItem = new ItemEntity();
+		private FlexTable table;
 		private Label itemName;
+		private Image checkMark;
+		private Image blankMark;
 		
 		public ItemFocusPanel(ItemEntity anItem){
 			focusPanel = new FocusPanel();
-			addListeners();
+			itemName = new Label();
+			checkMark = new Image("/img/interfaceIMGS/greencheckmark.png");
+			blankMark = new Image("/img/interfaceIMGS/blankmark.png");
+			table = new FlexTable();
 			item = anItem;
 			itemName.setText(item.getName());
 			focusPanel.add(itemName);
+			table.setWidget(0, 0, focusPanel);
+			addListeners();
+			initWidget(table);
 		}
 
 		@Override
 		public void onClick(ClickEvent event) {
 			
-			if(item.getItemType().equals(ItemType.ACTIVE)){
-				selectedActiveItem = item;
-			}else if(item.getItemType().equals(ItemType.PASSIVE)){
-				selectedPassiveItem = item;
+			if(event != null){
+				if(item.getItemType().equals(ItemType.ACTIVE)){
+					selectedActiveItem = item;
+					System.out.println("Active Item: "+ selectedActiveItem.getName());
+					table.setWidget(0, 1,checkMark);
+					
+				}else if(item.getItemType().equals(ItemType.PASSIVE)){
+					selectedPassiveItem = item;
+					System.out.println("Passive Item: "+ selectedPassiveItem.getName());
+					table.setWidget(0, 1,checkMark);
+				}
+				
+				notifyAllItemFocusPanels(allItemPanels);
 			}
-			
+		
 		}
 
 		@Override
 		public void onMouseOver(MouseOverEvent event) {
 			focusPanel.addStyleName(Styles.w_mouseOver);
-			
 		}
 		private void addListeners(){
 			focusPanel.addClickHandler(this);
 			focusPanel.addMouseOverHandler(this);
+		}
+		
+		private void notifyAllItemFocusPanels(ArrayList<ItemFocusPanel> otherItemFocusPanels){
+			for(ItemFocusPanel ifp: otherItemFocusPanels){
+				if(!ifp.equals(this)){
+					ifp.onClick(null);
+				}
+			}
 		}
 		
 	}

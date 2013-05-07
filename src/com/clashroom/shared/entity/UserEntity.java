@@ -26,6 +26,9 @@ public class UserEntity implements Serializable {
 	@Persistent()
 	private String email;
 	
+	@Persistent()
+	private int coin;
+	
 	@Persistent
 	private List<Long> itemInventory;
 	
@@ -136,5 +139,16 @@ public class UserEntity implements Serializable {
 	}
 	public void addItemToInventory(Long itemId){
 		itemInventory.add(itemId);
+	}
+	
+	public int getCoin() {
+		return coin;
+	}
+
+	public void setCoin(int coin) {
+		this.coin = coin;
+	}
+	public void addCoin(int coinAmount){
+		this.coin += coinAmount;
 	}
 }

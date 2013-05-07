@@ -68,6 +68,7 @@ public class StoreQuestServlet extends HttpServlet {
                                         .getParameter("Quest Unavailablility");
         String priorQuest = null;
         int requiredLevel = 0;
+        int coinAwarded = Integer.parseInt(request.getParameter("Coin"));
         /*
          * I don't think this takes into consideration daylight
          * savings
@@ -121,7 +122,7 @@ public class StoreQuestServlet extends HttpServlet {
                                         formatter.format(dateAvailable),
                                         formatter.format(dateUnavailable),
                                         victoryText, priorQuest,
-                                        itemIds);
+                                        itemIds,coinAwarded);
 
         System.out.println(formatter.format(dateAvailable));
         return newQuest;

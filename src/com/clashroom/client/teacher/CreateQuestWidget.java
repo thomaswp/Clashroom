@@ -57,6 +57,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	    private final ListBox itemsAvailable = new ListBox();
 	    private ArrayList<ItemEntity> itemsAvailableList = new ArrayList<ItemEntity>();
 	    private final TextBox itemsForServer = new TextBox();
+	    private final TextBox coinAmount = new TextBox();
 	    private final ListBox itemsSelected = new ListBox();
 	    private final ArrayList<ItemEntity> itemsSelectedList = new ArrayList<ItemEntity>();
 	    private final Label label1 = new Label("Enter the name of the quest.");
@@ -78,6 +79,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	    private final Label label8 = new Label(
 	                                    "How shall adveturers know of this quest?");
 	    private final Label label9 = new Label();
+	    private final Label label15 = new Label("How much coin shall the adveturer recieve for his efforts?");
 	    private final ListBox questAvailability = new ListBox();
 	    private final TextArea questDescription = new TextArea();
 	    private final FormPanel questForm = new FormPanel();
@@ -293,6 +295,8 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
         mainPanel.add(codeInput);
         mainPanel.add(label6);
         mainPanel.add(awardedXP);
+        mainPanel.add(label15);
+        mainPanel.add(coinAmount);
         mainPanel.add(label7);
         mainPanel.add(hPanel);
         hPanel.add(itemsAvailable);
@@ -482,6 +486,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
         timeUnAvailableMinutes.setVisibleItemCount(1);
         unAvailableAMPM.setVisible(false);
         victoryText.setName("Victory Text");
+        coinAmount.setName("Coin");
 
     }
 }

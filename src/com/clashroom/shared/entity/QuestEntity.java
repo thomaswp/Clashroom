@@ -38,8 +38,7 @@ public class QuestEntity implements Serializable {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
     @Persistent
-    private List<Long> itemsRewarded;//TODO: This will change to a
-                                       // item keys
+    private List<Long> itemsRewarded;
     @Persistent
     private int levelRequirement;
     @Persistent
@@ -52,9 +51,11 @@ public class QuestEntity implements Serializable {
     @Persistent
     private String victoryText;
     @Persistent
-    private boolean questCompleted; //TODO: Might need to make this specific to the student
+    private boolean questCompleted;
+    @Persistent
+    private int coinAwarded;
 
-    /**
+	/**
      * Zero arguement constructor in order to make the class
      * serializable
      */
@@ -96,7 +97,8 @@ public class QuestEntity implements Serializable {
                                     String aDateUnavailable,
                                     String victoryText,
                                     String prereqQuest,
-                                    List<Long> itemsRewardedPassed) {
+                                    List<Long> itemsRewardedPassed,
+                                    int coinAwarded) {
         this.questName = questName;
         this.questDescription = questDescription;
         this.completionCode = completionCode;
@@ -106,6 +108,7 @@ public class QuestEntity implements Serializable {
         this.dateAvailable = aDateAvailable;
         this.dateUnavailable = aDateUnavailable;
         this.prereqQuest = prereqQuest;
+        this.coinAwarded = coinAwarded;
         globallyAvailable = false;
         itemsRewarded = itemsRewardedPassed;
         questCompleted = false;
@@ -299,4 +302,11 @@ public class QuestEntity implements Serializable {
     public boolean getQuestCompleted(){
     	return questCompleted;
     }
+    public int getCoinAwarded() {
+		return coinAwarded;
+	}
+
+	public void setCoinAwarded(int coinAwarded) {
+		this.coinAwarded = coinAwarded;
+	}
 }
