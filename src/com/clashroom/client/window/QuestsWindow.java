@@ -1,16 +1,15 @@
 package com.clashroom.client.window;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-
 import com.clashroom.client.Styles;
+import com.clashroom.client.services.ItemRetrieverService;
+import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
-import com.clashroom.server.PMF;
-import com.clashroom.server.StoreQuestServlet;
+import com.clashroom.client.services.UserInfoService;
+import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.entity.QuestEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -31,15 +30,45 @@ public class QuestsWindow extends Composite {
 	private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
             .create(QuestRetrieverService.class);
 	
+	private static UserInfoServiceAsync userRetrieverSvc = GWT
+			.create(UserInfoService.class);
+	
+	private static ItemRetrieverServiceAsync itemCreatorSvc = GWT
+			.create(ItemRetrieverService.class);
+	
 	private ArrayList<QuestEntity> availableQuests;
+	private UserEntity currentUser;
 	private FlexTable studentQuests;
 	
 	public QuestsWindow(){
+		
+	   if(userRetrieverSvc == null){
+			userRetrieverSvc = GWT.create(UserInfoService.class);
+	   }
+	   
 	   if (questRetrieverSvc == null) 
 	   { 
 	     questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
 	   }
 	          
+	   
+
+	   
+	   AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
+
+			@Override
+			public void onFailure(Throwable caught) {
+				System.err.println("Error: RPC Call Failed");
+		    	caught.printStackTrace();		
+			}
+
+			@Override
+			public void onSuccess(UserEntity result) {
+				currentUser = result;	
+			}
+			
+		};
+	         
 	   // Set up the callback object.
 	   AsyncCallback<ArrayList<QuestEntity>> callback = new
 	   AsyncCallback<ArrayList<QuestEntity>>() {
@@ -56,7 +85,8 @@ public class QuestsWindow extends Composite {
 	   } };
 	    
 	   	setUpUI(); 
-	   
+
+	   	userRetrieverSvc.getUser(callBack);
 	    questRetrieverSvc.retrieveQuests(callback);        
 	}
 	
@@ -82,8 +112,10 @@ public class QuestsWindow extends Composite {
 		}
         for (int i = 0; i < availableQuests.size(); i++) 
         {	
-        	studentQuests.setWidget(i + 1, 0, new QuestInnerWindow(availableQuests.get(i)));
-        	studentQuests.getFlexCellFormatter().setColSpan(i+1, 0, 4);
+        	if(!currentUser.getCompletedQuests().contains(availableQuests.get(i).getId())){
+	        	studentQuests.setWidget(i + 1, 0, new QuestInnerWindow(availableQuests.get(i)));
+	        	studentQuests.getFlexCellFormatter().setColSpan(i+1, 0, 4);
+        	}
         }
         
     }
@@ -106,6 +138,9 @@ public class QuestsWindow extends Composite {
 		initWidget(main);
 	}
 	
+	/*
+	 * For testing purposes, will eventually delete
+	 */
 	private void createDummyQuest(){
 		
 		if (questRetrieverSvc == null) 
@@ -131,4 +166,31 @@ public class QuestsWindow extends Composite {
 		    
 		    questRetrieverSvc.addDummyQuest(callback); 	
 	}
+
+	private void createItems(){
+		
+		if (itemCreatorSvc == null) 
+		   { 
+		     itemCreatorSvc = GWT.create(ItemRetrieverService.class); 
+		   }
+		          
+		   // Set up the callback object.
+		   AsyncCallback<Void> callback = new
+		   AsyncCallback<Void>() {
+		          
+		   @Override 
+		   public void onFailure(Throwable caught) {
+		   System.err.println("Error: RPC Call Failed");
+		   	caught.printStackTrace(); 
+		   }
+		          
+		   @Override 
+		   public void onSuccess(Void result) 
+		   { 
+			   
+		   } };
+		    
+		    itemCreatorSvc.addItems(callback); 	
+	}
 }
+

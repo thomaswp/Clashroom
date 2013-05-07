@@ -2,9 +2,7 @@ package com.clashroom.client.battle;
 
 import java.util.LinkedList;
 
-import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
-import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.Debug;
@@ -32,7 +30,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 

@@ -1,8 +1,6 @@
 package com.clashroom.shared.news;
 
-import java.util.Date;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.clashroom.client.battle.BattlePage;

@@ -3,6 +3,8 @@ package com.clashroom.client.teacher;
 import java.util.ArrayList;
 
 import com.clashroom.client.FlowControl;
+import com.clashroom.client.services.ItemRetrieverService;
+import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
 import com.clashroom.shared.Constant;
@@ -36,6 +38,9 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	
 		private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
             .create(QuestRetrieverService.class);
+		
+		private static ItemRetrieverServiceAsync itemsRetrieverSvc = GWT
+				.create(ItemRetrieverService.class);
 	
 		private final Button addRemoveItem = new Button("Add Item");
 	    private final ListBox autoGenerateCode = new ListBox();
@@ -51,10 +56,10 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	    private final HorizontalPanel hPanel3 = new HorizontalPanel();
 	    private final HorizontalPanel hPanel4 = new HorizontalPanel();
 	    private final ListBox itemsAvailable = new ListBox();
-	    private final ArrayList<String> itemsAvailableList = new ArrayList<String>();
+	    private ArrayList<ItemEntity> itemsAvailableList = new ArrayList<ItemEntity>();
 	    private final TextBox itemsForServer = new TextBox();
 	    private final ListBox itemsSelected = new ListBox();
-	    private final ArrayList<String> itemsSelectedList = new ArrayList<String>();
+	    private final ArrayList<ItemEntity> itemsSelectedList = new ArrayList<ItemEntity>();
 	    private final Label label1 = new Label("Enter the name of the quest.");
 	    private final Label label10 = new Label();
 	    private final Label label11 = new Label();
@@ -91,28 +96,21 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	    private final VerticalPanel mainPanel = new VerticalPanel();
 	
 	public CreateQuestWidget(){	
+		
 	    questForm.setWidget(mainPanel);
 	    initWidget(questForm);
-		
+	    retrieveDBItems();
 		questForm.setAction("/clashroom/storeQuest");
-	     
-		itemsAvailableList.add("Katana");
-        itemsAvailableList.add("Bow");
-        itemsAvailableList.add("Health Potion");
-        itemsAvailableList.add("Smoke Bomb");
-        itemsAvailableList.add("10x Kunai");
         
         attachListeners();
-        itemListsPop();
-        
-
+       
         addWidgets();
         setUpWidgets();
 	}
 
 	@Override
 	public void onSubmit(SubmitEvent event) {
-		populateHiddenItemsField(itemsSelectedList);		
+		populateHiddenItemsField();		
 	}
 
 	@Override
@@ -125,18 +123,18 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 		if (event.getSource().equals(addRemoveItem)) {
             if (addRemoveItem.getText().equals("Add Item")
                                             && itemsAvailable.getSelectedIndex() != -1) {
-                itemsAvailableList.remove(itemsAvailable
+                ItemEntity removedItem = itemsAvailableList.remove(itemsAvailable
                                                 .getSelectedIndex());
-                itemsSelectedList.add(itemsAvailable
-                                                .getItemText(itemsAvailable.getSelectedIndex()));
+                
+                itemsSelectedList.add(removedItem);
             }
 
             if (addRemoveItem.getText().equals("Remove Item")
                                             && itemsSelected.getSelectedIndex() != -1) {
 
-                itemsSelectedList.remove(itemsSelected.getSelectedIndex());
-                itemsAvailableList.add(itemsSelected.getItemText(itemsSelected
-                                                .getSelectedIndex()));
+                ItemEntity removedItem = itemsSelectedList.remove(itemsSelected.getSelectedIndex());
+                
+                itemsAvailableList.add(removedItem);
             }
             itemListsPop();
         }
@@ -350,11 +348,11 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
         itemsAvailable.clear();
         itemsSelected.clear();
 
-        for (String item : itemsAvailableList) {
-            itemsAvailable.addItem(item);
+        for (ItemEntity item : itemsAvailableList) {
+            itemsAvailable.addItem(item.getName());
         }
-        for (String item : itemsSelectedList) {
-            itemsSelected.addItem(item);
+        for (ItemEntity item : itemsSelectedList) {
+            itemsSelected.addItem(item.getName());
         }
     }
     
@@ -362,16 +360,43 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
      * A way to pass the items list to the servlet, best way I can
      * think of for now, should be rewritten.
      */
-    private void populateHiddenItemsField(ArrayList<String> listOfItems) {
+    private void populateHiddenItemsField() {
         itemsForServer.setText("");
-        String itemsConcat = "";
-        for (String item : itemsSelectedList) {
-            itemsConcat += item + ",";
+        String itemIdsConcat = "";
+        for (ItemEntity item : itemsSelectedList) {
+            itemIdsConcat += item.getId() + ",";
         }
-        itemsForServer.setText(itemsConcat);
+        itemsForServer.setText(itemIdsConcat);
     }
     
-    private void questListPop() {
+    private void retrieveDBItems() {
+    	
+    	if (itemsRetrieverSvc == null) 
+        { 
+        	itemsRetrieverSvc = GWT.create(ItemRetrieverService.class); 
+        }
+          
+          	// Set up the callback object.
+        	AsyncCallback<ArrayList<ItemEntity>> callback = new
+        	AsyncCallback<ArrayList<ItemEntity>>() {
+          
+          @Override public void onFailure(Throwable caught) {
+          System.err.println("Error: RPC Call Failed");
+          caught.printStackTrace(); 
+         }
+          
+          @Override public void onSuccess(ArrayList<ItemEntity>result) 
+          { 
+        	  itemsAvailableList = result;
+        	  itemListsPop();
+        	  
+          } };
+          
+          itemsRetrieverSvc.retrieveItems(callback);
+          
+    }
+    
+    private void questListPop(){
     	
     	if (questRetrieverSvc == null) 
         { 
@@ -398,7 +423,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
           } };
           
           questRetrieverSvc.retrieveQuests(callback);
-          
+    	
     }
 
     private void setUpWidgets() {

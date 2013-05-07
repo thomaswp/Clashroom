@@ -1,8 +1,6 @@
 package com.clashroom.client.window;
 
 import com.clashroom.client.FlowControl;
-import com.clashroom.client.HomePage;
-import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
@@ -17,13 +15,11 @@ import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.NumberLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class UserInfoWindow extends Window {
 	

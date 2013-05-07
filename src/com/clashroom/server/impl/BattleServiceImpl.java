@@ -10,26 +10,19 @@ import javax.jdo.PersistenceManager;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
-import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.Battle;
 import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.actions.ActionExp;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.battlers.DragonBattler;
-import com.clashroom.shared.battle.battlers.GoblinBattler;
 import com.clashroom.shared.entity.BattleEntity;
 import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.QueuedBattleEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.news.BattleNews;
-import com.clashroom.shared.news.NewsfeedItem;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
-import com.google.gwt.user.client.rpc.SerializationException;
-import com.google.gwt.user.server.rpc.RPC;
-import com.google.gwt.user.server.rpc.RPCRequest;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class BattleServiceImpl extends RemoteServiceServlet implements BattleService {

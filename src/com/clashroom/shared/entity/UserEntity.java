@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.jdo.annotations.Embedded;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -24,6 +25,12 @@ public class UserEntity implements Serializable {
 	
 	@Persistent()
 	private String email;
+	
+	@Persistent
+	private List<Long> itemInventory;
+	
+	@Persistent
+	private List<Long> completedQuests;
 	
 	@Persistent(defaultFetchGroup="true")
 	@Embedded
@@ -120,5 +127,26 @@ public class UserEntity implements Serializable {
 	
 	public void setSkillPoints(int skillPoints) {
 		this.skillPoints = skillPoints; 
+	}
+	
+	public void setItemsIventory(List<Long> listOfItems){
+		itemInventory = listOfItems;
+	}
+	
+	public void setCompletedQuests(List<Long> listOfCompletedQuests){
+		completedQuests = listOfCompletedQuests;
+	}
+	
+	public List<Long> getCompletedQuests(){
+		return completedQuests;
+	}
+	public List<Long> getItemInventory(){
+		return itemInventory;
+	}
+	public void addCompletedQuest(Long questId){
+		completedQuests.add(questId);
+	}
+	public void addItemToInventory(Long itemId){
+		itemInventory.add(itemId);
 	}
 }

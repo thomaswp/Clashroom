@@ -3,6 +3,7 @@ package com.clashroom.client;
 import java.util.LinkedList;
 
 import com.clashroom.client.battle.BattlePage;
+import com.clashroom.client.battle.BattlePrepPage;
 import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.teacher.CreateBattlePage;
 import com.clashroom.client.teacher.CreateQuestPage;
@@ -10,7 +11,6 @@ import com.clashroom.client.teacher.CreatedQuestsPage;
 import com.clashroom.client.teacher.QuestDetailPage;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.user.UserInfoPage;
-import com.clashroom.client.window.ListBattleWindow;
 import com.clashroom.shared.Debug;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -71,6 +71,8 @@ public class FlowControl {
         	go(new CreateQuestPage(token));
         } else if (token.startsWith(CreateBattlePage.NAME)){
         	go(new CreateBattlePage(token));
+        } else if (token.startsWith(BattlePrepPage.NAME)){
+        	go(new BattlePrepPage(token));
         } else {
 			History.back();
 			throw new RuntimeException("No such page " + token);

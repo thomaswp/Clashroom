@@ -4,13 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 
-import com.clashroom.client.services.UserInfoService;
-import com.clashroom.client.services.UserInfoServiceAsync;
-import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.ActiveBountyEntity;
-import com.clashroom.shared.entity.UserEntity;
-import com.google.gwt.core.shared.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 public class ActiveTaskList implements Serializable {
 	private static final long serialVersionUID = 1L;

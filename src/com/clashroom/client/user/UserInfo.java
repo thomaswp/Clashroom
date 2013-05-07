@@ -2,8 +2,6 @@ package com.clashroom.client.user;
 
 import java.beans.Beans;
 
-import org.eclipse.jdt.internal.compiler.flow.FlowContext;
-
 import com.clashroom.client.FlowControl;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.UserInfoServiceAsync;
@@ -14,7 +12,6 @@ import com.clashroom.shared.Constant;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.dragons.DragonClass;
-import com.clashroom.shared.battle.skills.ActiveSkill;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.UserEntity;
@@ -23,7 +20,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Label;

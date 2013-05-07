@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.LinkedList;
 
 import com.clashroom.client.FlowControl;
-import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.TaskService;
@@ -27,7 +26,6 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 

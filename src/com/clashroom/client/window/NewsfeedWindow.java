@@ -3,14 +3,10 @@ package com.clashroom.client.window;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.TabExpander;
-
 import com.clashroom.client.Clashroom;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
-import com.clashroom.shared.Constant;
-import com.clashroom.shared.Debug;
 import com.clashroom.shared.news.NewsfeedItem;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -18,7 +14,6 @@ import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 

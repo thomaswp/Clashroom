@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionDeath;
 import com.clashroom.shared.battle.actions.ActionFinish;

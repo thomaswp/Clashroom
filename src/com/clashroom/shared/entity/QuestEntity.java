@@ -38,7 +38,7 @@ public class QuestEntity implements Serializable {
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long id;
     @Persistent
-    private List<String> itemsRewarded;//TODO: This will change to a
+    private List<Long> itemsRewarded;//TODO: This will change to a
                                        // item keys
     @Persistent
     private int levelRequirement;
@@ -96,7 +96,7 @@ public class QuestEntity implements Serializable {
                                     String aDateUnavailable,
                                     String victoryText,
                                     String prereqQuest,
-                                    List<String> itemsRewardedPassed) {
+                                    List<Long> itemsRewardedPassed) {
         this.questName = questName;
         this.questDescription = questDescription;
         this.completionCode = completionCode;
@@ -150,7 +150,7 @@ public class QuestEntity implements Serializable {
     /**
      * @return the itemsRewarded
      */
-    public List<String> getItemsRewarded() {
+    public List<Long> getItemsRewarded() {
         return itemsRewarded;
     }
 
@@ -248,7 +248,7 @@ public class QuestEntity implements Serializable {
      * @param aItemsRewarded
      *            the itemsRewarded to set
      */
-    public void setItemsRewarded(ArrayList<String> aItemsRewarded) {
+    public void setItemsRewarded(ArrayList<Long> aItemsRewarded) {
         itemsRewarded = aItemsRewarded;
     }
 

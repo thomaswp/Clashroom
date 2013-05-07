@@ -74,8 +74,8 @@ public class QuestRetrieverServiceImpl extends RemoteServiceServlet
      */
 	@Override
 	public String addDummyQuest() {
-		List<String> dummyList = new ArrayList();
-    	dummyList.add("Scroll of Wisdom");
+		List<Long> dummyList = new ArrayList();
+		dummyList.add((long) 10);
     	
     	QuestEntity dummyQuest = new QuestEntity("Train your Dragon", "Now that you have a dragon you must train it! Go to Temple Belk to obtain the dragon scroll", "ycmb",
                 100, 0,

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.clashroom.shared.battle.skills.EggShellSkill;
 import com.clashroom.shared.battle.skills.FireBreathSkill;
 import com.clashroom.shared.battle.skills.FireballSkill;
-import com.clashroom.shared.battle.skills.ActiveSkill;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class DragonHatchling extends DragonClass {

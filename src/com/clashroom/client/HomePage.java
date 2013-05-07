@@ -8,7 +8,6 @@ import com.clashroom.client.window.TasksWindow;
 import com.clashroom.client.window.UserInfoWindow;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 

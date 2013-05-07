@@ -8,6 +8,7 @@ package com.clashroom.server;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -56,9 +57,12 @@ public class StoreQuestServlet extends HttpServlet {
         String codeInput = null;
         int expGained = Integer.parseInt(request
                                         .getParameter("Awarded XP"));
-        List<String> itemsRewarded = Arrays.asList(request.getParameter(
-                                        "Items Selected").split(","));
-        String questAvailability = request
+        
+        List<String> itemStringIds = Arrays.asList((request.getParameter(
+                "Items Selected").split(",")));
+        List<Long> itemIds = new ArrayList<Long>();
+	
+		String questAvailability = request
                                         .getParameter("Quest Availability");
         String questUnAvailability = request
                                         .getParameter("Quest Unavailablility");
@@ -108,12 +112,17 @@ public class StoreQuestServlet extends HttpServlet {
                 codeInput = request.getParameter("Code Input");
             }
         }
+        
+        for(String stringId: itemStringIds){
+        	itemIds.add(Long.valueOf(stringId));
+        }
+        
         QuestEntity newQuest = new QuestEntity(questName, questDesc, codeInput,
                                         expGained, requiredLevel,
                                         formatter.format(dateAvailable),
                                         formatter.format(dateUnavailable),
                                         victoryText, priorQuest,
-                                        itemsRewarded);
+                                        itemIds);
 
         System.out.println(formatter.format(dateAvailable));
         return newQuest;

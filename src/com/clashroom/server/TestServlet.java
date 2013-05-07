@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.clashroom.shared.entity.ActiveBountyEntity;
-import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.TaskEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTaskList;

@@ -6,6 +6,8 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.clashroom.shared.battle.skills.Skill;
 /*
  * Item Entity, the teacher will be allowed to make items for students
  * to obtain
@@ -17,11 +19,41 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable
 public class ItemEntity implements Serializable {
 	
+	public enum ItemType {
+		ACTIVE, PASSIVE, NONE
+	}
+	
 	@Persistent
 	private String name;
 	
 	@Persistent
+	private String imageDir;
+
+	@Persistent
+	private ItemType itemType;
+	
+	@Persistent
 	private String desctiption;
+	
+	@Persistent(serialized = "true")
+	private Skill skill;
+	
+	@PrimaryKey
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+	private Long id;
+	
+	public ItemEntity(){
+		
+	}
+	
+	public ItemEntity(String aName, String aDescription,
+			Skill aSkill,ItemType theitemType,String imageDir){
+		this.name = aName;
+		this.desctiption = aDescription;
+		this.skill = aSkill;
+		this.itemType = theitemType;
+		this.imageDir = "/img/itemIMG/"+imageDir;
+	}
 	
 	public String getName() {
 		return name;
@@ -46,17 +78,28 @@ public class ItemEntity implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
 	
-	public ItemEntity(){
-		
+	public void setSkill(Skill aSkill){
+		skill = aSkill;
 	}
 	
-	public ItemEntity(String aName, String aDescription){
-		this.name = aName;
-		this.desctiption = aDescription;
+	public Skill getSkill(){
+		return skill;
+	}
+	
+	public String getImageDir() {
+		return imageDir;
+	}
+
+	public void setImageDir(String imageDir) {
+		this.imageDir = imageDir;
+	}
+
+	public ItemType getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
 	}
 }

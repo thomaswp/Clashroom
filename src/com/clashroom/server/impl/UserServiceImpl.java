@@ -19,7 +19,6 @@ import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.news.NewsfeedItem;
 
-import com.google.appengine.api.datastore.Entities;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;

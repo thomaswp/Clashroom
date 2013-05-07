@@ -12,7 +12,6 @@ import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.widget.ProgressBar;
-import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTask;
 import com.clashroom.shared.task.ActiveTaskList;

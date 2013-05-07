@@ -1,8 +1,6 @@
 package com.clashroom.server.impl;
 
 import javax.jdo.PersistenceManager;
-import javax.persistence.Persistence;
-
 import com.clashroom.client.services.LoginService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;

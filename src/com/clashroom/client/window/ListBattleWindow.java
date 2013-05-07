@@ -2,12 +2,9 @@ package com.clashroom.client.window;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import com.clashroom.client.Clashroom;
-import com.clashroom.client.HomePage;
-import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.battle.BattlePage;
 import com.clashroom.client.services.BattleService;
@@ -18,11 +15,9 @@ import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.entity.BattleEntity;
 import com.clashroom.shared.entity.QueuedBattleEntity;
-import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;

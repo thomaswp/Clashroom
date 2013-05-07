@@ -9,8 +9,6 @@ import java.util.Random;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.skills.AttackSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill;
-import com.clashroom.shared.battle.skills.FireballSkill;
-import com.clashroom.shared.battle.skills.HealSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill.Target;
 import com.clashroom.shared.battle.skills.Skill;
 
