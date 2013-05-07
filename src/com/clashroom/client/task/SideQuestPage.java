@@ -27,6 +27,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class SideQuestPage extends Page {
@@ -216,7 +217,10 @@ public class SideQuestPage extends Page {
 			//Title
 			questTable.setText(x, 0, quests.get(i).getTitle());
 			//Description
-			questTable.setText(x, 1, quests.get(i).getDesc().substring(0, 50)+"...");
+			SimplePanel full = new SimplePanel();
+			full.addStyleName(Styles.table_hidden_field);
+			full.add(new Label(quests.get(i).getDesc()));
+			questTable.setWidget(x, 1, full);
 			//Reward
 			questTable.setText(x, 2, Integer.toString(quests.get(i).getReward()));
 			DateTimeFormat dtf2 = DateTimeFormat.getFormat(PredefinedFormat.HOUR24_MINUTE_SECOND);
@@ -243,7 +247,7 @@ public class SideQuestPage extends Page {
 			for (int i = 0; i < queueTable.getCellCount(0); i++){
 				queueTable.setText(1, i, "");
 			}
-			queueTable.setText(1, 1, "Add some quests!");
+			queueTable.setText(1, 1, "Add some bounties!");
 			currentBar.setProgress(0);
 			totalBar.setProgress(0);
 		} else {
@@ -274,34 +278,35 @@ public class SideQuestPage extends Page {
 				
 				queueTable.setWidget(x, 6, removeQuestButton(i));
 				
-				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							System.out.println("Dat shit broke");
-						}
-
-						@Override
-						public void onSuccess(String result) {
-							System.out.println("Page: " + result);
-							aql.removeFirst();
-							queueTable.removeRow(queueTable.getRowCount()-1);
-							currentBar.setProgress(0);
-							if (aql.getAllQuests().size() < 1){
-								totalBar.setProgress(0);
-							}
-							
-						}
-						
-					});
-//					aql.completeQuest(userInfoService);
-//					queueTable.removeRow(queueTable.getRowCount()-1);
-//					return;
-				}
+				
 			}
 			updateProgressBar();
+			
+			//Check for active Quest for completion
+			if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
+				questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						System.out.println("Dat shit broke");
+					}
+
+					@Override
+					public void onSuccess(String result) {
+						System.out.println("Page: " + result);
+						aql.removeFirst();
+						queueTable.removeRow(queueTable.getRowCount()-1);
+						currentBar.setProgress(0);
+						if (aql.getAllQuests().size() < 1){
+							totalBar.setProgress(0);
+						}
+					}
+					
+				});
+//				aql.completeQuest(userInfoService);
+//				queueTable.removeRow(queueTable.getRowCount()-1);
+//				return;
+			}
 		}
 	}
 	

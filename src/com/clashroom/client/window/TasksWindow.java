@@ -138,7 +138,7 @@ public class TasksWindow extends Window {
 			for (int i = 0; i < queueTable.getCellCount(0); i++){
 				queueTable.setText(1, i, "");
 			}
-			queueTable.setText(1, 0, "Add some quests!");
+			queueTable.setText(1, 0, "Add some bounties!");
 			currentBar.setProgress(0);
 			totalBar.setProgress(0);
 		} else {
@@ -159,37 +159,39 @@ public class TasksWindow extends Window {
 				
 				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
 				
-				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							System.out.println("Dat shit broke");
-						}
-
-						@Override
-						public void onSuccess(String result) {
-							System.out.println("Window: " +  result);
-							aql.removeFirst();
-							queueTable.removeRow(queueTable.getRowCount()-1);
-							currentBar.setProgress(0);
-							if (aql.getAllQuests().size() < 1){
-								totalBar.setProgress(0);
-							}
-							if (onQuestCompletedListener != null) {
-								onQuestCompletedListener.run(); 
-							}
-						}
-						
-					});
-//					aql.completeQuest();
-//					queueTable.removeRow(queueTable.getRowCount()-1);
-//					persistAQL();
-//					return;
-				}
+				
 			}
 			updateProgressBar();
+			
+			//Check for active Quest for completion
+			if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
+				questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						System.out.println("Dat shit broke");
+					}
+
+					@Override
+					public void onSuccess(String result) {
+						System.out.println("Window: " +  result);
+						aql.removeFirst();
+						queueTable.removeRow(queueTable.getRowCount()-1);
+						currentBar.setProgress(0);
+						if (aql.getAllQuests().size() < 1){
+							totalBar.setProgress(0);
+						}
+						if (onQuestCompletedListener != null) {
+							onQuestCompletedListener.run(); 
+						}
+					}
+					
+				});
+//				aql.completeQuest();
+//				queueTable.removeRow(queueTable.getRowCount()-1);
+//				persistAQL();
+//				return;
+			}
 		}
 	}
 	

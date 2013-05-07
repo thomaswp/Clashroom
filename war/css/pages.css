@@ -56,11 +56,11 @@
 }
 
 .profile_portrait img {
-	margin:-10px 0 0 -60px;
+	width:200px;
 }
 
 .profile_portrait_window img {
-	margin:-10px 0 0 -60px;
+	width:200px;
 }
 
 .profile_stats {

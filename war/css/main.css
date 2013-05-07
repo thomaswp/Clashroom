@@ -140,3 +140,27 @@ html {
 .flexTable_header td {
 	text-align:center;
 }
+
+.table_hidden {
+	height:16px;
+	width:300px;
+	overflow:hidden;
+	-webkit-transition: all 500ms ease-in-out;
+	-moz-transition: all 500ms ease-in-out;
+	-ms-transition: all 500ms ease-in-out;
+	-o-transition: all 500ms ease-in-out;
+	transition: all 500ms ease-in-out;
+}
+
+.table_hidden:hover {
+	cursor:pointer;
+}
+
+.table_hidden:active {
+	height:300px;
+	-webkit-transition: all 500ms ease-in-out;
+	-moz-transition: all 500ms ease-in-out;
+	-ms-transition: all 500ms ease-in-out;
+	-o-transition: all 500ms ease-in-out;
+	transition: all 500ms ease-in-out;
+}
