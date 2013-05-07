@@ -44,17 +44,18 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	}
 
 	@Override
-	public String persistAQL(Long userID, ActiveTaskList aql) throws IllegalArgumentException {
+	public String persistAQL(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		ActiveBountyEntity entity = new ActiveBountyEntity();
-		if (aql.getId() != null) {
-			entity = pm.getObjectById(ActiveBountyEntity.class, aql.getId());
-		} else {
-			entity.setUser(userID);
+		//ActiveBountyEntity entity = new ActiveBountyEntity();
+		
+		ActiveBountyEntity abe = QueryUtils.queryUnique(pm, ActiveBountyEntity.class, "userID==%s", userID);
+		if (abe == null){
+			abe = new ActiveBountyEntity();
+			abe.setUser(userID);
 		}
-		entity.setActiveQuests(aql);
+		abe.setActiveQuests(atl);
 		try {
-			pm.makePersistent(entity);
+			pm.makePersistent(abe);
 		} finally {
 			pm.close();
 		}
@@ -67,11 +68,11 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		UserServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
 		atl.removeFirst();
 		
-		ActiveBountyEntity entity = new ActiveBountyEntity();
-		entity = pm.getObjectById(ActiveBountyEntity.class, atl.getId());
-		entity.setActiveQuests(atl);
+		//ActiveBountyEntity entity = new ActiveBountyEntity();
+		ActiveBountyEntity abe = QueryUtils.queryUnique(pm, ActiveBountyEntity.class, "userID==%s", userID);
+		abe.setActiveQuests(atl);
 		try {
-			pm.makePersistent(entity);
+			pm.makePersistent(abe);
 			pm.flush();
 		} finally {
 			pm.close();
