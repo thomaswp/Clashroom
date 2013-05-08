@@ -77,10 +77,51 @@ public class TestServlet extends HttpServlet {
 	}
 	
 	public void createTestQuests(HttpServletResponse resp) throws ServletException, IOException {
-		resp.getWriter().println(createQuest(new Task("The Forge of Karak Khazad", "Deep under the World’s Edge Mountains was a Dwarven stronghold of great wealth and reknown. Most of the world knew of Karak Khazad, and its fabulous metal works, producing items of power and beauty. But with the fall of the Dwarves, the forge at Karak Khazad was lost, and its enchanted anvil abandoned. Now the foul creatures living in the ruins use the anvil for their own purposes, and although unable to attain its full potential, the results are truly troubling nonetheless. The Dwarven Enchanter Smith Dol Gondur has hired the Warriors to retrieve this anvil, and return it to him. In payment, he will either offer D6x200 gold or an item he creates with the anvil. If the item is chosen, make two rolls on the Weapons and Armor Dungeon Room Treasure table, and choose the one the Warriors like the best. This he gives to them for free.", 12000, 60)));
-		resp.getWriter().println(createQuest(new Task("Curse of the Wolf", "One of the Warriors was attacked by a werewolf and torn horribly on a trip to a Settlement, and upon arrival discovered he was infected by the Curse of the Wolf. Hurled from the City, the Warrior sought an answer for the cure to this curse, and with his friends learned of the Fountain of Light buried deep in the mountains. Supposedly enchanted with great power, this Fount is able to heal any affliction, remove any curse, for a price. With little else to try, the Warriors set out for the Fountain of Light, racing against the full moon.", 100000, 50)));
-		resp.getWriter().println(createQuest(new Task("The Skaven Priests of Torne", "Princess Janitta, the daughter of King Reinwelle, has been captured by the evil skavens that control the sewers beneath the ancient city of Torne. The warriors have been commissioned to rescue her before she is sacrificed by the plague priests in their temple hidden somewhere deep within the meandering sewer passageways. ", 240000, 120)));
-		resp.getWriter().println(createQuest(new Task("The Dragon Oracle", "High above the city of Khost is a dragon’s cave, where the monster will answer questions for a price. Only the bravest of Warriors can hope to reach the dragon and learn their answer, for he keeps the dungeon well stocked with creatures. The Warriors have been hired to reach the dragon and ask a single question: is the treaty offered by a nearby count trustworthy or not? The Duke hiring the Warriors pays well, an objective room treasure and 50 gold each.", 2*60*60*1000, 50000)));
+		//resp.getWriter().println(createQuest(new Task("The Forge of Karak Khazad", "Deep under the World’s Edge Mountains was a Dwarven stronghold of great wealth and reknown. Most of the world knew of Karak Khazad, and its fabulous metal works, producing items of power and beauty. But with the fall of the Dwarves, the forge at Karak Khazad was lost, and its enchanted anvil abandoned. Now the foul creatures living in the ruins use the anvil for their own purposes, and although unable to attain its full potential, the results are truly troubling nonetheless. The Dwarven Enchanter Smith Dol Gondur has hired the Warriors to retrieve this anvil, and return it to him. In payment, he will either offer D6x200 gold or an item he creates with the anvil. If the item is chosen, make two rolls on the Weapons and Armor Dungeon Room Treasure table, and choose the one the Warriors like the best. This he gives to them for free.", 12000, 60)));
+		//resp.getWriter().println(createQuest(new Task("Curse of the Wolf", "One of the Warriors was attacked by a werewolf and torn horribly on a trip to a Settlement, and upon arrival discovered he was infected by the Curse of the Wolf. Hurled from the City, the Warrior sought an answer for the cure to this curse, and with his friends learned of the Fountain of Light buried deep in the mountains. Supposedly enchanted with great power, this Fount is able to heal any affliction, remove any curse, for a price. With little else to try, the Warriors set out for the Fountain of Light, racing against the full moon.", 100000, 50)));
+		//resp.getWriter().println(createQuest(new Task("The Skaven Priests of Torne", "Princess Janitta, the daughter of King Reinwelle, has been captured by the evil skavens that control the sewers beneath the ancient city of Torne. The warriors have been commissioned to rescue her before she is sacrificed by the plague priests in their temple hidden somewhere deep within the meandering sewer passageways. ", 240000, 120)));
+		//resp.getWriter().println(createQuest(new Task("The Dragon Oracle", "High above the city of Khost is a dragon’s cave, where the monster will answer questions for a price. Only the bravest of Warriors can hope to reach the dragon and learn their answer, for he keeps the dungeon well stocked with creatures. The Warriors have been hired to reach the dragon and ask a single question: is the treaty offered by a nearby count trustworthy or not? The Duke hiring the Warriors pays well, an objective room treasure and 50 gold each.", 2*60*60*1000, 50000)));
+	
+		resp.getWriter().println(createQuest(new Task(
+				"The Dragon of the Lethesand Desert",
+				"An angry noblewoman named Elient seeks a dragon trainer to expose a corrupt aristocrat who serves the Dragon of the Lethesand Desert.",
+				2*60*60*1000, 4)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Lost City of Cabrook",
+				"A charming aristocrat named Ambes seeks a dragon trainer to recover and destroy an evil artifact from the lost city of Cabrook in the Jungle of Jade.",
+				1*60*60*1000, 2)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Ruins of Windselw Castle",
+				"A guarded noblewoman named Hansa seeks a dragon trainer to recover and destroy an evil artifact from the ruins of Windselw Castle.",
+				2*60*60*1000, 4)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Assassins of Adras the Crimson",
+				"A frantic priest named Monesto seeks a dragon trainer to protect him from the assassins of Adras the Crimson",
+				3*60*60*1000, 6)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Demon of the Huamana Jungle",
+				"An ex-adventurer named Bedge seeks a dragon trainer to thwart the monstrous plan of the Demon of the Huamana Jungle.",
+				2*60*60*1000, 4)));
+		resp.getWriter().println(createQuest(new Task(
+				"Smoore Stronghold",
+				"A merchant named Thurey seeks a dragon trainer to recover and destroy an evil artifact from Smoore Stronghold.",
+				1*60*60*1000, 2)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Crystal Desert",
+				"A charming noblewoman named Andis seeks a dragon trainer to investigate bizarre monsters which wander the Crystal Desert.",
+				2*60*60*1000, 4)));
+		resp.getWriter().println(createQuest(new Task(
+				"The lost city of Runivik",
+				"A priest named Hippusarp seeks a dragon trainer to recover and destroy an evil artifact from the lost city of Runivik in the Jungle of Spears.",
+				3*60*60*1000, 6)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Behemoth of the Tuli March",
+				"A guarded ex-adventurer named Nieleon Weke seeks a dragon trainer to slay the Behemoth of the Tuli March and retrieve its hide.",
+				2*60*60*1000, 4)));
+		resp.getWriter().println(createQuest(new Task(
+				"The Pirates of the Silent Sea",
+				"A merchant named Ether seeks a dragon trainer to recover a caravan of exotic goods from the pirates of the Silent Sea.",
+				1*60*60*1000, 2)));
 	}
 
 }
