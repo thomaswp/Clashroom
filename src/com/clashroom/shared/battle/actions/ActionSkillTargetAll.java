@@ -13,13 +13,15 @@ public class ActionSkillTargetAll extends BattleAction {
 	public Battler attacker;
 	public ActiveSkill skill;
 	public LinkedList<ActionSkill> attacks;
+	public boolean critical;
 
 
-	public ActionSkillTargetAll(Battler attacker, ActiveSkill skill, LinkedList<ActionSkill> attacks) {
+	public ActionSkillTargetAll(Battler attacker, ActiveSkill skill, boolean critical, LinkedList<ActionSkill> attacks) {
 		super();
 		this.attacker = attacker;
 		this.skill = skill;
 		this.attacks = attacks;
+		this.critical = critical;
 	}
 
 	@Override

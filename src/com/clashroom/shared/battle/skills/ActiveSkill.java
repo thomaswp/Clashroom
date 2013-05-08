@@ -10,7 +10,7 @@ import com.clashroom.shared.battle.battlers.Battler;
 public abstract class ActiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;
 
-	public static int DAMAGE_FACTOR_MULT = 5;
+	public static final double CRITICAL_MULT = 2;
 	public static float ACCURACY_PERFECT = -1;
 
 	public enum Target {
@@ -21,7 +21,7 @@ public abstract class ActiveSkill extends Skill {
 	protected boolean targetAllies;
 	protected int baseDamage;
 	/** [0+] */
-	protected double damageFactor;
+	//protected double damageFactor;
 	/** [0+] */
 	protected double accuracyFactor;
 	/** [0+] */
@@ -49,16 +49,18 @@ public abstract class ActiveSkill extends Skill {
 		this.target = target;
 		this.targetAllies = targetAllies;
 		this.baseDamage = baseDamage;
-		this.damageFactor = damageFactor;
+		//this.damageFactor = damageFactor;
 		this.accuracyFactor = accuracyFactor;
 		this.rangeFactor = rangeFactor;
 		this.mpCost = mpCost;
 	}
+	
+	protected double getAttackModifier(Battler attacker) {
+		return attacker.getSpellModifier();
+	}
 
 	public Damage getDamage(Battler attacker, Battler target, Random random) {
-		int attackerStr = getAttribute(attacker, attribute);
-		//int targetStr = getAttribute(attacker, attribute);
-		double dmg = baseDamage + attackerStr * damageFactor * DAMAGE_FACTOR_MULT;
+		double dmg = baseDamage * getAttackModifier(attacker);
 		dmg += dmg * rangeFactor * (random.nextDouble() - 0.5) * 2;
 		int damage = (int)Math.max(dmg, 0);
 		if (targetAllies) damage *= -1;
@@ -71,18 +73,25 @@ public abstract class ActiveSkill extends Skill {
 		Damage damage = getDamage(attacker, target, random);
 		if (miss) damage.damage = 0;
 		
-		return new ActionSkill(attacker, this, miss, damage);
+		boolean critical = false;
+		if (!miss) {
+			critical = getCritical(attacker, random);
+			if (critical) damage.damage *= CRITICAL_MULT;
+		}
+		
+		return new ActionSkill(attacker, this, miss, critical, damage);
+	}
+	
+	public boolean getCritical(Battler attacker, Random random) {
+		if (targetAllies) return false;
+		return attacker.getCriticalChance() > random.nextDouble();
 	}
 	
 	public boolean getMiss(Battler attacker, Battler target, Random random) {
 		if (targetAllies || accuracyFactor == ACCURACY_PERFECT) {
 			return false;
 		} else {
-//			double chance = accuracyFactor * Math.sqrt(
-//					attacker.agility / (double)target.agility);
-//			return chance < random.nextDouble() * 1.5;
-			
-			double missChance = (10 - (attacker.agility - target.agility)) / 100.0;
+			double missChance = target.getDodgeChance();
 			return missChance > random.nextDouble();
 		}
 	}

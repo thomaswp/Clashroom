@@ -12,6 +12,11 @@ public class AttackSkill extends ActiveSkill {
 	}
 
 	@Override
+	protected double getAttackModifier(Battler attacker) {
+		return attacker.getMeleeModifier();
+	}
+	
+	@Override
 	public String getAttackString(Battler attacker, Battler target) {
 		return Formatter.format("%s attacked %s", attacker.name, target.name);
 	}

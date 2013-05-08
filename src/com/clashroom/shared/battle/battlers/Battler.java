@@ -55,17 +55,33 @@ public abstract class Battler implements Serializable {
 		tempBattlers = new LinkedList<Battler>();
 		tempSkills = new LinkedList<ActiveSkill>();
 	}
+	
+	public double getSpellModifier() {
+		return 0.5 + Math.pow(intelligence, 0.75) / (2 * (level + 1));
+	}
+	
+	public double getMeleeModifier() {
+		return 10 + 1.5 * strength;
+	}
+	
+	public double getDodgeChance() {
+		return 0.01 + Math.pow(agility, 0.6) / (2 * (level + 10));
+	}
+	
+	public double getCriticalChance() {
+		return 0.01 + Math.pow(agility, 0.55) / (2 * (level + 10));
+	}
 
 	public int getExpReward() {
 		return (int)(23 * expFactor * (1 + (level - 1) * 0.3));
 	}
 
 	protected void generateMaxHP() {
-		maxHp = level * 35 + strength * 23;
+		maxHp = 100 + (10 * level) + (10 * strength);
 	}
 
 	protected void generateMaxMP() {
-		maxMp = level * 15 + intelligence * 8;
+		maxMp = 100 + (5) + (5 * strength);
 	}
 
 	protected int getStatCurve(int level, int minGain, int maxGain) {

@@ -13,16 +13,18 @@ public class ActionSkill extends BattleAction {
 	public ActiveSkill skill;
 	public LinkedList<Damage> damages = new LinkedList<ActionSkill.Damage>();
 	public boolean missed;
+	public boolean critical;
 	
 	public Damage getPrimaryDamage() {
 		return damages.get(0);
 	}
 	
-	public ActionSkill(Battler attacker, ActiveSkill skill, boolean missed, Damage damage) {
+	public ActionSkill(Battler attacker, ActiveSkill skill, boolean missed, boolean critical, Damage damage) {
 		super();
 		this.attacker = attacker;
 		this.skill = skill;
 		this.missed = missed;
+		this.critical = critical;
 		damages.add(damage);
 	}
 
