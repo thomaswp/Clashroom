@@ -281,15 +281,18 @@ public class SetupUser extends Composite {
 			vPanel.add(image);
 			
 			final FocusPanel focusPanel = new FocusPanel(vPanel);
-			focusPanel.setStyleName("borderHovered");
+			//focusPanel.setStyleName("borderHovered");
+			focusPanel.setStyleName("option");
 			focusPanel.addFocusHandler(new FocusHandler() {
 				@Override
 				public void onFocus(FocusEvent event) {
 					if (focusedPanel != null) {
-						focusedPanel.setStyleName("borderHovered");
+						//focusedPanel.setStyleName("borderHovered");
+						focusedPanel.setStyleName("option");
 					}
 					focusedPanel = focusPanel;
-					focusPanel.setStyleName("border");
+					focusedPanel.setStyleName("selected");
+					//focusPanel.setStyleName("border");
 					SetupUser.this.dragonClass = dragonClass; 
 					htmlDragonDescription.setHTML(Formatter.format(
 							"<b>%s</b>: %s", dragonClass.getName(), 
@@ -311,6 +314,7 @@ public class SetupUser extends Composite {
 		horizontalPanel_3.setWidth("100%");
 		
 		buttonNext = new Button("Next");
+		buttonNext.addStyleName("next");
 		buttonNext.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {

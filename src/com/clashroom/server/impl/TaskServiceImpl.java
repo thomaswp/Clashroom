@@ -11,7 +11,10 @@ import com.clashroom.client.services.TaskService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
 import com.clashroom.shared.entity.ActiveBountyEntity;
+import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.TaskEntity;
+import com.clashroom.shared.news.BattleNews;
+import com.clashroom.shared.news.TaskNews;
 import com.clashroom.shared.task.ActiveTaskList;
 import com.clashroom.shared.task.Task;
 
@@ -66,6 +69,10 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	public String completeQuest(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		UserServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
+		
+		NewsfeedEntity item = new NewsfeedEntity(new TaskNews(atl.getActiveQuest(), userID));
+		pm.makePersistent(item);
+		
 		atl.removeFirst();
 		
 		//ActiveBountyEntity entity = new ActiveBountyEntity();
