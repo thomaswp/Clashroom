@@ -66,7 +66,7 @@ public void setupUI() {
 		hPanel = new HorizontalPanel();
 		
 		itemName = new Label();
-		itemName.addStyleName(Styles.text_title);
+		itemName.addStyleName(Styles.page_title);
 		itemDesc = new Label();
 		itemDesc.addStyleName(Styles.quest_desc);
 		itemType = new Label();
