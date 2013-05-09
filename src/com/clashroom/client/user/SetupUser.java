@@ -5,6 +5,7 @@ import com.clashroom.client.resources.MyResources;
 import com.clashroom.client.widget.AnimatedProgressBar;
 import com.clashroom.client.widget.MomentumScrollPanel;
 import com.clashroom.shared.Constant;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.entity.DragonEntity;
@@ -27,6 +28,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 public class SetupUser extends Composite {
@@ -89,10 +93,20 @@ public class SetupUser extends Composite {
 		horizontalPanel_1.add(lblNewLabel);
 		lblNewLabel.setStyleName("prompt");
 		
+		KeyPressHandler nextTab = new KeyPressHandler() {
+			@Override
+			public void onKeyPress(KeyPressEvent event) {
+				int key = event.getNativeEvent().getKeyCode();
+				Debug.write(key);
+				if (key == KeyCodes.KEY_ENTER) {
+					nextTab();
+				}
+			}
+		};
+		
 		textBoxFirstName = new TextBox();
 		horizontalPanel_1.add(textBoxFirstName);
 		textBoxFirstName.setMaxLength(30);
-		
 		decoratedTabPanel.selectTab(0);
 		
 		HorizontalPanel horizontalPanel_2 = new HorizontalPanel();
@@ -105,6 +119,7 @@ public class SetupUser extends Composite {
 		
 		textBoxLastName = new TextBox();
 		textBoxLastName.setMaxLength(30);
+		textBoxLastName.addKeyPressHandler(nextTab);
 		horizontalPanel_2.add(textBoxLastName);
 		
 		VerticalPanel verticalPanel_2 = new VerticalPanel();
@@ -124,6 +139,7 @@ public class SetupUser extends Composite {
 		
 		textBoxUsername = new TextBox();
 		textBoxUsername.setMaxLength(30);
+		textBoxUsername.addKeyPressHandler(nextTab);
 		horizontalPanel_4.add(textBoxUsername);
 		
 		Button btnRandom = new Button("Random");
@@ -260,6 +276,7 @@ public class SetupUser extends Composite {
 		
 		textBoxDragonName = new TextBox();
 		textBoxDragonName.setMaxLength(30);
+		textBoxDragonName.addKeyPressHandler(nextTab);
 		horizontalPanel_7.add(textBoxDragonName);
 		
 		HorizontalPanel horizontalPanel_6 = new HorizontalPanel();
@@ -314,17 +331,21 @@ public class SetupUser extends Composite {
 		buttonNext.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				int index = decoratedTabPanel.getTabBar().getSelectedTab();
-				index++;
-				if (index < decoratedTabPanel.getTabBar().getTabCount()) {
-					decoratedTabPanel.selectTab(index);
-				} else {
-					tryFinish();
-				}
+				nextTab();
 			}
 		});
 		horizontalPanel_3.add(buttonNext);
 		horizontalPanel_3.setCellHorizontalAlignment(buttonNext, HasHorizontalAlignment.ALIGN_RIGHT);
+	}
+	
+	private void nextTab() {
+		int index = decoratedTabPanel.getTabBar().getSelectedTab();
+		index++;
+		if (index < decoratedTabPanel.getTabBar().getTabCount()) {
+			decoratedTabPanel.selectTab(index);
+		} else {
+			tryFinish();
+		}
 	}
 	
 	private void tryFinish() {

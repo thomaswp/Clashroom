@@ -3,6 +3,7 @@ package com.clashroom.client.battle;
 import java.util.LinkedList;
 
 import com.clashroom.client.Page;
+import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.Debug;
@@ -10,12 +11,17 @@ import com.clashroom.shared.battle.Battle;
 import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.actions.ActionDeath;
 import com.clashroom.shared.battle.actions.ActionExp;
+import com.clashroom.shared.battle.actions.ActionFinish;
 import com.clashroom.shared.battle.actions.ActionSkill;
 import com.clashroom.shared.battle.actions.ActionSkillTargetAll;
 import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.battlers.DragonBattler;
+import com.clashroom.shared.battle.dragons.DragonHatchling;
+import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.BattleEntity;
+import com.clashroom.shared.entity.DragonEntity;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.TextMetrics;
@@ -30,6 +36,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -46,12 +54,13 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	private Timer timer;
 
 	private Context2d context2d;
-	private int width = 1000, height = 600;
+	private int width = 1100, height = 600;
 	private long lastUpdate;
 
 	private LinkedList<BattlerSprite> battlers = new LinkedList<BattlerSprite>();
 	private Battle battle;
-	private Label info;
+	private Label labelInfo, labelTitle;
+	private VerticalPanel vPanelInfoHistory;
 
 	private int fps;
 	private int fpsFrames;
@@ -68,20 +77,19 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		
 		factory = entity.getBattleFactory();
 		entityId = entity.getId();
-		setupPage();
+		setupUI();
 		setupBattle();
 	}
 
 	public BattlePage(long id) {
 		super(getToken(id));
-		Debug.write(getToken());
-		setupPage();
+		setupUI();
 		fetchBattle(id);
 	}
 	
 	public BattlePage(String token) {
 		super(token);
-		setupPage();
+		setupUI();
 		fetchBattle(getLongParameter("id"));
 	}
 	
@@ -101,7 +109,86 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 					caught.printStackTrace();
 				}
 			});
+		} else {
+			Battler b1 = createTestBattler("Rufus", 0, 1);
+			Battler b2 = createTestBattler("Hale", 1, 1);
+			factory = createTestFactory(b1, b2);
+			setupBattle();
 		}
+	}
+	
+	private void testRoundRobbin() {
+		int[][] a = new int[4][4];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				if (i != j) {
+					for (int k = 0; k < 50; k++) {
+						
+						Battler b1 = createTestBattler("Rufus", i, k);
+						Battler b2 = createTestBattler("Hale", j, k);
+						
+						if (isTeamAWinner(createTestFactory(b1, b2))) {
+							a[i][j]++;
+						} else {
+							a[j][i]++;
+						}
+					}
+				}
+			}
+		}
+		
+		String out = "";
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				out += (a[i][j] + ", ");
+			}
+			out += "\n";
+		}
+		System.out.println(out);
+	}
+	
+	private boolean isTeamAWinner(BattleFactory factory) {
+		Battle battle = factory.generateBattle();
+		do {
+			BattleAction action = battle.nextAction();
+			if (action instanceof ActionFinish) {
+				if (((ActionFinish) action).teamAVictor) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} while (!battle.isOver());
+		return false;
+	}
+	
+	private BattleFactory createTestFactory(Battler a, Battler b) {
+		LinkedList<Battler> teamA = new LinkedList<Battler>();
+		LinkedList<Battler> teamB = new LinkedList<Battler>();
+		
+		teamA.add(a);
+		teamB.add(b);
+		
+		return new BattleFactory("Team A", teamA, "Team B", teamB);
+	}
+	
+	
+	private DragonBattler createTestBattler(String name, int dragonClass, int level) {
+		DragonEntity entity = new DragonEntity();
+		entity.setName(name);
+		entity.setDragonClassId(dragonClass);
+		entity.getDragonClass().setUp(entity);
+		for (int l = 1; l < level; l++) {
+			entity.getDragonClass().levelUp(entity);
+		}
+		entity.setLevel(level);
+		DragonBattler db1 = new DragonBattler(entity, 0);
+		for (Skill skill : entity.getDragonClass().getSkillTree().keySet()) {
+			if (entity.getLevel() >= entity.getDragonClass().getSkillTree().get(skill)) {
+				db1.skills.add(skill);	
+			}
+		}
+		return db1;
 	}
 	
 	@Override
@@ -111,7 +198,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		}
 	}
 
-	private void setupPage() {
+	private void setupUI() {
 		Window.setTitle("Battle");
 
 		VerticalPanel panel = new VerticalPanel();
@@ -121,13 +208,32 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 //		Hyperlink link = new Hyperlink("<", ListBattlePage.NAME);
 //		link.addStyleName(Styles.back_button);
 //		panel.add(link);
+		
+		labelTitle = new Label("Battle");
+		labelTitle.addStyleName(Styles.page_title);
+		panel.add(labelTitle);
+		
+		Label instructions = new Label("Click to go!");
+		panel.add(instructions);
 
-		info = new Label();
-		panel.add(info);
-
+		HorizontalPanel hPanel = new HorizontalPanel();
+		panel.add(hPanel);
+		
 		Canvas canvas = Canvas.createIfSupported();
-		panel.add(canvas);
+		hPanel.add(canvas);
 
+		VerticalPanel vPanelInfo = new VerticalPanel();
+		hPanel.add(vPanelInfo);
+		
+		labelInfo = new Label();
+		labelInfo.addStyleName(Styles.battle_info);
+		vPanelInfo.add(labelInfo);
+		
+		vPanelInfoHistory = new VerticalPanel();
+		vPanelInfoHistory.addStyleName(Styles.battle_info_history);
+		vPanelInfo.add(vPanelInfoHistory);
+
+		
 		canvas.setWidth(width + "px");
 		canvas.setHeight(height + "px");
 		canvas.setCoordinateSpaceWidth(width);
@@ -157,13 +263,17 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		if (factory == null) return;
 		
 		Window.setTitle("Battle - " + factory.getName());
+		labelTitle.setText(factory.getName());
+		
+		vPanelInfoHistory.clear();
+		labelInfo.setText("");
 
 		battlers.clear();
 		battle = factory.generateBattle();
 
 		int dx = 40, dy = 65;
 		int dSize = battle.getTeamA().size() / 2;
-		int x = 200 - dx * dSize, y = height / 2 - dy * dSize;
+		int x = 230 - dx * dSize, y = height / 2 - dy * dSize;
 		for (Battler b : battle.getTeamA()) {
 			BattlerSprite bs = new BattlerSprite(b, x, y);
 			b.tag = bs;
@@ -172,7 +282,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		}
 
 		dSize = battle.getTeamB().size() / 2;
-		x = width - 200 + dx * dSize; 
+		x = width - 230 + dx * dSize; 
 		y = height / 2 - dy * dSize;
 		for (Battler b : battle.getTeamB()) {
 			BattlerSprite bs = new BattlerSprite(b, x, y);
@@ -233,6 +343,13 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		detailsSprite.setPosition(event.getX(), event.getY());
 	}
 
+	private void postInfo(String text) {
+		Label hLabel = new Label(labelInfo.getText());
+		hLabel.addStyleName(Styles.battle_info);
+		vPanelInfoHistory.insert(hLabel, 0);
+		labelInfo.setText(SafeHtmlUtils.htmlEscape(text));
+	}
+	
 	@Override
 	public void onMouseDown(MouseDownEvent event) {
 		mouseDown = true;
@@ -277,7 +394,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				BattlerSprite battler = ((ActionDeath) action).battler.getTag();
 				battler.die();
 			}
-			info.setText(SafeHtmlUtils.htmlEscape(action.toBattleString()));
+			postInfo(action.toBattleString());
 		}
 		else if (battle != null && (postAction = battle.getNextPostBattleAction()) != null) {
 			if (postAction instanceof ActionExp) {
@@ -290,7 +407,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				}
 				((ActionExp) postAction).battler.setLevel(((ActionExp) postAction).newLevel);
 			}
-			info.setText(SafeHtmlUtils.htmlEscape(postAction.toBattleString()));
+			postInfo(postAction.toBattleString());
 		}
 	}
 }

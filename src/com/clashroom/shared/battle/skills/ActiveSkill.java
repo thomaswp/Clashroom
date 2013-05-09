@@ -2,6 +2,7 @@ package com.clashroom.shared.battle.skills;
 
 import java.util.Random;
 
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionSkill;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
@@ -68,16 +69,19 @@ public abstract class ActiveSkill extends Skill {
 	}
 	
 	public ActionSkill getAttack(Battler attacker, Battler target, Random random) {
+		boolean critical = getCritical(attacker, random);
+		return getAttack(attacker, target, critical, random);
+	}
+
+	public ActionSkill getAttack(Battler attacker, Battler target, boolean critical,
+			Random random) {
 		boolean miss = getMiss(attacker, target, random);
+		critical &= !miss;
 		
 		Damage damage = getDamage(attacker, target, random);
 		if (miss) damage.damage = 0;
 		
-		boolean critical = false;
-		if (!miss) {
-			critical = getCritical(attacker, random);
-			if (critical) damage.damage *= CRITICAL_MULT;
-		}
+		if (critical) damage.damage *= CRITICAL_MULT;
 		
 		return new ActionSkill(attacker, this, miss, critical, damage);
 	}

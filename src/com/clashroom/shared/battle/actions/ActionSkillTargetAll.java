@@ -42,6 +42,7 @@ public class ActionSkillTargetAll extends BattleAction {
 			}
 		}
 		damageString += "!";
+		if (critical) damageString += " A critical hit!";
 		return attackString + " " + damageString;
 	}
 }

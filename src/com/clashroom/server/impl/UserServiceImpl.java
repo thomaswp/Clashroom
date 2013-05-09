@@ -20,7 +20,6 @@ import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.QuestEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.news.NewsfeedItem;
-import com.clashroom.shared.news.QuestNews;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
@@ -203,9 +202,9 @@ implements UserInfoService {
 			}
 			user.setItemsIventory(user.getItemInventory());
 			
-			QuestNews qn = new QuestNews(new Date(), quest.getQuestName(), user.getUsername(), user.getId());
-			NewsfeedEntity ne = new NewsfeedEntity(qn);
-			pm.makePersistent(ne);
+//			QuestNews qn = new QuestNews(new Date(), quest.getQuestName(), user.getUsername(), user.getId());
+//			NewsfeedEntity ne = new NewsfeedEntity(qn);
+//			pm.makePersistent(ne);
 			
 			pm.makePersistent(user);
 		} finally {

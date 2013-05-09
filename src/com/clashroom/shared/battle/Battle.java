@@ -176,16 +176,11 @@ public class Battle {
 			LinkedList<ActionSkill> attacks = new LinkedList<ActionSkill>();
 			boolean critical = skill.getCritical(attacker, random);
 			for (Battler battler : targets) {
-				ActionSkill oneAttack = skill.getAttack(attacker, battler, random);
-				if (!oneAttack.critical) {
-					oneAttack.critical = true;
-					oneAttack.damages.get(0).damage *= 2;
-				}
+				ActionSkill oneAttack = skill.getAttack(attacker, battler, critical, random);
 				attacks.add(oneAttack);
 				doDamage(oneAttack.getPrimaryDamage());
 			}
 			action = new ActionSkillTargetAll(attacker, skill, critical, attacks);
-			//action = new ActionSkill(attacker, new AttackSkill(), true, new Damage(targets.get(0), 0));
 		}
 		attacker.mp -= skill.getMpCost();
 		

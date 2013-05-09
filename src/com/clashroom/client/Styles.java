@@ -39,7 +39,11 @@ public class Styles {
 	public static final String quest_date = "quest_date";
 	public static final String quest_message = "quest_message";
 	
+	public static final String battle_info = "battle_info";
+	public static final String battle_info_history = "battle_info_history";
+	
 	//public static final String back_button = "back_button";
 	
 	public static final String position_relative = "relative";
+	
 }
