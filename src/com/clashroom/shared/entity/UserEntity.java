@@ -39,7 +39,7 @@ public class UserEntity implements Serializable {
 	
 	@Persistent
 	private Integer skillPoints = 0;
-	
+
 	public boolean isSetup() {
 		return id != null;
 	}

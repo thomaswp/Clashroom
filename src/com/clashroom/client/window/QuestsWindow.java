@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /*
@@ -40,6 +41,7 @@ public class QuestsWindow extends Composite {
 	private ArrayList<QuestEntity> availableQuests;
 	private UserEntity currentUser;
 	private FlexTable studentQuests;
+	private ScrollPanel scrollPanel;
 
 	public QuestsWindow(){
 
@@ -92,14 +94,7 @@ public class QuestsWindow extends Composite {
 		questRetrieverSvc.retrieveQuests(callback);        
 	}
 
-	public void listStudentQuests() {
-		/*
-		 * Will be taken out later. Meant to just check if any quests
-		 * exists and if they don't create one and slap it in.
-		 */
-		if(availableQuests.size() < 1){
-			createDummyQuest();
-		}        
+	public void listStudentQuests() {       
 
 		String[] headers = new String[] {
 				"Quest Name", "Description", "Reward", "Type"
@@ -131,68 +126,16 @@ public class QuestsWindow extends Composite {
 		label.addStyleName(Styles.text_title);
 		main.add(label);
 		studentQuests = new FlexTable();
+		scrollPanel = new ScrollPanel();
 		studentQuests.addStyleName(Styles.table);
 		main.addStyleName(NAME);
 		studentQuests.getRowFormatter().addStyleName(0, Styles.table_header);
 		studentQuests.getRowFormatter().addStyleName(0, Styles.gradient);
 		studentQuests.setCellSpacing(0);
-		main.add(studentQuests);
+		scrollPanel.add(studentQuests);
+		scrollPanel.setSize("100", "100");//Not working ask Dan about making it scrollable
+		main.add(scrollPanel);
 		initWidget(main);
-	}
-
-	/*
-	 * For testing purposes, will eventually delete
-	 */
-	private void createDummyQuest(){
-
-		if (questRetrieverSvc == null) 
-		{ 
-			questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-		}
-
-		// Set up the callback object.
-		AsyncCallback<String> callback = new
-				AsyncCallback<String>() {
-
-			@Override 
-			public void onFailure(Throwable caught) {
-				System.err.println("Error: RPC Call Failed");
-				caught.printStackTrace(); 
-			}
-
-			@Override 
-			public void onSuccess(String result) 
-			{ 
-
-			} };
-
-			questRetrieverSvc.addDummyQuest(callback); 	
-	}
-
-	private void createItems(){
-
-		if (itemCreatorSvc == null) 
-		{ 
-			itemCreatorSvc = GWT.create(ItemRetrieverService.class); 
-		}
-
-		// Set up the callback object.
-		AsyncCallback<Void> callback = new
-				AsyncCallback<Void>() {
-
-			@Override 
-			public void onFailure(Throwable caught) {
-				System.err.println("Error: RPC Call Failed");
-				caught.printStackTrace(); 
-			}
-
-			@Override 
-			public void onSuccess(Void result) 
-			{ 
-
-			} };
-
-			itemCreatorSvc.addItems(callback); 	
 	}
 }
 

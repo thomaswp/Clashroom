@@ -202,9 +202,11 @@ implements UserInfoService {
 				user.addItemToInventory(itemID);
 			}
 			user.setItemsIventory(user.getItemInventory());
+			int totalsp = user.getSkillPoints() + quest.getQuestPoints();
 			
-			user.getDragon().addExp(quest.getExperienceRewarded());
-			user.setDragon(pm.detachCopy(user.getDragon()));
+			user.setSkillPoints(totalsp);
+			
+			addExpImpl(pm, quest.getExperienceRewarded());
 			
 			
 			QuestNews qn = new QuestNews(new Date(), quest.getQuestName(), user.getUsername(), user.getId());

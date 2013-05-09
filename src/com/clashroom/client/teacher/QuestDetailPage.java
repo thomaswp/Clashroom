@@ -9,6 +9,7 @@ import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.client.window.ItemInnerWindow;
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.QuestEntity;
@@ -70,14 +71,6 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		super(token);
 		
 		long id = getLongParameter("id");
-		
-		if(userSvc == null){
-			userSvc = GWT.create(UserInfoService.class);
-		}
-		
-		if (questRetrieverSvc == null) { 
-	        questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-	    }
 		
 		AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
 
@@ -174,7 +167,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		
 		questName.setText(aQuest.getQuestName());
 		questDesc.setText(aQuest.getQuestDescription());
-		questXpGained.setText(Constant.TERM_EXP + ": "+ aQuest.getExperienceRewarded());
+		questXpGained.setText(Constant.TERM_EXP + ": "+ aQuest.getExperienceRewarded() + " exp");
 		questLevelRequirment.setText("Level "+ aQuest.getLevelRequirement());
 		questItemsAwarded.setText("Items: ");
 		
@@ -182,7 +175,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		for(int i = 0; i < questItems.size(); i++){
 			if(aQuest.getItemsRewarded().contains(questItems.get(i).getId())){
 			itemsListTable.setWidget(i, 0, 
-					new Hyperlink(questItems.get(i).getName(),"url"));
+					new ItemInnerWindow(questItems.get(i)));
 			}
 			//TODO Have these has hyperlinks go to Pages of items
 		}
@@ -202,9 +195,6 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	
 	private void getQuestItems(){
 		
-		if(itemSvc == null){
-			itemSvc = GWT.create(ItemRetrieverService.class);
-		}
 		AsyncCallback<ArrayList<ItemEntity>> callback = new AsyncCallback<ArrayList<ItemEntity>>() {
 
 			@Override
