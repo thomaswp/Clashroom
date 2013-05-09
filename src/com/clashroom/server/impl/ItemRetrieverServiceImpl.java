@@ -83,6 +83,7 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
     	itemList.add(fireBallScroll);
     	itemList.add(fireBreathScroll);
     	itemList.add(healScroll);
+    	itemList.add(sneakAttack);
 		
     	
     	 PersistenceManager pm = PMF.get().getPersistenceManager();

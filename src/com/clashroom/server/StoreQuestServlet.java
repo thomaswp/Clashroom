@@ -78,6 +78,8 @@ public class StoreQuestServlet extends HttpServlet {
         formatter.setTimeZone(TimeZone.getTimeZone("America/New_York"));
 
         String victoryText = request.getParameter("Victory Text");
+        
+        int questPoints = Integer.parseInt(request.getParameter("Quest Points"));
 
         if (questAvailability.equals("DateTime")) {
             // TODO Get the appropriate Date
@@ -122,9 +124,8 @@ public class StoreQuestServlet extends HttpServlet {
                                         formatter.format(dateAvailable),
                                         formatter.format(dateUnavailable),
                                         victoryText, priorQuest,
-                                        itemIds);
+                                        itemIds,questPoints);
 
-        System.out.println(formatter.format(dateAvailable));
         return newQuest;
 
     }

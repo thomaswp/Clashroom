@@ -52,7 +52,7 @@ public class ItemEntity implements Serializable {
 		this.desctiption = aDescription;
 		this.skill = aSkill;
 		this.itemType = theitemType;
-		this.imageDir = "/img/itemIMG/"+imageDir;
+		this.imageDir = "/img/items/"+imageDir;
 	}
 	
 	public String getName() {
