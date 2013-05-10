@@ -49,6 +49,12 @@ public class UserInfo extends Composite {
 		labelStr.setValue((int)dragon.getStrength());
 		labelAgi.setValue((int)dragon.getAgility());
 		labelInt.setValue((int)dragon.getIntelligence());
+		
+		labelMelee.setValue(45.0);
+		labelSkillMod.setValue(1.34);
+		labelSpellMod.setValue(0.82);
+		labelDodge.setValue(0.165);
+		labelCrit.setValue(0.135);
 
 		vPanelSkills.addStyleName(Styles.profile_skills);
 		labelSp.setText(Formatter.format("You have %s%s to spend.", user.getSkillPoints(), 
@@ -135,6 +141,11 @@ public class UserInfo extends Composite {
 	private NumberLabel<Integer> labelStr;
 	private NumberLabel<Integer> labelAgi;
 	private NumberLabel<Integer> labelInt;
+	private NumberLabel<Double> labelSpellMod;
+	private NumberLabel<Double> labelSkillMod;
+	private NumberLabel<Double> labelMelee;
+	private NumberLabel<Double> labelDodge;
+	private NumberLabel<Double> labelCrit;
 	private VerticalPanel vPanelSkills;
 	private Label labelSp;
 	private UserInfoServiceAsync userInfoService;
@@ -216,7 +227,7 @@ public class UserInfo extends Composite {
 		hPanelStats.add(vPanelStats2);
 		
 		HorizontalPanel hPanelStr = new HorizontalPanel();
-		vPanelStats2.add(hPanelStr);
+		vPanelStats1.add(hPanelStr);
 		
 		Label labelStrPrompt = new Label(Constant.STAT_STR + ": ");
 		hPanelStr.add(labelStrPrompt);
@@ -225,7 +236,7 @@ public class UserInfo extends Composite {
 		hPanelStr.add(labelStr);
 		
 		HorizontalPanel hPanelAgi = new HorizontalPanel();
-		vPanelStats2.add(hPanelAgi);
+		vPanelStats1.add(hPanelAgi);
 
 		Label labelAgiPrompt = new Label(Constant.STAT_AGI +": ");
 		hPanelAgi.add(labelAgiPrompt);
@@ -234,13 +245,58 @@ public class UserInfo extends Composite {
 		hPanelAgi.add(labelAgi);
 		
 		HorizontalPanel hPanelInt = new HorizontalPanel();
-		vPanelStats2.add(hPanelInt);
+		vPanelStats1.add(hPanelInt);
 		
 		Label labelIntPrompt = new Label(Constant.STAT_INT + ": ");
 		hPanelInt.add(labelIntPrompt);
 		
 		labelInt = new NumberLabel<Integer>();
 		hPanelInt.add(labelInt);
+		
+		HorizontalPanel hPanelSpellMod = new HorizontalPanel();
+		vPanelStats2.add(hPanelSpellMod);
+		
+		Label labelSpellModPrompt = new Label("Melee: ");
+		hPanelSpellMod.add(labelSpellModPrompt);
+		
+		labelMelee = new NumberLabel<Double>();
+		hPanelSpellMod.add(labelMelee);
+		
+		hPanelSpellMod = new HorizontalPanel();
+		vPanelStats2.add(hPanelSpellMod);
+		
+		labelSpellModPrompt = new Label("SkillMod: ");
+		hPanelSpellMod.add(labelSpellModPrompt);
+		
+		labelSkillMod = new NumberLabel<Double>();
+		hPanelSpellMod.add(labelSkillMod);
+		
+		hPanelSpellMod = new HorizontalPanel();
+		vPanelStats2.add(hPanelSpellMod);
+		
+		labelSpellModPrompt = new Label("SpellMod: ");
+		hPanelSpellMod.add(labelSpellModPrompt);
+		
+		labelSpellMod = new NumberLabel<Double>();
+		hPanelSpellMod.add(labelSpellMod);
+		
+		hPanelSpellMod = new HorizontalPanel();
+		vPanelStats2.add(hPanelSpellMod);
+		
+		labelSpellModPrompt = new Label("Dodge: ");
+		hPanelSpellMod.add(labelSpellModPrompt);
+		
+		labelDodge = new NumberLabel<Double>();
+		hPanelSpellMod.add(labelDodge);
+		
+		hPanelSpellMod = new HorizontalPanel();
+		vPanelStats2.add(hPanelSpellMod);
+		
+		labelSpellModPrompt = new Label("Crit: ");
+		hPanelSpellMod.add(labelSpellModPrompt);
+		
+		labelCrit = new NumberLabel<Double>();
+		hPanelSpellMod.add(labelCrit);
 		
 		Label skillsLabel = new Label(Constant.TERM_SKILL_PL);
 		skillsLabel.addStyleName(Styles.text_title);

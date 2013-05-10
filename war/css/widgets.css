@@ -23,6 +23,11 @@
 	width:100%;
 }
 
+.ListBattlesWindow {
+	width:100%;
+	margin:0px auto;
+}
+
 /* --- PROGRESS BAR --- */
 .gwt-ProgressBar-shell {
     background-color: #fff;
@@ -141,4 +146,16 @@
 	font-family: 'Oswald', sans-serif;
 	text-transform:uppercase;
 	letter-spacing:0.1em;
+}
+
+
+.outer_table ::-webkit-scrollbar {
+    width: 15px;
+}
+ 
+.outer_table ::-webkit-scrollbar-track {
+}
+ 
+.outer_table ::-webkit-scrollbar-thumb {
+    background:#a3daec;
 }

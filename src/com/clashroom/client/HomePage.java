@@ -8,6 +8,7 @@ import com.clashroom.client.window.TasksWindow;
 import com.clashroom.client.window.UserInfoWindow;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 
@@ -38,6 +39,7 @@ public class HomePage extends Page {
 		final UserInfoWindow userInfoWindow = new UserInfoWindow();
 		box.add(userInfoWindow);
 		box.setWidth("24%");
+		box.setHeight("690px");
 		main.add(box);
 		
 		box = new VerticalPanel();

@@ -36,7 +36,7 @@
 	border-radius:100px;
 	overflow:hidden;
 	box-shadow:0 -1px 0px 0px rgba(0,0,0,0.2);
-	margin:20px;
+	margin:40px 20px 60px 20px;
 	background:#efefef;
 }
 
@@ -136,7 +136,7 @@
 /* --- TASKS --- */
 .sideQuests {
 	width:800px;
-	margin:40px auto;
+	margin:20px auto 0 auto;
 }
 
 .sideQuests table {
