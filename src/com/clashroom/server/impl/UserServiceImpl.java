@@ -19,6 +19,7 @@ import com.clashroom.shared.entity.DragonEntity;
 import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.QuestEntity;
 import com.clashroom.shared.entity.UserEntity;
+import com.clashroom.shared.news.JoinNews;
 import com.clashroom.shared.news.NewsfeedItem;
 
 import com.google.appengine.api.users.User;
@@ -38,6 +39,17 @@ implements UserInfoService {
 		
 		UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "email == %s", user.getEmail());
 		return entity;
+	}
+	
+	public UserEntity getUser(long id) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		try {
+			UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "id == %s", id);
+			entity = pm.detachCopy(entity);
+			return entity;
+		} finally {
+			pm.close();
+		}
 	}
 	
 	@Override
@@ -93,6 +105,11 @@ implements UserInfoService {
 		dragonClass.setUp(dragon);
 
 		pm.makePersistent(user);
+		
+		JoinNews joinNews = new JoinNews(user);
+		NewsfeedEntity newsEntity = new NewsfeedEntity(joinNews);
+		pm.makePersistent(newsEntity);
+		
 		pm.flush();
 		pm.close();
 	}
@@ -137,17 +154,21 @@ implements UserInfoService {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
 		List<NewsfeedEntity> entities = new ArrayList<NewsfeedEntity>();
-		for (Long userId : users) {
-			entities.addAll(QueryUtils.query(pm, NewsfeedEntity.class, "playerIds.contains(%s)", userId));
-		}
-		
-		//TODO: Better implementation than just grabbing everything...
-		Collections.sort(entities, new Comparator<NewsfeedEntity>() {
-			@Override
-			public int compare(NewsfeedEntity o1, NewsfeedEntity o2) {
-				return o1.getDate().compareTo(o2.getDate());
+		if (users != null) {
+			for (Long userId : users) {
+				entities.addAll(QueryUtils.query(pm, NewsfeedEntity.class, "playerIds.contains(%s)", userId));
 			}
-		});
+
+			//TODO: Better implementation than just grabbing everything...
+			Collections.sort(entities, new Comparator<NewsfeedEntity>() {
+				@Override
+				public int compare(NewsfeedEntity o1, NewsfeedEntity o2) {
+					return o1.getDate().compareTo(o2.getDate());
+				}
+			});
+		} else {
+			entities.addAll(QueryUtils.queryRange(pm, NewsfeedEntity.class, "date desc", count, null));
+		}
 		
 		List<NewsfeedItem> items = new ArrayList<NewsfeedItem>();
 		for (int i = 0; i < count && i < entities.size(); i++) {

@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 @RemoteServiceRelativePath("user")
 public interface UserInfoService extends RemoteService {
 	public UserEntity getUser();
+	public UserEntity getUser(long id);
 	public void setUser(UserEntity user);
 	public void addExp(int exp);
 	public List<UserEntity> getAllUsers();

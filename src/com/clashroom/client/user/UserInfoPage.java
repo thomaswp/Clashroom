@@ -1,6 +1,8 @@
 package com.clashroom.client.user;
 
+import com.clashroom.client.Clashroom;
 import com.clashroom.client.FlowControl;
+import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.UserInfoService;
@@ -30,22 +32,36 @@ public class UserInfoPage extends Page {
 				
 		setupUI();
 		
-		userInfoService.getUser(new AsyncCallback<UserEntity>() {
+		Long id = getLongParameter("id");
+		
+		AsyncCallback<UserEntity> callback = new AsyncCallback<UserEntity>() {
 			@Override
 			public void onSuccess(UserEntity result) {
 				if (!result.isSetup()) {
 					FlowControl.go(new SetupPage(result));
 				} else {
 					user = result;
-					populate();
+					if (user == null) {
+						FlowControl.go(new HomePage());
+						return;
+					} else {
+						populate();
+					}
 				}
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
 				caught.printStackTrace();
+				FlowControl.go(new HomePage());
 			}
-		});
+		};
+		
+		if (id == null) {
+			userInfoService.getUser(callback);	
+		} else {
+			userInfoService.getUser(id, callback);
+		}
 	}
 	
 	private void setupUI() {
@@ -64,7 +80,7 @@ public class UserInfoPage extends Page {
 	}
 	
 	private void populate() {
-		userInfoWidget.setUser(user);
+		userInfoWidget.setUser(user, user.getId() == Clashroom.getLoginInfo().getUserId());
 	}
 
 }

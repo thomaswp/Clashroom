@@ -59,7 +59,7 @@ public class SetupPage extends Page {
 	
 	private void setupUser() {
 		if (user.isSetup()) {
-			FlowControl.go(new UserInfoPage());
+			FlowControl.go(new HomePage());
 			return;
 		}
 		form.setUser(user);
