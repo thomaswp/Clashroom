@@ -4,10 +4,11 @@ import com.clashroom.shared.Constant;
 
 public class BlessedBuff extends Buff {
 
-	private int strength;
+	private float strength;
 	
-	public BlessedBuff(int strength) {
+	public BlessedBuff(float strength) {
 		this.strength = strength;
+		setModifiers();
 	}
 	
 	@Override
@@ -17,13 +18,17 @@ public class BlessedBuff extends Buff {
 
 	@Override
 	public String getDescription() {
-		return "This Dragon is blessed and has extra " + Constant.STAT_STR;
+		return "This Dragon is blessed and has extra " + Constant.STAT_STR + ".";
 	}
 
 	@Override
 	public void setModifiers() {
-		setModifier(Stat.Str, strength, 0);
-		
+		setModifier(Stat.Str, 0, strength);
+	}
+
+	@Override
+	public String getIcon() {
+		return "runes-orange-1.png";
 	}
 
 }

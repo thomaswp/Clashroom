@@ -7,8 +7,7 @@ public class AttackSkill extends ActiveSkill {
 	private static final long serialVersionUID = 1L;
 	
 	public AttackSkill() {
-		super("Attack", null, Attribute.Strength, Target.One, false, 1, 1,
-				1, 0.1, 0);
+		super("Attack", null, Attribute.Strength, Target.One, false, 50, 1, 0.15, 0);
 	}
 
 	@Override

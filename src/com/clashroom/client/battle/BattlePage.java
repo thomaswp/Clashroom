@@ -7,6 +7,7 @@ import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.Battle;
 import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.actions.ActionDeath;
@@ -110,11 +111,24 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				}
 			});
 		} else {
-			Battler b1 = createTestBattler("Rufus", 0, 1);
-			Battler b2 = createTestBattler("Hale", 1, 1);
+			testRoundRobbin();
+			
+			Battler b1 = createTestBattler("Rufus", 2, 20);
+			Battler b2 = createTestBattler("Jax", 1, 20);
+			
+			printBattlerStats(b1);
+			printBattlerStats(b2);
 			factory = createTestFactory(b1, b2);
 			setupBattle();
 		}
+	}
+	
+	private void printBattlerStats(Battler b) {
+		System.out.println(Formatter.format(
+				"Name: %s\nStr: %s\nAgi: %s\nInt: %s" +
+				"\nDodge: %s\nCrit: %s\nSpell: %s\nMelee: %s \n",
+				b.name, b.getStrength(), b.getAgility(), b.getIntelligence(),
+				b.getDodgeChance(), b.getCriticalChance(), b.getSpellModifier(), b.getMeleeModifier()));
 	}
 	
 	private void testRoundRobbin() {
@@ -122,15 +136,16 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (i != j) {
-					for (int k = 0; k < 50; k++) {
-						
-						Battler b1 = createTestBattler("Rufus", i, k);
-						Battler b2 = createTestBattler("Hale", j, k);
-						
-						if (isTeamAWinner(createTestFactory(b1, b2))) {
-							a[i][j]++;
-						} else {
-							a[j][i]++;
+					for (int k = 0; k < 25; k++) {
+						for (int l = 0; l < 10; l++) {
+							Battler b1 = createTestBattler("Rufus", i, k);
+							Battler b2 = createTestBattler("Hale", j, k);
+							
+							if (isTeamAWinner(createTestFactory(b1, b2))) {
+								a[i][j]++;
+							} else {
+								a[j][i]++;
+							}
 						}
 					}
 				}

@@ -10,6 +10,7 @@ import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.buff.Buff;
 import com.clashroom.shared.battle.buff.Buff.Stat;
+import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.battle.skills.AttackSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill.Target;
@@ -78,7 +79,6 @@ public abstract class Battler implements Serializable {
 			}
 		}
 		hp = getMaxHp();
-		Debug.write(getMaxMp());
 		mp = getMaxMp();
 		tempBattlers = new LinkedList<Battler>();
 		tempSkills = new LinkedList<ActiveSkill>();
@@ -89,7 +89,8 @@ public abstract class Battler implements Serializable {
 	}
 	
 	public static double getSpellModifier(int intelligence, int level) {
-		return 0.5 + Math.pow(intelligence, 0.75) / (2 * (level + 1));
+		//return 1 + Math.pow(intelligence, 1.75) / (150 * (level + 10));
+		return getDerivedStatCurve(1, 3.5, intelligence, DragonClass.MAX_STAT_GAIN_PER_LEVEL);
 	}
 	
 	public double getMeleeModifier() {
@@ -97,7 +98,7 @@ public abstract class Battler implements Serializable {
 	}
 	
 	public static double getMeleeModifier(int strength) {
-		return 10 + 1.5 * strength;
+		return getDerivedStatCurve(1, 5, strength, DragonClass.MAX_STAT_GAIN_PER_LEVEL);
 	}
 	
 	public double getDodgeChance() {
@@ -105,7 +106,8 @@ public abstract class Battler implements Serializable {
 	}
 	
 	public static double getDodgeChance(int agility, int level) {
-		return 0.01 + Math.pow(agility, 0.6) / (2 * (level + 10));
+		//return 0.01 + Math.pow(agility, 1.6) / (2500 * (level + 10));
+		return getDerivedStatCurve(0.05, 0.6, agility, DragonClass.MAX_STAT_GAIN_PER_LEVEL);
 	}
 	
 	public double getCriticalChance() {
@@ -113,9 +115,19 @@ public abstract class Battler implements Serializable {
 	}
 	
 	public double getCriticalChance(int agility, int level) {
-		return 0.01 + Math.pow(agility, 0.55) / (2 * (level + 10));
+		//return 0.01 + Math.pow(agility, 1.55) / (2500 * (level + 10));
+		return getDerivedStatCurve(0.03, 0.5, agility, DragonClass.MAX_STAT_GAIN_PER_LEVEL);
 	}
 
+	private static double getDerivedStatCurve(double min, double max, int stat, int maxStatGainPerLvl) {
+		//by lvl ~8 at max stat gain, reaches 1/5 of max
+		//by lvl 15 at max stat gain, reaches 1/3 of max
+		//by lvl 30 at max stat gain, reaches 1/2 of max
+		//by lvl 60 at max stat gain, reaches 2/3 of max
+		//by lvl 90 at max stat gain, reaches 3/4 of max
+		return min + stat * (max-min) / (stat + maxStatGainPerLvl * 30);  
+	}
+	
 	public int getExpReward() {
 		return (int)(23 * expFactor * (1 + (level - 1) * 0.3));
 	}
@@ -125,7 +137,7 @@ public abstract class Battler implements Serializable {
 	}
 
 	protected void generateMaxMP() {
-		maxMp = 100 + (5) + (5 * strength);
+		maxMp = 100 + (5 * level) + (5 * intelligence);
 	}
 	
 	private int modify(int value, Stat stat) {

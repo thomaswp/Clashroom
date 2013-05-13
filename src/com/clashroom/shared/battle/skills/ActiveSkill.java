@@ -12,7 +12,7 @@ import com.clashroom.shared.battle.buff.Buff;
 public abstract class ActiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;
 
-	public static final double CRITICAL_MULT = 2;
+	public static final double CRITICAL_MULT = 1.5;
 	public static float ACCURACY_PERFECT = -1;
 
 	public enum Target {
@@ -21,12 +21,20 @@ public abstract class ActiveSkill extends Skill {
 	
 	protected Target target;
 	protected boolean targetAllies;
+	/**
+	 * The base damage to be multiplied by the battler's spell or melee factor.
+	 */
 	protected int baseDamage;
-	/** [0+] */
-	//protected double damageFactor;
-	/** [0+] */
+	/** 
+	 * The chance of hitting with this skill is multiplies by this factor: 
+	 * [0,1], or ACCURACY_PERFECT for perfect accuracy. 
+	 */
 	protected double accuracyFactor;
-	/** [0+] */
+	/** 
+	 * The portion of this skill's damage which is up to change: [0,1].
+	 * Setting this to 0 means the skill deals consistent damage, and
+	 * setting it to 1 would indicate it could do 0-200% of its base damage.
+	 */
 	protected double rangeFactor;
 	protected int mpCost;
 	
@@ -44,14 +52,13 @@ public abstract class ActiveSkill extends Skill {
 
 	protected ActiveSkill(String name, String icon, Attribute attribute, 
 			Target target, boolean targetAllies, int baseDamage,
-			double damageFactor, double accuracyFactor, double rangeFactor,
+			double accuracyFactor, double rangeFactor,
 			int mpCost) {
 		super(name, icon, attribute);
 
 		this.target = target;
 		this.targetAllies = targetAllies;
 		this.baseDamage = baseDamage;
-		//this.damageFactor = damageFactor;
 		this.accuracyFactor = accuracyFactor;
 		this.rangeFactor = rangeFactor;
 		this.mpCost = mpCost;
@@ -99,7 +106,7 @@ public abstract class ActiveSkill extends Skill {
 		if (targetAllies || accuracyFactor == ACCURACY_PERFECT) {
 			return false;
 		} else {
-			double missChance = target.getDodgeChance();
+			double missChance = target.getDodgeChance() / accuracyFactor;
 			return missChance > random.nextDouble();
 		}
 	}

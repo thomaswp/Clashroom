@@ -7,9 +7,9 @@ import com.clashroom.shared.battle.buff.Buff;
 public class BlessingSkill extends ActiveSkill {
 	private static final long serialVersionUID = 1L;
 
-	protected BlessingSkill() {
-		super("Blessing", "runes-orange-1.png", Attribute.Intelligence, Target.One, true, 0, 0,
-				1, 0, 50);
+	public BlessingSkill() {
+		super("Blessing", "runes-orange-1.png", Attribute.Intelligence, Target.One, true, 0, 
+				ACCURACY_PERFECT, 0, 50);
 	}
 
 	@Override
@@ -24,7 +24,7 @@ public class BlessingSkill extends ActiveSkill {
 	
 	@Override
 	public Buff getBuff() {
-		return new BlessedBuff(10);
+		return new BlessedBuff(1.5f);
 	}
 
 }

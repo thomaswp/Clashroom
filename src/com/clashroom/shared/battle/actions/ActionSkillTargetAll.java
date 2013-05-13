@@ -48,7 +48,7 @@ public class ActionSkillTargetAll extends BattleAction {
 			Damage damage = attack.getPrimaryDamage();
 			if (damage.buff != null) {
 				damageString += Formatter.format(" %s was %s!", 
-						damage.target.name, damage.buff);
+						damage.target.name, damage.buff.getName());
 			}
 		}
 		return attackString + " " + damageString;

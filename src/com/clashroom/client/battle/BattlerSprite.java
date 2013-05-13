@@ -1,9 +1,11 @@
 package com.clashroom.client.battle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.buff.Buff;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.canvas.dom.client.FillStrokeStyle;
@@ -190,6 +192,7 @@ public class BattlerSprite extends BatchedSprite {
 
 			@Override
 			protected void addDrawSteps(ArrayList<DrawStep<BattlerSprite>> drawSteps) {
+				//Draw sprite
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					@Override
 					public void startStep(Context2d context2d) {
@@ -242,7 +245,8 @@ public class BattlerSprite extends BatchedSprite {
 					}
 				});
 				
-				final int barHeight = 12;
+				//Draw health bar
+				final int hpBarHeight = 12;
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final FillStrokeStyle fillStyleA = CssColor.make("#00cc00");
 					final FillStrokeStyle fillStyleB = CssColor.make("#ff0000");
@@ -267,12 +271,13 @@ public class BattlerSprite extends BatchedSprite {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
 							int barFill = barWidth * sprite.hp / sprite.battler.getMaxHp();
-							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight * 2, barFill, barHeight);
-							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight * 2, barWidth, barHeight);
+							context2d.fillRect(sprite.x - barWidth / 2, top - hpBarHeight * 2, barFill, hpBarHeight);
+							context2d.strokeRect(sprite.x - barWidth / 2, top - hpBarHeight * 2, barWidth, hpBarHeight);
 						}
 					}
 				});
 				
+				//Draw mp bar
 				final int mpBarHeight = 4;
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final FillStrokeStyle fillStyle = CssColor.make("#0000ff");
@@ -291,12 +296,37 @@ public class BattlerSprite extends BatchedSprite {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
 							int barFill = barWidth * sprite.battler.mp / sprite.battler.getMaxMp();
-							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight, barFill, mpBarHeight);
-							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight, barWidth, mpBarHeight);
+							context2d.fillRect(sprite.x - barWidth / 2, top - hpBarHeight, barFill, mpBarHeight);
+							context2d.strokeRect(sprite.x - barWidth / 2, top - hpBarHeight, barWidth, mpBarHeight);
 						}
 					}
 				});
 				
+				//Draw buff icons
+				drawSteps.add(new DrawStep<BattlerSprite>() {
+					final int iconSize = 24;
+					final int iconBuffer = iconSize + 4;
+					
+					@Override
+					public void startStep(Context2d context2d) {
+						
+					}
+					
+					@Override
+					public void doStep(Context2d context2d, BattlerSprite sprite) {
+						float top = sprite.y - sprite.height / 2 - hpBarHeight + mpBarHeight + 2;
+						int width = sprite.battler.buffs.size() * iconBuffer;
+						float left = sprite.x - width / 2;
+						int index = 0;
+						for (Buff buff : sprite.battler.buffs) {
+							ImageElement image = loadBuffImage(buff.getIcon());
+							context2d.drawImage(image, left + iconBuffer * index, top, iconSize, iconSize);
+							index++;
+						}
+					}
+				});
+				
+				//Write health text
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final int textSize = 11;
 					final FillStrokeStyle fillStyle = CssColor.make("#000000");
@@ -313,10 +343,11 @@ public class BattlerSprite extends BatchedSprite {
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
 						float top = sprite.y - sprite.height / 2;
 						String status = sprite.hp + "/" + sprite.battler.getMaxHp();
-						context2d.fillText(status, sprite.x, top - barHeight - 2);
+						context2d.fillText(status, sprite.x, top - hpBarHeight - 2);
 					}
 				});
 
+				//Write battler description background
 				final int titleTextSize = 20;
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					
@@ -347,12 +378,12 @@ public class BattlerSprite extends BatchedSprite {
 						int border = 3;
 						float top = sprite.y - sprite.height / 2;
 						context2d.fillRect(sprite.x - textWidth / 2 - border, 
-								top - barHeight * 2 - 3 * titleTextSize / 2 - border + 3,
+								top - hpBarHeight * 2 - 3 * titleTextSize / 2 - border + 3,
 								textWidth + border * 2, titleTextSize + border * 2);
 					}
 				});
 				
-				
+				//Write battler description
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final FillStrokeStyle fillStyle = CssColor.make("#111111");
 					
@@ -370,10 +401,11 @@ public class BattlerSprite extends BatchedSprite {
 						
 						float top = sprite.y - sprite.height / 2;
 						context2d.fillText(sprite.battler.description, sprite.x, 
-								top - barHeight * 2 - titleTextSize / 2);
+								top - hpBarHeight * 2 - titleTextSize / 2);
 					}
 				});
 				
+				//Write damage
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final FillStrokeStyle fillStyle = CssColor.make("#CCCCCC");
 					

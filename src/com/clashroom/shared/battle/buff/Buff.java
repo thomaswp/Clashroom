@@ -2,9 +2,12 @@ package com.clashroom.shared.battle.buff;
 
 import java.util.HashMap;
 
+import com.clashroom.shared.Debug;
+
 public abstract class Buff {
 	public abstract String getName();
 	public abstract String getDescription();
+	public abstract String getIcon();
 	public abstract void setModifiers();
 	
 	public enum Stat {
@@ -22,7 +25,7 @@ public abstract class Buff {
 	}
 	
 	protected void setModifier(Stat stat, int plus, float factor) {
-		Modifier mod = modifierMap.get(stat); 
+		Modifier mod = modifierMap.get(stat);
 		mod.plus = plus;
 		mod.factor = factor;
 	}

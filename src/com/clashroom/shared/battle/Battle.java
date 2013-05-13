@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionDeath;
 import com.clashroom.shared.battle.actions.ActionFinish;
@@ -198,7 +199,6 @@ public class Battle {
 		battlers.removeFirst();
 		battlers.add(attacker);
 		
-		//Debug.write(action.toBattleString());
 		return action;
 	}
 	
@@ -207,6 +207,9 @@ public class Battle {
 			Battler target = damage.target;
 			target.hp = Math.max(0, target.hp - damage.damage);
 			target.hp = Math.min(target.hp, target.getMaxHp());
+			if (damage.buff != null) {
+				target.buffs.add(damage.buff);
+			}
 		}
 	}
 	

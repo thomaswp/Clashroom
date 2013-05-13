@@ -21,6 +21,7 @@ public abstract class PassiveSkill extends Skill {
 	
 	protected PassiveSkill(String name, String icon, Attribute attribute) {
 		super(name, icon, attribute);
+		addBuffs(buffs);
 	}
 	
 	protected abstract void addBuffs(List<Buff> buffs);

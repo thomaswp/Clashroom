@@ -6,7 +6,7 @@ public class HealSkill extends ActiveSkill {
 	private static final long serialVersionUID = 1L;
 
 	public HealSkill() {
-		super("Heal", "heal-royal-1.png", Attribute.Intelligence, Target.One, true, 50, 1,
+		super("Heal", "heal-royal-1.png", Attribute.Intelligence, Target.One, true, 75, 
 				ACCURACY_PERFECT, 0.25, 50);
 	}
 

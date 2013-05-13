@@ -2,6 +2,8 @@ package com.clashroom.shared.battle.dragons;
 
 import java.util.HashMap;
 
+import com.clashroom.shared.battle.skills.BlessingSkill;
+import com.clashroom.shared.battle.skills.HealSkill;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class LionDragon extends DragonClass {
@@ -49,8 +51,8 @@ public class LionDragon extends DragonClass {
 
 	@Override
 	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
-		// TODO Auto-generated method stub
-		
+		skillTree.put(new HealSkill(), 4);
+		skillTree.put(new BlessingSkill(), 8);
 	}
 
 

@@ -7,7 +7,7 @@ import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.buff.Buff;
 
-public class EggShellSkill extends PassiveSkill {//permanent   
+public class EggShellSkill extends PassiveSkill {   
 	private static final long serialVersionUID = 1L;
 
 	public EggShellSkill() {
@@ -43,6 +43,11 @@ public class EggShellSkill extends PassiveSkill {//permanent
 		@Override
 		public void setModifiers() {
 			setModifier(Stat.MaxHp, 0, 1.1f);
+		}
+
+		@Override
+		public String getIcon() {
+			return "protect-blue-1.png";
 		}
 	}
 

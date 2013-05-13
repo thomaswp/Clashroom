@@ -42,6 +42,11 @@ public class FogSkill extends PassiveSkill {
 		public void setModifiers() {
 			setModifier(Stat.Dodge, 0, 1.1f);
 		}
+
+		@Override
+		public String getIcon() {
+			return "fog-air-1.png";
+		}
 		
 	}
 

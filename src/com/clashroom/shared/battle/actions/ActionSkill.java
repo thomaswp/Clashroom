@@ -34,15 +34,18 @@ public class ActionSkill extends BattleAction {
 		String attackString = skill.getAttackString(attacker, getPrimaryDamage().target);
 		String damageString;
 		if (missed) {
-			damageString = "and missed!";
+			damageString = " and missed!";
 		} else {
-			damageString = skill.targetsAllies() ? "healing " : "dealing ";
-			for (int i = 0; i < damages.size(); i++) {
-				if (i > 0) damageString += i == damages.size() - 1 ? " and " : ", ";
-				Damage damage = damages.get(i);
-				damageString += Formatter.format("%d damage", Math.abs(damage.damage));
-				if (damages.size() > 1) {
-					damageString += Formatter.format(" to %s", damage.target.name);
+			damageString = "";
+			if (!skill.targetsAllies() || getPrimaryDamage().damage != 0) {
+				damageString = skill.targetsAllies() ? " healing " : " dealing ";
+				for (int i = 0; i < damages.size(); i++) {
+					if (i > 0) damageString += i == damages.size() - 1 ? " and " : ", ";
+					Damage damage = damages.get(i);
+					damageString += Formatter.format("%d damage", Math.abs(damage.damage));
+					if (damages.size() > 1) {
+						damageString += Formatter.format(" to %s", damage.target.name);
+					}
 				}
 			}
 			damageString += "!";
@@ -51,11 +54,11 @@ public class ActionSkill extends BattleAction {
 				Damage damage = damages.get(i);
 				if (damage.buff != null) {
 					damageString += Formatter.format(" %s was %s!", 
-							damage.target.name, damage.buff);
+							damage.target.name, damage.buff.getName());
 				}
 			}
 		}
-		return attackString + " " + damageString;
+		return attackString + damageString;
 	}
 	
 	public static class Damage {
