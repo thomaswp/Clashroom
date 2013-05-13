@@ -35,6 +35,8 @@ public class SideQuestPage extends Page {
 	
 	public final static String NAME = "sideQuests";
 	
+	private static final int TASK_LIMIT =  24*60*60*1000;
+	
 	private static final int REFRESH_INTERVAL = 1000; //ms
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable questTable = new FlexTable();
@@ -199,9 +201,12 @@ public class SideQuestPage extends Page {
 	
 	//Clones a Quest from the QuestList and adds it to the active QuestQueue
 	public void takeQuest(Task o){
-		aql.addQuest(o);
-		persistAQL();
-		updateQueue();
+		if (aql.getTotalDuration() < TASK_LIMIT){
+			aql.addQuest(o);
+			persistAQL();
+			updateQueue();
+		}
+		
 	}
 	
 	//Adds a quest to the available QuestList
