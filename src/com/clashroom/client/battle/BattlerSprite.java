@@ -142,7 +142,7 @@ public class BattlerSprite extends BatchedSprite {
 		}
 		
 		int dif = targetHp - hp;
-		int seg = Math.max((int)(battler.maxHp * 0.01f), 1);
+		int seg = Math.max((int)(battler.getMaxHp() * 0.01f), 1);
 		if (dif > 0) {
 			hp = Math.min(targetHp, hp + seg);
 		} else if (dif < 0) {
@@ -263,10 +263,10 @@ public class BattlerSprite extends BatchedSprite {
 							context2d.setFillStyle(style);
 							currentFillStyle = style;
 						}
-						if (sprite.battler.maxHp > 0) {
+						if (sprite.battler.getMaxHp() > 0) {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
-							int barFill = barWidth * sprite.hp / sprite.battler.maxHp;
+							int barFill = barWidth * sprite.hp / sprite.battler.getMaxHp();
 							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight * 2, barFill, barHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight * 2, barWidth, barHeight);
 						}
@@ -287,10 +287,10 @@ public class BattlerSprite extends BatchedSprite {
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-						if (sprite.battler.maxMp > 0) {
+						if (sprite.battler.getMaxMp() > 0) {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
-							int barFill = barWidth * sprite.battler.mp / sprite.battler.maxMp;
+							int barFill = barWidth * sprite.battler.mp / sprite.battler.getMaxMp();
 							context2d.fillRect(sprite.x - barWidth / 2, top - barHeight, barFill, mpBarHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - barHeight, barWidth, mpBarHeight);
 						}
@@ -312,7 +312,7 @@ public class BattlerSprite extends BatchedSprite {
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
 						float top = sprite.y - sprite.height / 2;
-						String status = sprite.hp + "/" + sprite.battler.maxHp;
+						String status = sprite.hp + "/" + sprite.battler.getMaxHp();
 						context2d.fillText(status, sprite.x, top - barHeight - 2);
 					}
 				});

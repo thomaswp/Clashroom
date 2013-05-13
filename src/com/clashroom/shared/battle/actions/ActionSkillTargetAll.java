@@ -43,6 +43,14 @@ public class ActionSkillTargetAll extends BattleAction {
 		}
 		damageString += "!";
 		if (critical) damageString += " A critical hit!";
+		for (int i = 0; i < attacks.size(); i++) {
+			ActionSkill attack = attacks.get(i);
+			Damage damage = attack.getPrimaryDamage();
+			if (damage.buff != null) {
+				damageString += Formatter.format(" %s was %s!", 
+						damage.target.name, damage.buff);
+			}
+		}
 		return attackString + " " + damageString;
 	}
 }

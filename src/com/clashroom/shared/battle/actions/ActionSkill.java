@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.buff.Buff;
 import com.clashroom.shared.battle.skills.ActiveSkill;
 
 public class ActionSkill extends BattleAction {
@@ -46,6 +47,13 @@ public class ActionSkill extends BattleAction {
 			}
 			damageString += "!";
 			if (critical) damageString += " A critical hit!";
+			for (int i = 0; i < damages.size(); i++) {
+				Damage damage = damages.get(i);
+				if (damage.buff != null) {
+					damageString += Formatter.format(" %s was %s!", 
+							damage.target.name, damage.buff);
+				}
+			}
 		}
 		return attackString + " " + damageString;
 	}
@@ -53,10 +61,12 @@ public class ActionSkill extends BattleAction {
 	public static class Damage {
 		public Battler target;
 		public int damage;
+		public Buff buff;
 		
-		public Damage(Battler target, int damage) {
+		public Damage(Battler target, int damage, Buff buff) {
 			this.target = target;
 			this.damage = damage;
+			this.buff = buff;
 		}
 	}
 }

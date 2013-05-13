@@ -7,6 +7,7 @@ import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionSkill;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.buff.Buff;
 
 public abstract class ActiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;
@@ -65,7 +66,7 @@ public abstract class ActiveSkill extends Skill {
 		dmg += dmg * rangeFactor * (random.nextDouble() - 0.5) * 2;
 		int damage = (int)Math.max(dmg, 0);
 		if (targetAllies) damage *= -1;
-		return new Damage(target, damage);
+		return new Damage(target, damage, getBuff());
 	}
 	
 	public ActionSkill getAttack(Battler attacker, Battler target, Random random) {
@@ -79,7 +80,10 @@ public abstract class ActiveSkill extends Skill {
 		critical &= !miss;
 		
 		Damage damage = getDamage(attacker, target, random);
-		if (miss) damage.damage = 0;
+		if (miss) {
+			damage.damage = 0;
+			damage.buff = null;
+		}
 		
 		if (critical) damage.damage *= CRITICAL_MULT;
 		
@@ -108,5 +112,9 @@ public abstract class ActiveSkill extends Skill {
 	
 	public String getAttackString(Battler attacker) {
 		return Formatter.format("%s cast %s", attacker.name, name);
+	}
+	
+	public Buff getBuff() {
+		return null;
 	}
 }

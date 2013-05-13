@@ -1,8 +1,11 @@
 package com.clashroom.shared.battle.skills;
 
+import java.util.List;
+
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.buff.Buff;
 
 public class EggShellSkill extends PassiveSkill {//permanent   
 	private static final long serialVersionUID = 1L;
@@ -22,10 +25,25 @@ public class EggShellSkill extends PassiveSkill {//permanent
 	}
 
 	@Override
-	public void applyBuff(Battler battler) {
-		int plus = Math.round(battler.maxHp * 0.1f);
-		Debug.write("%d, %d", battler.maxHp, plus);
-		battler.maxHp += plus;
+	protected void addBuffs(List<Buff> buffs) {
+		buffs.add(new EggShellBuff());
+	}
+	
+	public static class EggShellBuff extends Buff {
+		@Override
+		public String getName() {
+			return "Egg Shell";
+		}
+
+		@Override
+		public String getDescription() {
+			return "A tough egg shell protects this Dragon, giving it extra " + Constant.STAT_HP + ".";
+		}
+
+		@Override
+		public void setModifiers() {
+			setModifier(Stat.MaxHp, 0, 1.1f);
+		}
 	}
 
 }

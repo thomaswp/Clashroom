@@ -84,7 +84,7 @@ public class Battle {
 		Collections.sort(battlers, new Comparator<Battler>() {
 			@Override
 			public int compare(Battler o1, Battler o2) {
-				return o1.agility = o2.agility;
+				return o1.getAgility() - o2.getAgility();
 			}
 		});
 		
@@ -206,7 +206,7 @@ public class Battle {
 		if (damage != null) {
 			Battler target = damage.target;
 			target.hp = Math.max(0, target.hp - damage.damage);
-			target.hp = Math.min(target.hp, target.maxHp);
+			target.hp = Math.min(target.hp, target.getMaxHp());
 		}
 	}
 	

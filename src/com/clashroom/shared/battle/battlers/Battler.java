@@ -6,11 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
+import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buff.Buff.Stat;
 import com.clashroom.shared.battle.skills.AttackSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill.Target;
 import com.clashroom.shared.battle.skills.Skill;
+import com.google.gwt.dev.util.collect.HashMap;
 
 public abstract class Battler implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,16 +22,38 @@ public abstract class Battler implements Serializable {
 	public String name;
 	public int level;
 	public String description;
-	public int strength, agility, intelligence;
-	public int maxHp, maxMp;
+	protected int strength, agility, intelligence;
+	protected int maxHp, maxMp;
 	public int hp, mp;
 	public String image;
 	public boolean teamA;
 	public ArrayList<Skill> skills = new ArrayList<Skill>();
 	public double expFactor = 1;
 
+	public ArrayList<Buff> buffs = new ArrayList<Buff>();
+
 	protected transient LinkedList<Battler> tempBattlers = new LinkedList<Battler>();
 	protected transient LinkedList<ActiveSkill> tempSkills = new LinkedList<ActiveSkill>(); 
+	
+	public int getStrength() {
+		return modify(strength, Stat.Str);
+	}
+	
+	public int getAgility() {
+		return modify(agility, Stat.Agi);
+	}
+
+	public int getIntelligence() {
+		return modify(intelligence, Stat.Int);
+	}
+
+	public int getMaxHp() {
+		return modify(maxHp, Stat.MaxHp);
+	}
+
+	public int getMaxMp() {
+		return modify(maxMp, Stat.MaxMp);
+	}
 
 	public transient Object tag;
 
@@ -45,30 +71,48 @@ public abstract class Battler implements Serializable {
 	}
 
 	public void setup() {
+		buffs.clear();
 		for (Skill skill : skills) {
 			if (!skill.isActive()) {
-				skill.asPassive().applyBuff(this);
+				buffs.addAll(skill.asPassive().getBuffs());
 			}
 		}
-		hp = maxHp;
-		mp = maxMp;
+		hp = getMaxHp();
+		Debug.write(getMaxMp());
+		mp = getMaxMp();
 		tempBattlers = new LinkedList<Battler>();
 		tempSkills = new LinkedList<ActiveSkill>();
 	}
 	
 	public double getSpellModifier() {
+		return modify(getSpellModifier(getIntelligence(), level), Stat.Spell);
+	}
+	
+	public static double getSpellModifier(int intelligence, int level) {
 		return 0.5 + Math.pow(intelligence, 0.75) / (2 * (level + 1));
 	}
 	
 	public double getMeleeModifier() {
+		return modify(getMeleeModifier(getStrength()), Stat.Melee);
+	}
+	
+	public static double getMeleeModifier(int strength) {
 		return 10 + 1.5 * strength;
 	}
 	
 	public double getDodgeChance() {
+		return modify(getDodgeChance(getAgility(), level), Stat.Dodge);
+	}
+	
+	public static double getDodgeChance(int agility, int level) {
 		return 0.01 + Math.pow(agility, 0.6) / (2 * (level + 10));
 	}
 	
 	public double getCriticalChance() {
+		return modify(getCriticalChance(getAgility(), level), Stat.Crit);
+	}
+	
+	public double getCriticalChance(int agility, int level) {
 		return 0.01 + Math.pow(agility, 0.55) / (2 * (level + 10));
 	}
 
@@ -82,6 +126,20 @@ public abstract class Battler implements Serializable {
 
 	protected void generateMaxMP() {
 		maxMp = 100 + (5) + (5 * strength);
+	}
+	
+	private int modify(int value, Stat stat) {
+		return (int)modify((double)value, stat);
+	}
+	
+	private double modify(double value, Stat stat) {
+		for (Buff buff : buffs) {
+			value *= buff.getModifier(stat).getFactor();
+		}
+		for (Buff buff : buffs) {
+			value += buff.getModifier(stat).getPlus();
+		}
+		return value;
 	}
 
 	protected int getStatCurve(int level, int minGain, int maxGain) {

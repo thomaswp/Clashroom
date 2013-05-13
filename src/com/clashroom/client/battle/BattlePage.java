@@ -403,7 +403,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 					actionExp.battler.setLevel(actionExp.newLevel);
 					BattlerSprite sprite = actionExp.battler.getTag();
 					sprite.levelUp();
-					sprite.setTargetHp(actionExp.battler.maxHp);
+					sprite.setTargetHp(actionExp.battler.getMaxHp());
 				}
 				((ActionExp) postAction).battler.setLevel(((ActionExp) postAction).newLevel);
 			}

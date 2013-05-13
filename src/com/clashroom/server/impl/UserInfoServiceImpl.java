@@ -3,7 +3,6 @@ package com.clashroom.server.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
-public class UserServiceImpl extends RemoteServiceServlet 
+public class UserInfoServiceImpl extends RemoteServiceServlet 
 implements UserInfoService {
 
 	public static UserEntity getCurrentUser(PersistenceManager pm) {
