@@ -124,9 +124,9 @@ public class TestServlet extends HttpServlet {
 		questList.add(quest1);
 		
 		QuestEntity quest2 = new QuestEntity("Wait..what do dragons eat again?", "You are still in the process of understanding your role as a dragon trainer. " +
-				"Dragons, like other animals need food, but what do dragons eat? And where do you go to find it? Luckily you over hear another dragon trainer mention something " +
+				"Dragons, like other animals, need food but what do dragons eat? And where do you go to find it? Luckily you over hear another dragon trainer mention something " +
 				"about going to the Mosely market to pick up their dragon some food for the road. You decide to travel to Mosely market to find some food for your dragon" +
-				" not matter what. Even if that means looking under every table.", "dragonchow",
+				" no matter what. Even if that means looking under every table.", "dragonchow",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
@@ -157,8 +157,8 @@ public class TestServlet extends HttpServlet {
 		questList.add(quest4);
 		
 		QuestEntity quest5 = new QuestEntity("Dragon Trainer's Liscense: Part 3", " Who is this sorceress? At this rate you'll never be able to get a liscense." +
-				" Perhaps if you go back to the castle where you found this letter you will be able to find her by checking the name tags on the outside of" +
-				" the rooms in the castle in the area you found the letter. You look at the name one more time...hmmm is this possibly an anagram of some sort?", "Shannon Duvall",
+				" Perhaps if you go back to the castle where you found this letter you will be able to find her. Checking the name tags on the outside of" +
+				" the room doors seems like a good idea. You look at the name one more time...hmmm is this possibly an anagram of some sort?", "Shannon Duvall",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
