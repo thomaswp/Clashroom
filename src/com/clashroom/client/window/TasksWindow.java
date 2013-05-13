@@ -22,6 +22,7 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TasksWindow extends Window {
@@ -29,7 +30,6 @@ public class TasksWindow extends Window {
 	public final static String NAME = "sideQuestWidget";
 	
 	private static final int REFRESH_INTERVAL = 1000; //ms
-	private static final int WIDGET_LIMIT = 5;
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
 	private FlexTable queueTable = new FlexTable();
@@ -57,8 +57,8 @@ public class TasksWindow extends Window {
 		mainPanel.add(label);
 		
 		//Create tables for quests
-		queueTable.setText(0, 0, "Title");
-		queueTable.setText(0, 1, "Time Left");
+		//queueTable.setText(0, 0, "Title");
+		//queueTable.setText(0, 1, "Time Left");
 		
 		// Add styles to elements in the quest tables
 		queueTable.getColumnFormatter().addStyleName(1, Styles.text_right);
@@ -68,7 +68,22 @@ public class TasksWindow extends Window {
 		queueTable.setCellSpacing(0);
 		
 		//Assemble main panel
-		mainPanel.add(queueTable);
+		ScrollPanel scroll = new ScrollPanel();
+		scroll.setHeight("175px");
+		scroll.add(queueTable);
+		
+		FlexTable outer = new FlexTable();
+		outer.setText(0, 0, "Title");
+		outer.setText(0, 1, "Time Left");
+		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outer.getRowFormatter().addStyleName(0, Styles.table_header);
+		outer.getRowFormatter().addStyleName(0, Styles.gradient);
+		outer.addStyleName(Styles.outer_table);
+		outer.setCellSpacing(0);
+		outer.setWidget(1, 0, scroll);
+		outer.getFlexCellFormatter().setColSpan(1, 0, 2);
+		
+		mainPanel.add(outer);
 		mainPanel.add(currentBar);
 		mainPanel.add(totalBar);
 		
@@ -138,7 +153,7 @@ public class TasksWindow extends Window {
 			for (int i = 0; i < queueTable.getCellCount(0); i++){
 				queueTable.setText(1, i, "");
 			}
-			queueTable.setText(1, 0, "Add some quests!");
+			queueTable.setText(1, 0, "Add some bounties!");
 			currentBar.setProgress(0);
 			totalBar.setProgress(0);
 		} else {
@@ -148,7 +163,7 @@ public class TasksWindow extends Window {
 			LinkedList<ActiveTask> queue = aql.getAllQuests();
 			long startTime = aql.activeQuestStart();
 			
-			for (int i = 0; i < queue.size() && i < WIDGET_LIMIT; i++){
+			for (int i = 0; i < queue.size(); i++){
 				int x = i + 1;
 				//Title
 				queueTable.setText(x, 0, queue.get(i).getTitle());
@@ -159,37 +174,39 @@ public class TasksWindow extends Window {
 				
 				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
 				
-				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							System.out.println("Dat shit broke");
-						}
-
-						@Override
-						public void onSuccess(String result) {
-							System.out.println("Window: " +  result);
-							aql.removeFirst();
-							queueTable.removeRow(queueTable.getRowCount()-1);
-							currentBar.setProgress(0);
-							if (aql.getAllQuests().size() < 1){
-								totalBar.setProgress(0);
-							}
-							if (onQuestCompletedListener != null) {
-								onQuestCompletedListener.run(); 
-							}
-						}
-						
-					});
-//					aql.completeQuest();
-//					queueTable.removeRow(queueTable.getRowCount()-1);
-//					persistAQL();
-//					return;
-				}
+				
 			}
 			updateProgressBar();
+			
+			//Check for active Quest for completion
+			if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
+				questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						System.out.println("Dat shit broke");
+					}
+
+					@Override
+					public void onSuccess(String result) {
+						System.out.println("Window: " +  result);
+						aql.removeFirst();
+						queueTable.removeRow(queueTable.getRowCount()-1);
+						currentBar.setProgress(0);
+						if (aql.getAllQuests().size() < 1){
+							totalBar.setProgress(0);
+						}
+						if (onQuestCompletedListener != null) {
+							onQuestCompletedListener.run(); 
+						}
+					}
+					
+				});
+//				aql.completeQuest();
+//				queueTable.removeRow(queueTable.getRowCount()-1);
+//				persistAQL();
+//				return;
+			}
 		}
 	}
 	

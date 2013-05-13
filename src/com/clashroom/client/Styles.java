@@ -16,7 +16,14 @@ public class Styles {
 	public static final String w_mouseOver = "w_mouseOver";
 	
 	public static final String table = "flexTable";
+	
+
+	public static final String outer_table = "outer_table";
 	public static final String table_header = "flexTable_header";
+	
+	
+
+	public static final String table_hidden_field = "table_hidden";
 	
 	public static final String profile_name = "profile_name";
 	public static final String profile_lvl = "profile_lvl";

@@ -27,11 +27,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class SideQuestPage extends Page {
 	
 	public final static String NAME = "sideQuests";
+	
+	private static final int TASK_LIMIT =  24*60*60*1000;
 	
 	private static final int REFRESH_INTERVAL = 1000; //ms
 	private VerticalPanel mainPanel = new VerticalPanel();
@@ -60,29 +64,28 @@ public class SideQuestPage extends Page {
 		mainPanel.addStyleName(NAME);
 		
 		//Create tables for quests
-		questTable.setText(0, 0, "Title");
-		questTable.setText(0, 1, "Description");
-		questTable.setText(0, 2, "Reward");
-		questTable.setText(0, 3, "Duration");
-		questTable.setText(0, 4, "Add");
-		
-		queueTable.setText(0, 0, "Title");
-		queueTable.setText(0, 1, "Description");
-		queueTable.setText(0, 2, "Reward");
-		queueTable.setText(0, 3, "Start");
-		queueTable.setText(0, 4, "End");
-		queueTable.setText(0, 5, "Time Left");
-		queueTable.setText(0, 6, "Remove");
-		
+	
 		// Add styles to elements in the quest tables
 		questTable.getRowFormatter().addStyleName(0, Styles.table_header);
 		questTable.getRowFormatter().addStyleName(0, Styles.gradient);
 		questTable.addStyleName(Styles.table);
 		questTable.getColumnFormatter().addStyleName(4, Styles.text_center);
+		questTable.setCellSpacing(0);
+		questTable.getColumnFormatter().setWidth(0, "20%");
+		questTable.getColumnFormatter().setWidth(1, "55%");
+		questTable.getColumnFormatter().setWidth(2, "10%");
+		questTable.getColumnFormatter().setWidth(3, "10%");
+		questTable.getColumnFormatter().setWidth(4, "5%");
 		
 		queueTable.getRowFormatter().addStyleName(0, Styles.table_header);
 		queueTable.getRowFormatter().addStyleName(0, Styles.gradient);
 		queueTable.addStyleName(Styles.table);
+		queueTable.setCellSpacing(0);
+		queueTable.getColumnFormatter().setWidth(0, "20%");
+		queueTable.getColumnFormatter().setWidth(1, "50%");
+		queueTable.getColumnFormatter().setWidth(2, "10%");
+		queueTable.getColumnFormatter().setWidth(3, "17.5%");
+		queueTable.getColumnFormatter().setWidth(4, "5%");
 		
 		//Assemble main panel
 //		Hyperlink link = new Hyperlink("<", HomePage.NAME);
@@ -94,11 +97,59 @@ public class SideQuestPage extends Page {
 		label = new Label("Available Bounties");
 		label.addStyleName(Styles.page_subtitle);
 		mainPanel.add(label);
-		mainPanel.add(questTable);
+		
+		ScrollPanel scroll = new ScrollPanel();
+		scroll.setHeight("175px");
+		scroll.add(questTable);
+		
+		FlexTable outer = new FlexTable();
+		outer.setText(0, 0, "Title");
+		outer.setText(0, 1, "Description");
+		outer.setText(0, 2, "Reward");
+		outer.setText(0, 3, "Duration");
+		outer.setText(0, 4, "Add");
+		outer.getColumnFormatter().setWidth(0, "20%");
+		outer.getColumnFormatter().setWidth(1, "50%");
+		outer.getColumnFormatter().setWidth(2, "10%");
+		outer.getColumnFormatter().setWidth(3, "12.5%");
+		outer.getColumnFormatter().setWidth(4, "7.5%");
+		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outer.getRowFormatter().addStyleName(0, Styles.table_header);
+		outer.getRowFormatter().addStyleName(0, Styles.gradient);
+		outer.addStyleName(Styles.outer_table);
+		outer.setCellSpacing(0);
+		outer.setWidget(1, 0, scroll);
+		outer.getFlexCellFormatter().setColSpan(1, 0, 5);
+		
+		mainPanel.add(outer);
 		label = new Label("Queued Bounties");
 		label.addStyleName(Styles.page_subtitle);
 		mainPanel.add(label);
-		mainPanel.add(queueTable);
+		
+		scroll = new ScrollPanel();
+		scroll.setHeight("175px");
+		scroll.add(queueTable);
+		
+		outer = new FlexTable();
+		outer.setText(0, 0, "Title");
+		outer.setText(0, 1, "Description");
+		outer.setText(0, 2, "Reward");
+		outer.setText(0, 3, "Time Left");
+		outer.setText(0, 4, "Remove");
+		outer.getColumnFormatter().setWidth(0, "20%");
+		outer.getColumnFormatter().setWidth(1, "40%");
+		outer.getColumnFormatter().setWidth(2, "15%");
+		outer.getColumnFormatter().setWidth(3, "17.5%");
+		outer.getColumnFormatter().setWidth(4, "7.5%");
+		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outer.getRowFormatter().addStyleName(0, Styles.table_header);
+		outer.getRowFormatter().addStyleName(0, Styles.gradient);
+		outer.addStyleName(Styles.outer_table);
+		outer.setCellSpacing(0);
+		outer.setWidget(1, 0, scroll);
+		outer.getFlexCellFormatter().setColSpan(1, 0, 5);
+		
+		mainPanel.add(outer);
 		label = new Label("Current Progress");
 		label.addStyleName(Styles.page_subtitle);
 		mainPanel.add(label);
@@ -150,9 +201,12 @@ public class SideQuestPage extends Page {
 	
 	//Clones a Quest from the QuestList and adds it to the active QuestQueue
 	public void takeQuest(Task o){
-		aql.addQuest(o);
-		persistAQL();
-		updateQueue();
+		if (aql.getTotalDuration() < TASK_LIMIT){
+			aql.addQuest(o);
+			persistAQL();
+			updateQueue();
+		}
+		
 	}
 	
 	//Adds a quest to the available QuestList
@@ -216,7 +270,10 @@ public class SideQuestPage extends Page {
 			//Title
 			questTable.setText(x, 0, quests.get(i).getTitle());
 			//Description
-			questTable.setText(x, 1, quests.get(i).getDesc().substring(0, 50)+"...");
+			SimplePanel full = new SimplePanel();
+			full.addStyleName(Styles.table_hidden_field);
+			full.add(new Label(quests.get(i).getDesc()));
+			questTable.setWidget(x, 1, full);
 			//Reward
 			questTable.setText(x, 2, Integer.toString(quests.get(i).getReward()));
 			DateTimeFormat dtf2 = DateTimeFormat.getFormat(PredefinedFormat.HOUR24_MINUTE_SECOND);
@@ -243,7 +300,7 @@ public class SideQuestPage extends Page {
 			for (int i = 0; i < queueTable.getCellCount(0); i++){
 				queueTable.setText(1, i, "");
 			}
-			queueTable.setText(1, 1, "Add some quests!");
+			queueTable.setText(1, 1, "Add some bounties!");
 			currentBar.setProgress(0);
 			totalBar.setProgress(0);
 		} else {
@@ -256,52 +313,56 @@ public class SideQuestPage extends Page {
 			for (int i = 0; i < queue.size(); i++){
 				int x = i + 1;
 				//Title
-				queueTable.setText(x, 0, queue.get(i).getTitle() + " " + i);
+				queueTable.setText(x, 0, queue.get(i).getTitle());
 				//Description
-				queueTable.setText(x, 1, queue.get(i).getDesc().substring(0, 25)+"...");
+				SimplePanel full = new SimplePanel();
+				full.addStyleName(Styles.table_hidden_field);
+				full.add(new Label(quests.get(i).getDesc()));
+				queueTable.setWidget(x, 1, full);
 				//Reward
 				queueTable.setText(x, 2, Integer.toString(queue.get(i).getReward()));
 				//Start time
-				queueTable.setText(x, 3, dtf.format(new Date(startTime)));
+				//queueTable.setText(x, 3, dtf.format(new Date(startTime)));
 				startTime += queue.get(i).getDuration();
 				//End time
-				queueTable.setText(x, 4, dtf.format(new Date(startTime)));
+				//queueTable.setText(x, 4, dtf.format(new Date(startTime)));
 				long timeLeft = startTime - new Date().getTime();
 				//Time left
-				queueTable.setText(x, 5, dtf2.format(new Date(timeLeft-(19*60*60*1000))));
+				queueTable.setText(x, 3, dtf2.format(new Date(timeLeft-(19*60*60*1000))));
 				
 				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
 				
-				queueTable.setWidget(x, 6, removeQuestButton(i));
+				queueTable.setWidget(x, 4, removeQuestButton(i));
 				
-				//Check for active Quest for completion
-				if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-					questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
-
-						@Override
-						public void onFailure(Throwable caught) {
-							System.out.println("Dat shit broke");
-						}
-
-						@Override
-						public void onSuccess(String result) {
-							System.out.println("Page: " + result);
-							aql.removeFirst();
-							queueTable.removeRow(queueTable.getRowCount()-1);
-							currentBar.setProgress(0);
-							if (aql.getAllQuests().size() < 1){
-								totalBar.setProgress(0);
-							}
-							
-						}
-						
-					});
-//					aql.completeQuest(userInfoService);
-//					queueTable.removeRow(queueTable.getRowCount()-1);
-//					return;
-				}
+				
 			}
 			updateProgressBar();
+			
+			//Check for active Quest for completion
+			if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
+				questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+
+					@Override
+					public void onFailure(Throwable caught) {
+						System.out.println("Dat shit broke");
+					}
+
+					@Override
+					public void onSuccess(String result) {
+						System.out.println("Page: " + result);
+						aql.removeFirst();
+						queueTable.removeRow(queueTable.getRowCount()-1);
+						currentBar.setProgress(0);
+						if (aql.getAllQuests().size() < 1){
+							totalBar.setProgress(0);
+						}
+					}
+					
+				});
+//				aql.completeQuest(userInfoService);
+//				queueTable.removeRow(queueTable.getRowCount()-1);
+//				return;
+			}
 		}
 	}
 	

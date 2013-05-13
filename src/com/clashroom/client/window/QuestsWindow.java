@@ -16,6 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /*
@@ -105,13 +106,13 @@ public class QuestsWindow extends Composite {
 				"Quest Name", "Description", "Reward", "Type"
 		};
 
-		for (int i = 0; i < headers.length; i++) {
-			studentQuests.setText(0, i, headers[i]);
-			if (i == 0) studentQuests.getColumnFormatter().setWidth(i, "25%");
-			else if (i==1) studentQuests.getColumnFormatter().setWidth(i, "50%");
-			else if (i==2) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
-			else if (i==3) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
-		}
+//		for (int i = 0; i < headers.length; i++) {
+//			studentQuests.setText(0, i, headers[i]);
+//			if (i == 0) studentQuests.getColumnFormatter().setWidth(i, "25%");
+//			else if (i==1) studentQuests.getColumnFormatter().setWidth(i, "50%");
+//			else if (i==2) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
+//			else if (i==3) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
+//		}
 		for (int i = 0; i < availableQuests.size(); i++) 
 		{	
 			if(!currentUser.getCompletedQuests().contains(availableQuests.get(i).getId())){
@@ -136,7 +137,33 @@ public class QuestsWindow extends Composite {
 		studentQuests.getRowFormatter().addStyleName(0, Styles.table_header);
 		studentQuests.getRowFormatter().addStyleName(0, Styles.gradient);
 		studentQuests.setCellSpacing(0);
-		main.add(studentQuests);
+		//studentQuests.setWidth("100%");
+		
+		ScrollPanel scroll = new ScrollPanel();
+		scroll.setHeight("225px");
+		scroll.add(studentQuests);
+		
+		FlexTable outer = new FlexTable();
+		String[] headers = new String[] {
+				"Quest Name", "Description", "Reward", "Type"
+		};
+		
+		for (int i = 0; i < headers.length; i++) {
+			outer.setText(0, i, headers[i]);
+			if (i == 0) outer.getColumnFormatter().setWidth(i, "25%");
+			else if (i==1) outer.getColumnFormatter().setWidth(i, "50%");
+			else if (i==2) outer.getColumnFormatter().setWidth(i, "12.5%");
+			else if (i==3) outer.getColumnFormatter().setWidth(i, "12.5%");
+		}
+		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outer.getRowFormatter().addStyleName(0, Styles.table_header);
+		outer.getRowFormatter().addStyleName(0, Styles.gradient);
+		outer.addStyleName(Styles.outer_table);
+		outer.setCellSpacing(0);
+		outer.setWidget(1, 0, scroll);
+		outer.getFlexCellFormatter().setColSpan(1, 0, 4);
+		
+		main.add(outer);
 		initWidget(main);
 	}
 

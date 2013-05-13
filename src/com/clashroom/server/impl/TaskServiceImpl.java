@@ -11,7 +11,10 @@ import com.clashroom.client.services.TaskService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
 import com.clashroom.shared.entity.ActiveBountyEntity;
+import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.TaskEntity;
+import com.clashroom.shared.news.BattleNews;
+import com.clashroom.shared.news.TaskNews;
 import com.clashroom.shared.task.ActiveTaskList;
 import com.clashroom.shared.task.Task;
 
@@ -44,17 +47,18 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	}
 
 	@Override
-	public String persistAQL(Long userID, ActiveTaskList aql) throws IllegalArgumentException {
+	public String persistAQL(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		ActiveBountyEntity entity = new ActiveBountyEntity();
-		if (aql.getId() != null) {
-			entity = pm.getObjectById(ActiveBountyEntity.class, aql.getId());
-		} else {
-			entity.setUser(userID);
+		//ActiveBountyEntity entity = new ActiveBountyEntity();
+		
+		ActiveBountyEntity abe = QueryUtils.queryUnique(pm, ActiveBountyEntity.class, "userID==%s", userID);
+		if (abe == null){
+			abe = new ActiveBountyEntity();
+			abe.setUser(userID);
 		}
-		entity.setActiveQuests(aql);
+		abe.setActiveQuests(atl);
 		try {
-			pm.makePersistent(entity);
+			pm.makePersistent(abe);
 		} finally {
 			pm.close();
 		}
@@ -65,13 +69,17 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	public String completeQuest(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		UserInfoServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
+		
+		NewsfeedEntity item = new NewsfeedEntity(new TaskNews(atl.getActiveQuest(), userID));
+		pm.makePersistent(item);
+		
 		atl.removeFirst();
 		
-		ActiveBountyEntity entity = new ActiveBountyEntity();
-		entity = pm.getObjectById(ActiveBountyEntity.class, atl.getId());
-		entity.setActiveQuests(atl);
+		//ActiveBountyEntity entity = new ActiveBountyEntity();
+		ActiveBountyEntity abe = QueryUtils.queryUnique(pm, ActiveBountyEntity.class, "userID==%s", userID);
+		abe.setActiveQuests(atl);
 		try {
-			pm.makePersistent(entity);
+			pm.makePersistent(abe);
 			pm.flush();
 		} finally {
 			pm.close();

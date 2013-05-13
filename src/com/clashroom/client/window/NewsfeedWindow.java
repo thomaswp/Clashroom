@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class NewsfeedWindow extends Composite {
@@ -54,19 +55,53 @@ public class NewsfeedWindow extends Composite {
 		vPanel.add(title);
 		
 		DecoratedTabPanel tabPanel = new DecoratedTabPanel();
+		tabPanel.setWidth("100%");
 		vPanel.add(tabPanel);
 		
 		tableMe = new FlexTable();
 		tableMe.addStyleName(Styles.table);
 		tableMe.getRowFormatter().addStyleName(0,Styles.gradient);
 		tableMe.getRowFormatter().addStyleName(0, Styles.table_header);
-		tabPanel.add(tableMe, "Me");
+		
+		ScrollPanel scrollMe = new ScrollPanel();
+		scrollMe.setHeight("175px");
+		scrollMe.add(tableMe);
+		
+		FlexTable outerMe = new FlexTable();
+		outerMe.setText(0, 0, "When");
+		outerMe.setText(0, 1, "What");
+		outerMe.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outerMe.getRowFormatter().addStyleName(0, Styles.table_header);
+		outerMe.getRowFormatter().addStyleName(0, Styles.gradient);
+		outerMe.addStyleName(Styles.outer_table);
+		outerMe.setCellSpacing(0);
+		outerMe.setWidget(1, 0, scrollMe);
+		outerMe.getFlexCellFormatter().setColSpan(1, 0, 2);
+		
+
+		tabPanel.add(outerMe, "Me");
 		
 		tableEveryone = new FlexTable();
 		tableEveryone.addStyleName(Styles.table);
 		tableEveryone.getRowFormatter().addStyleName(0,Styles.gradient);
 		tableEveryone.getRowFormatter().addStyleName(0, Styles.table_header);
-		tabPanel.add(tableEveryone, "Everyone");
+		
+		ScrollPanel scrollEveryone = new ScrollPanel();
+		scrollEveryone.setHeight("175px");
+		scrollEveryone.add(tableEveryone);
+		
+		FlexTable outerEveryone = new FlexTable();
+		outerEveryone.setText(0, 0, "When");
+		outerEveryone.setText(0, 1, "What");
+		outerEveryone.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outerEveryone.getRowFormatter().addStyleName(0, Styles.table_header);
+		outerEveryone.getRowFormatter().addStyleName(0, Styles.gradient);
+		outerEveryone.addStyleName(Styles.outer_table);
+		outerEveryone.setCellSpacing(0);
+		outerEveryone.setWidget(1, 0, scrollEveryone);
+		outerEveryone.getFlexCellFormatter().setColSpan(1, 0, 2);
+		
+		tabPanel.add(outerEveryone, "Everyone");
 		
 		tabPanel.selectTab(0);
 		
@@ -85,13 +120,13 @@ public class NewsfeedWindow extends Composite {
 	}
 	
 	private void populateTable(FlexTable table, List<NewsfeedItem> news) {
-		String[] headers = new String[] {
-				"When", "What"
-		};
-		
-		for (int i = 0; i < headers.length; i++) {
-			table.setText(0, i, headers[i]);
-		}
+//		String[] headers = new String[] {
+//				"When", "What"
+//		};
+//		
+//		for (int i = 0; i < headers.length; i++) {
+//			table.setText(0, i, headers[i]);
+//		}
 		
 		int row = 1;
 		for (NewsfeedItem item : news) {

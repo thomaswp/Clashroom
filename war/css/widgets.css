@@ -2,9 +2,11 @@
 	position: fixed;
 	left: 0;
 	top: 0;
-	width: 100%;
+	right:0;
 	border-bottom: 1px solid #000;
-	background:#fff;
+	background:rgba(255,255,255,0.7);
+	z-index:10;
+	padding:5px 10px;
 }
 
 .w_mouseOver {
@@ -19,6 +21,11 @@
 .studentQuests {
 	font-size:12px;
 	width:100%;
+}
+
+.ListBattlesWindow {
+	width:100%;
+	margin:0px auto;
 }
 
 /* --- PROGRESS BAR --- */
@@ -52,4 +59,103 @@
 
 .profile_window .profile_lvl {
 	top: 225px;
+	right:0px;
+}
+
+/* --- SETUP PAGE ---*/
+.Setup {
+	margin:40px auto;
+}
+
+.Setup .gwt-TabPanelBottom {
+	padding:10px;
+	background:#fff;
+}
+
+.Setup .gwt-TabPanelBottom .gwt-Label, .Setup .gwt-TabPanelBottom .gwt-InlineHTML {
+	font-family: 'Oswald', sans-serif;
+	text-transform:uppercase;
+	letter-spacing:0.1em;
+	padding:10px 20px;
+	display:block;
+}
+
+.Setup .gwt-TabPanelBottom .prompt {
+	font-family: 'Oswald', sans-serif;
+	text-transform:uppercase;
+	font-size:16px;
+	letter-spacing:0.1em;
+	text-indent:20px;
+}
+
+.Setup .tabMiddleCenterInner {
+	font-family: 'Oswald', sans-serif;
+	text-transform:uppercase;
+	letter-spacing:0.1em;
+}
+
+.Setup .gwt-Button {
+	margin: 0 0 0 10px;
+	font-family: 'Oswald', sans-serif;
+	text-transform:uppercase;
+	background:#ccc;
+	color:#fff;
+	letter-spacing:0.1em;
+	text-shadow:0px 1px 0px rgba(0,0,0,0.3);
+}
+
+.Setup .next {
+	margin: 20px 0 0 0;
+	font-size:18px;
+}
+
+.Setup .option {
+	opacity:0.6;
+	-webkit-transition: all 150ms ease-in-out;
+	-moz-transition: all 150ms ease-in-out;
+	-ms-transition: all 150ms ease-in-out;
+	-o-transition: all 150ms ease-in-out;
+	transition: all 150ms ease-in-out;
+}
+
+.Setup .option:hover {
+	opacity:0.9;
+	-webkit-transition: all 150ms ease-in-out;
+	-moz-transition: all 150ms ease-in-out;
+	-ms-transition: all 150ms ease-in-out;
+	-o-transition: all 150ms ease-in-out;
+	transition: all 150ms ease-in-out;
+}
+
+.Setup .selected {
+	opacity:1;
+	-webkit-transition: all 150ms ease-in-out;
+	-moz-transition: all 150ms ease-in-out;
+	-ms-transition: all 150ms ease-in-out;
+	-o-transition: all 150ms ease-in-out;
+	transition: all 150ms ease-in-out;
+}
+
+.Setup .option .gwt-Label {
+	font-family: 'Oswald', sans-serif;
+	text-transform:uppercase;
+	letter-spacing:0.1em;
+}
+
+.Setup .selected .gwt-Label {
+	font-family: 'Oswald', sans-serif;
+	text-transform:uppercase;
+	letter-spacing:0.1em;
+}
+
+
+.outer_table ::-webkit-scrollbar {
+    width: 15px;
+}
+ 
+.outer_table ::-webkit-scrollbar-track {
+}
+ 
+.outer_table ::-webkit-scrollbar-thumb {
+    background:#a3daec;
 }

@@ -23,6 +23,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class ListBattleWindow extends Composite {
@@ -38,7 +39,7 @@ public class ListBattleWindow extends Composite {
 	public ListBattleWindow() {
 		
 		VerticalPanel panel = new VerticalPanel();
-		panel.addStyleName(NAME);
+		panel.addStyleName(NAME + "Window");
 		Label title = new Label("Battles");
 		title.addStyleName(Styles.text_title);
 		panel.add(title);
@@ -47,15 +48,29 @@ public class ListBattleWindow extends Composite {
 		table.addStyleName(Styles.table);
 		table.getRowFormatter().addStyleName(0,Styles.gradient);
 		table.getRowFormatter().addStyleName(0, Styles.table_header);
-		panel.add(table);
-		initWidget(panel);
+		
+		ScrollPanel scroll = new ScrollPanel();
+		scroll.setHeight("213px");
+		scroll.add(table);
 		
 		String[] headers = new String[] {
 				"Date", "Battle", "Challengers", "Victor", Constant.TERM_EXP_SHORT + " Gained"
 		};
 		
+		FlexTable outer = new FlexTable();
+		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outer.getRowFormatter().addStyleName(0, Styles.table_header);
+		outer.getRowFormatter().addStyleName(0, Styles.gradient);
+		outer.addStyleName(Styles.outer_table);
+		outer.setCellSpacing(0);
+		outer.setWidget(1, 0, scroll);
+		outer.getFlexCellFormatter().setColSpan(1, 0, headers.length);		
+		
+		panel.add(outer);
+		initWidget(panel);
+		
 		for (int i = 0; i < headers.length; i++) {
-			table.setText(0, i, headers[i]);
+			outer.setText(0, i, headers[i]);
 		}
 
 		battleService.getBattles(new AsyncCallback<List<BattleEntity>>() {
