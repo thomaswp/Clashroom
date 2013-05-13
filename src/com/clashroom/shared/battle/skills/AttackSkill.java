@@ -7,10 +7,14 @@ public class AttackSkill extends ActiveSkill {
 	private static final long serialVersionUID = 1L;
 	
 	public AttackSkill() {
-		super("Attack", null, Attribute.Strength, Target.One, false, 0, 1,
-				1, 0.1, 0);
+		super("Attack", null, Attribute.Strength, Target.One, false, 50, 1, 0.15, 0);
 	}
 
+	@Override
+	protected double getAttackModifier(Battler attacker) {
+		return attacker.getMeleeModifier();
+	}
+	
 	@Override
 	public String getAttackString(Battler attacker, Battler target) {
 		return Formatter.format("%s attacked %s", attacker.name, target.name);

@@ -64,7 +64,7 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 	@Override
 	public String completeQuest(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		UserServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
+		UserInfoServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
 		atl.removeFirst();
 		
 		ActiveBountyEntity entity = new ActiveBountyEntity();

@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.buff.Buff;
 import com.clashroom.shared.battle.skills.ActiveSkill;
 
 public class ActionSkill extends BattleAction {
@@ -13,16 +14,18 @@ public class ActionSkill extends BattleAction {
 	public ActiveSkill skill;
 	public LinkedList<Damage> damages = new LinkedList<ActionSkill.Damage>();
 	public boolean missed;
+	public boolean critical;
 	
 	public Damage getPrimaryDamage() {
 		return damages.get(0);
 	}
 	
-	public ActionSkill(Battler attacker, ActiveSkill skill, boolean missed, Damage damage) {
+	public ActionSkill(Battler attacker, ActiveSkill skill, boolean missed, boolean critical, Damage damage) {
 		super();
 		this.attacker = attacker;
 		this.skill = skill;
 		this.missed = missed;
+		this.critical = critical;
 		damages.add(damage);
 	}
 
@@ -31,29 +34,42 @@ public class ActionSkill extends BattleAction {
 		String attackString = skill.getAttackString(attacker, getPrimaryDamage().target);
 		String damageString;
 		if (missed) {
-			damageString = "and missed!";
+			damageString = " and missed!";
 		} else {
-			damageString = skill.targetsAllies() ? "healing " : "dealing ";
-			for (int i = 0; i < damages.size(); i++) {
-				if (i > 0) damageString += i == damages.size() - 1 ? " and " : ", ";
-				Damage damage = damages.get(i);
-				damageString += Formatter.format("%d damage", Math.abs(damage.damage));
-				if (damages.size() > 1) {
-					damageString += Formatter.format(" to %s", damage.target.name);
+			damageString = "";
+			if (!skill.targetsAllies() || getPrimaryDamage().damage != 0) {
+				damageString = skill.targetsAllies() ? " healing " : " dealing ";
+				for (int i = 0; i < damages.size(); i++) {
+					if (i > 0) damageString += i == damages.size() - 1 ? " and " : ", ";
+					Damage damage = damages.get(i);
+					damageString += Formatter.format("%d damage", Math.abs(damage.damage));
+					if (damages.size() > 1) {
+						damageString += Formatter.format(" to %s", damage.target.name);
+					}
 				}
 			}
 			damageString += "!";
+			if (critical) damageString += " A critical hit!";
+			for (int i = 0; i < damages.size(); i++) {
+				Damage damage = damages.get(i);
+				if (damage.buff != null) {
+					damageString += Formatter.format(" %s was %s!", 
+							damage.target.name, damage.buff.getName());
+				}
+			}
 		}
-		return attackString + " " + damageString;
+		return attackString + damageString;
 	}
 	
 	public static class Damage {
 		public Battler target;
 		public int damage;
+		public Buff buff;
 		
-		public Damage(Battler target, int damage) {
+		public Damage(Battler target, int damage, Buff buff) {
 			this.target = target;
 			this.damage = damage;
+			this.buff = buff;
 		}
 	}
 }

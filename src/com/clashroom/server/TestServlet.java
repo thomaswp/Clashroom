@@ -31,6 +31,8 @@ public class TestServlet extends HttpServlet {
 		} else if ("sp".equals(d)) {
 			addSp();
 			resp.getWriter().println("+1 sp");
+		} else if ("quests".equals(d)) {
+			
 		} else {
 			resp.getWriter().println("use ?do=something");
 		}

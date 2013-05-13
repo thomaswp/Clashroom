@@ -15,8 +15,6 @@ public abstract class DragonClass {
 	protected int id = nextId++;
 	protected HashMap<Skill, Integer> skillTree = new HashMap<Skill, Integer>();
 	
-	//3 total stats
-	
 	public HashMap<Skill, Integer> getSkillTree() {
 		return skillTree;
 	}
@@ -71,13 +69,15 @@ public abstract class DragonClass {
 		
 	}
 	
+	public static int MAX_STAT_GAIN_PER_LEVEL = 10;
+	
 	public void levelUp(DragonEntity entity) {
 		
-		double plusStr = generatePlus(10, getStrengthFactor());
-		double plusAgi = generatePlus(10, getAgilityFactor());
-		double plusInt = generatePlus(10, getIntelligenceFactor());
-		double plusHp = generatePlus(100, getHpFactor());
-		double plusMp = generatePlus(25, getMpFactor());
+		double plusStr = generatePlus(MAX_STAT_GAIN_PER_LEVEL, getStrengthFactor());
+		double plusAgi = generatePlus(MAX_STAT_GAIN_PER_LEVEL, getAgilityFactor());
+		double plusInt = generatePlus(MAX_STAT_GAIN_PER_LEVEL, getIntelligenceFactor());
+		double plusHp = 40 + generatePlus(60, getHpFactor());
+		double plusMp = 10 + generatePlus(15, getMpFactor());
 		
 		entity.setStrength(entity.getStrength() + plusStr);
 		entity.setAgility(entity.getAgility() + plusAgi);

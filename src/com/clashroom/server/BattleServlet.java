@@ -30,6 +30,7 @@ public class BattleServlet extends HttpServlet {
 			pm.deletePersistent(qb);
 		}
 		Debug.write("Created %d battles", queuedBattles.size());
+		pm.flush();
 		pm.close();
 	}
 

@@ -2,9 +2,13 @@ package com.clashroom.client.battle;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
+import com.clashroom.shared.Constant;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.dom.client.ImageElement;
+import com.google.gwt.user.client.ui.Image;
 
 public abstract class BatchedSprite {
 	protected static abstract class DrawStep<T> {
@@ -23,6 +27,15 @@ public abstract class BatchedSprite {
 		
 		public Renderer() {
 			addDrawSteps(drawSteps);
+		}
+		
+		private HashMap<String, ImageElement> buffMap = new HashMap<String, ImageElement>();
+		protected ImageElement loadBuffImage(String name) {
+			if (buffMap.containsKey(name)) return buffMap.get(name);
+			
+			ImageElement image = ImageElement.as(new Image(Constant.IMG_ICON + name).getElement());
+			buffMap.put(name, image);
+			return image;
 		}
 	} 
 	

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionDeath;
 import com.clashroom.shared.battle.actions.ActionFinish;
@@ -84,7 +85,7 @@ public class Battle {
 		Collections.sort(battlers, new Comparator<Battler>() {
 			@Override
 			public int compare(Battler o1, Battler o2) {
-				return o1.agility = o2.agility;
+				return o1.getAgility() - o2.getAgility();
 			}
 		});
 		
@@ -174,13 +175,13 @@ public class Battle {
 			}
 		} else {
 			LinkedList<ActionSkill> attacks = new LinkedList<ActionSkill>();
+			boolean critical = skill.getCritical(attacker, random);
 			for (Battler battler : targets) {
-				ActionSkill oneAttack = skill.getAttack(attacker, battler, random); 
+				ActionSkill oneAttack = skill.getAttack(attacker, battler, critical, random);
 				attacks.add(oneAttack);
 				doDamage(oneAttack.getPrimaryDamage());
 			}
-			action = new ActionSkillTargetAll(attacker, skill, attacks);
-			//action = new ActionSkill(attacker, new AttackSkill(), true, new Damage(targets.get(0), 0));
+			action = new ActionSkillTargetAll(attacker, skill, critical, attacks);
 		}
 		attacker.mp -= skill.getMpCost();
 		
@@ -198,7 +199,6 @@ public class Battle {
 		battlers.removeFirst();
 		battlers.add(attacker);
 		
-		//Debug.write(action.toBattleString());
 		return action;
 	}
 	
@@ -206,7 +206,10 @@ public class Battle {
 		if (damage != null) {
 			Battler target = damage.target;
 			target.hp = Math.max(0, target.hp - damage.damage);
-			target.hp = Math.min(target.hp, target.maxHp);
+			target.hp = Math.min(target.hp, target.getMaxHp());
+			if (damage.buff != null) {
+				target.buffs.add(damage.buff);
+			}
 		}
 	}
 	

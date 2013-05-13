@@ -5,9 +5,10 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.ui.Widget;
 
-public abstract class NewsfeedItem implements Serializable {
+public abstract class NewsfeedItem implements Serializable, IsSerializable {
 	private static final long serialVersionUID = 1L;
 	
 	private List<Long> playerIds;
@@ -34,5 +35,5 @@ public abstract class NewsfeedItem implements Serializable {
 	}
 	
 	public abstract Widget getInfoWidget();
-
+	public abstract String getName();
 }

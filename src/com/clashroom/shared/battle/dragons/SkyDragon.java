@@ -2,7 +2,10 @@ package com.clashroom.shared.battle.dragons;
 
 import java.util.HashMap;
 
+import com.clashroom.shared.battle.skills.FogSkill;
+import com.clashroom.shared.battle.skills.LightningSkill;
 import com.clashroom.shared.battle.skills.Skill;
+import com.clashroom.shared.battle.skills.StormSkill;
 
 public class SkyDragon extends DragonClass {
 
@@ -49,8 +52,9 @@ public class SkyDragon extends DragonClass {
 
 	@Override
 	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
-		// TODO Auto-generated method stub
-		
+		skillTree.put(new LightningSkill(), 1);
+		skillTree.put(new FogSkill(), 4);
+		skillTree.put(new StormSkill(), 7);
 	}
 
 

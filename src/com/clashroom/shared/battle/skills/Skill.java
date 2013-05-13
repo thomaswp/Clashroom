@@ -24,7 +24,9 @@ public abstract class Skill implements Serializable {
 		new FireBreathSkill(),
 		new HealSkill(),
 		new EggShellSkill(),
-		//Add new skills down here
+		new FogSkill(),
+		new StormSkill(),
+		new LightningSkill()
 	};
 	//--> to here
 	
@@ -102,9 +104,9 @@ public abstract class Skill implements Serializable {
 
 	protected static int getAttribute(Battler battler, Attribute attribute) {
 		switch (attribute) {
-		case Strength: return battler.strength;
-		case Agility: return battler.agility;
-		case Intelligence: return battler.intelligence;
+		case Strength: return battler.getStrength();
+		case Agility: return battler.getAgility();
+		case Intelligence: return battler.getIntelligence();
 		case None: return 0;
 		}
 		return 0;

@@ -1,2 +1,0 @@
-serviceClass: com.clashroom.client.services.TaskService
-path: C9A638DFAAB2817431008C98D999C99E.gwt.rpc

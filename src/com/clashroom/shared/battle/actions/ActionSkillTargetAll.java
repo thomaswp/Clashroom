@@ -13,13 +13,15 @@ public class ActionSkillTargetAll extends BattleAction {
 	public Battler attacker;
 	public ActiveSkill skill;
 	public LinkedList<ActionSkill> attacks;
+	public boolean critical;
 
 
-	public ActionSkillTargetAll(Battler attacker, ActiveSkill skill, LinkedList<ActionSkill> attacks) {
+	public ActionSkillTargetAll(Battler attacker, ActiveSkill skill, boolean critical, LinkedList<ActionSkill> attacks) {
 		super();
 		this.attacker = attacker;
 		this.skill = skill;
 		this.attacks = attacks;
+		this.critical = critical;
 	}
 
 	@Override
@@ -40,6 +42,15 @@ public class ActionSkillTargetAll extends BattleAction {
 			}
 		}
 		damageString += "!";
+		if (critical) damageString += " A critical hit!";
+		for (int i = 0; i < attacks.size(); i++) {
+			ActionSkill attack = attacks.get(i);
+			Damage damage = attack.getPrimaryDamage();
+			if (damage.buff != null) {
+				damageString += Formatter.format(" %s was %s!", 
+						damage.target.name, damage.buff.getName());
+			}
+		}
 		return attackString + " " + damageString;
 	}
 }

@@ -13,9 +13,13 @@ tmp/
 *~.nib
 local.properties
 .classpath
-.settings/
 .loadpath
 war/WEB-INF/classes/*
+war/WEB-INF/appengine-generated/*
+war/WEB-INF/deploy/*
+war/WEB-INF/lib/*
+war/clashroom/*
+.gwt/.gwt-log
 *.class
 local_db.bin
 

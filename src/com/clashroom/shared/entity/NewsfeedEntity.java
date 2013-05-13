@@ -27,9 +27,13 @@ public class NewsfeedEntity {
 	@Persistent(serialized="true")
 	private NewsfeedItem item;
 	
+	@Persistent
+	private String type;
+	
 	public NewsfeedEntity(NewsfeedItem item) {
 		this.item = item;
 		this.date = item.getDate();
+		this.type = item.getName();
 		playerIds.addAll(item.getPlayerIds());
 	}
 
@@ -47,5 +51,9 @@ public class NewsfeedEntity {
 
 	public NewsfeedItem getItem() {
 		return item;
+	}
+	
+	public String getType() {
+		return type;
 	}
 }

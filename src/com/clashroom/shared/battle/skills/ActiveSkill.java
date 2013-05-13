@@ -2,15 +2,17 @@ package com.clashroom.shared.battle.skills;
 
 import java.util.Random;
 
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionSkill;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
+import com.clashroom.shared.battle.buff.Buff;
 
 public abstract class ActiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;
 
-	public static int DAMAGE_FACTOR_MULT = 5;
+	public static final double CRITICAL_MULT = 1.5;
 	public static float ACCURACY_PERFECT = -1;
 
 	public enum Target {
@@ -19,12 +21,20 @@ public abstract class ActiveSkill extends Skill {
 	
 	protected Target target;
 	protected boolean targetAllies;
+	/**
+	 * The base damage to be multiplied by the battler's spell or melee factor.
+	 */
 	protected int baseDamage;
-	/** [0+] */
-	protected double damageFactor;
-	/** [0+] */
+	/** 
+	 * The chance of hitting with this skill is multiplies by this factor: 
+	 * [0,1], or ACCURACY_PERFECT for perfect accuracy. 
+	 */
 	protected double accuracyFactor;
-	/** [0+] */
+	/** 
+	 * The portion of this skill's damage which is up to change: [0,1].
+	 * Setting this to 0 means the skill deals consistent damage, and
+	 * setting it to 1 would indicate it could do 0-200% of its base damage.
+	 */
 	protected double rangeFactor;
 	protected int mpCost;
 	
@@ -42,47 +52,61 @@ public abstract class ActiveSkill extends Skill {
 
 	protected ActiveSkill(String name, String icon, Attribute attribute, 
 			Target target, boolean targetAllies, int baseDamage,
-			double damageFactor, double accuracyFactor, double rangeFactor,
+			double accuracyFactor, double rangeFactor,
 			int mpCost) {
 		super(name, icon, attribute);
 
 		this.target = target;
 		this.targetAllies = targetAllies;
 		this.baseDamage = baseDamage;
-		this.damageFactor = damageFactor;
 		this.accuracyFactor = accuracyFactor;
 		this.rangeFactor = rangeFactor;
 		this.mpCost = mpCost;
 	}
+	
+	protected double getAttackModifier(Battler attacker) {
+		return attacker.getSpellModifier();
+	}
 
 	public Damage getDamage(Battler attacker, Battler target, Random random) {
-		int attackerStr = getAttribute(attacker, attribute);
-		//int targetStr = getAttribute(attacker, attribute);
-		double dmg = baseDamage + attackerStr * damageFactor * DAMAGE_FACTOR_MULT;
+		double dmg = baseDamage * getAttackModifier(attacker);
 		dmg += dmg * rangeFactor * (random.nextDouble() - 0.5) * 2;
 		int damage = (int)Math.max(dmg, 0);
 		if (targetAllies) damage *= -1;
-		return new Damage(target, damage);
+		return new Damage(target, damage, getBuff());
 	}
 	
 	public ActionSkill getAttack(Battler attacker, Battler target, Random random) {
+		boolean critical = getCritical(attacker, random);
+		return getAttack(attacker, target, critical, random);
+	}
+
+	public ActionSkill getAttack(Battler attacker, Battler target, boolean critical,
+			Random random) {
 		boolean miss = getMiss(attacker, target, random);
+		critical &= !miss;
 		
 		Damage damage = getDamage(attacker, target, random);
-		if (miss) damage.damage = 0;
+		if (miss) {
+			damage.damage = 0;
+			damage.buff = null;
+		}
 		
-		return new ActionSkill(attacker, this, miss, damage);
+		if (critical) damage.damage *= CRITICAL_MULT;
+		
+		return new ActionSkill(attacker, this, miss, critical, damage);
+	}
+	
+	public boolean getCritical(Battler attacker, Random random) {
+		if (targetAllies) return false;
+		return attacker.getCriticalChance() > random.nextDouble();
 	}
 	
 	public boolean getMiss(Battler attacker, Battler target, Random random) {
 		if (targetAllies || accuracyFactor == ACCURACY_PERFECT) {
 			return false;
 		} else {
-//			double chance = accuracyFactor * Math.sqrt(
-//					attacker.agility / (double)target.agility);
-//			return chance < random.nextDouble() * 1.5;
-			
-			double missChance = (10 - (attacker.agility - target.agility)) / 100.0;
+			double missChance = target.getDodgeChance() / accuracyFactor;
 			return missChance > random.nextDouble();
 		}
 	}
@@ -95,5 +119,9 @@ public abstract class ActiveSkill extends Skill {
 	
 	public String getAttackString(Battler attacker) {
 		return Formatter.format("%s cast %s", attacker.name, name);
+	}
+	
+	public Buff getBuff() {
+		return null;
 	}
 }
