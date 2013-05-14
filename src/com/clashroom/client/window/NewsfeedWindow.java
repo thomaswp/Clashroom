@@ -49,6 +49,7 @@ public class NewsfeedWindow extends Composite {
 	private void setupUI() {
 		VerticalPanel vPanel = new VerticalPanel();
 		vPanel.setWidth("100%");
+		vPanel.addStyleName("newsfeed");
 		
 		Label title = new Label("Town Herald");
 		title.addStyleName(Styles.text_title);
@@ -64,7 +65,7 @@ public class NewsfeedWindow extends Composite {
 		tableMe.getRowFormatter().addStyleName(0, Styles.table_header);
 		
 		ScrollPanel scrollMe = new ScrollPanel();
-		scrollMe.setHeight("175px");
+		scrollMe.setHeight("181px");
 		scrollMe.add(tableMe);
 		
 		FlexTable outerMe = new FlexTable();
@@ -87,7 +88,7 @@ public class NewsfeedWindow extends Composite {
 		tableEveryone.getRowFormatter().addStyleName(0, Styles.table_header);
 		
 		ScrollPanel scrollEveryone = new ScrollPanel();
-		scrollEveryone.setHeight("175px");
+		scrollEveryone.setHeight("181px");
 		scrollEveryone.add(tableEveryone);
 		
 		FlexTable outerEveryone = new FlexTable();

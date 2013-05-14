@@ -148,16 +148,23 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		rewards.add(questItemsAwarded);
 		rewards.add(itemsListTable);
 		
+		VerticalPanel panel = new VerticalPanel();
+		panel.addStyleName("details");
+		panel.add(questDateAvailable);
+		panel.add(questDateUnavailable);
+		panel.add(hPanel);
+		
 		vPanel.add(questName);
-		vPanel.add(questDesc);
-		vPanel.add(rewards);
 		vPanel.add(questLevelRequirment);
-		vPanel.add(questDateAvailable);
-		vPanel.add(questDateUnavailable);
+		vPanel.add(questDesc);
+		
+		vPanel.add(panel);
+
 		hPanel.add(enterCode);
 		hPanel.add(submit);
-		hPanel.add(codeEntryMsg);
-		vPanel.add(hPanel);
+		vPanel.add(codeEntryMsg);
+		
+		vPanel.add(rewards);
 		
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");

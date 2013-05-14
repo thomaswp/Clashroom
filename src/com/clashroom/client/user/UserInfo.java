@@ -60,6 +60,7 @@ public class UserInfo extends Composite {
 		vPanelSkills.addStyleName(Styles.profile_skills);
 		labelSp.setText(Formatter.format("You have %s%s to spend.", user.getSkillPoints(), 
 				Constant.TERM_SKILL_POINT_SHORT));
+		labelSp.addStyleName("indent");
 		labelSp.setVisible(isMe);
 		for (Skill skill : dragonClass.getSkills()) {
 			addSkill(skill, user, dragonClass, isMe);

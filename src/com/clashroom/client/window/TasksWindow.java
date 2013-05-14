@@ -69,7 +69,7 @@ public class TasksWindow extends Window {
 		
 		//Assemble main panel
 		ScrollPanel scroll = new ScrollPanel();
-		scroll.setHeight("175px");
+		scroll.setHeight("133px");
 		scroll.add(queueTable);
 		
 		FlexTable outer = new FlexTable();
