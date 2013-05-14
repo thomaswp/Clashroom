@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class NewsfeedWindow extends Composite {
 	
@@ -66,47 +67,40 @@ public class NewsfeedWindow extends Composite {
 		
 		ScrollPanel scrollMe = new ScrollPanel();
 		scrollMe.setHeight("181px");
-		scrollMe.add(tableMe);
-		
-		FlexTable outerMe = new FlexTable();
-		outerMe.setText(0, 0, "When");
-		outerMe.setText(0, 1, "What");
-		outerMe.getColumnFormatter().addStyleName(1, Styles.text_right);
-		outerMe.getRowFormatter().addStyleName(0, Styles.table_header);
-		outerMe.getRowFormatter().addStyleName(0, Styles.gradient);
-		outerMe.addStyleName(Styles.outer_table);
-		outerMe.setCellSpacing(0);
-		outerMe.setWidget(1, 0, scrollMe);
-		outerMe.getFlexCellFormatter().setColSpan(1, 0, 2);
-		
+		scrollMe.add(tableMe);	
 
-		tabPanel.add(outerMe, "Me");
+		tabPanel.add(getScrollingTable(tableMe), "Me");
 		
 		tableEveryone = new FlexTable();
 		tableEveryone.addStyleName(Styles.table);
 		tableEveryone.getRowFormatter().addStyleName(0,Styles.gradient);
 		tableEveryone.getRowFormatter().addStyleName(0, Styles.table_header);
 		
-		ScrollPanel scrollEveryone = new ScrollPanel();
-		scrollEveryone.setHeight("181px");
-		scrollEveryone.add(tableEveryone);
 		
-		FlexTable outerEveryone = new FlexTable();
-		outerEveryone.setText(0, 0, "When");
-		outerEveryone.setText(0, 1, "What");
-		outerEveryone.getColumnFormatter().addStyleName(1, Styles.text_right);
-		outerEveryone.getRowFormatter().addStyleName(0, Styles.table_header);
-		outerEveryone.getRowFormatter().addStyleName(0, Styles.gradient);
-		outerEveryone.addStyleName(Styles.outer_table);
-		outerEveryone.setCellSpacing(0);
-		outerEveryone.setWidget(1, 0, scrollEveryone);
-		outerEveryone.getFlexCellFormatter().setColSpan(1, 0, 2);
-		
-		tabPanel.add(outerEveryone, "Everyone");
+		tabPanel.add(getScrollingTable(tableEveryone), "Everyone");
 		
 		tabPanel.selectTab(0);
 		
 		initWidget(vPanel);
+	}
+	
+	private FlexTable getScrollingTable(FlexTable table) {
+		ScrollPanel scroll = new ScrollPanel();
+		scroll.setHeight("181px");
+		scroll.add(table);
+		
+		FlexTable outer = new FlexTable();
+		outer.setText(0, 0, "When");
+		outer.setText(0, 1, "What");
+		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
+		outer.getColumnFormatter().setWidth(0, "95px");
+		outer.getRowFormatter().addStyleName(0, Styles.table_header);
+		outer.getRowFormatter().addStyleName(0, Styles.gradient);
+		outer.addStyleName(Styles.outer_table);
+		outer.setCellSpacing(0);
+		outer.setWidget(1, 0, scroll);
+		outer.getFlexCellFormatter().setColSpan(1, 0, 2);
+		return outer;
 	}
 	
 	private void populateUI(List<NewsfeedItem> result) {
