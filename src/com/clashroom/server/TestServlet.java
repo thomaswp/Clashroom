@@ -115,7 +115,8 @@ public class TestServlet extends HttpServlet {
 		
 		QuestEntity quest1 = new QuestEntity("A Dragon Trainer is Born", "You are now a dragon trainer, but what do you do? How do you become the best trainer out there? " +
 				"You adveture leads you to the temple of Belk. There you feel inclined to sit in the back on the first floor and begin your studies." +
-				" You start by checking a very large encyclopedia to see what more you can learn about dragons.", "dragonknowledge",
+				" You start by checking a very large Webster dictionary to see what more you can learn about dragons. You find this dictionary closest to the window and" +
+				"on top of a book shelf.", "dragonknowledge",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
