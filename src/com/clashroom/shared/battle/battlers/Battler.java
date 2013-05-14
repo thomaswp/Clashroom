@@ -8,8 +8,8 @@ import java.util.Random;
 
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
-import com.clashroom.shared.battle.buff.Buff;
-import com.clashroom.shared.battle.buff.Buff.Stat;
+import com.clashroom.shared.battle.buffs.Buff;
+import com.clashroom.shared.battle.buffs.Buff.Stat;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.battle.skills.AttackSkill;
 import com.clashroom.shared.battle.skills.ActiveSkill;
@@ -114,7 +114,7 @@ public abstract class Battler implements Serializable {
 		return modify(getCriticalChance(getAgility(), level), Stat.Crit);
 	}
 	
-	public double getCriticalChance(int agility, int level) {
+	public static double getCriticalChance(int agility, int level) {
 		//return 0.01 + Math.pow(agility, 1.55) / (2500 * (level + 10));
 		return getDerivedStatCurve(0.03, 0.5, agility, DragonClass.MAX_STAT_GAIN_PER_LEVEL);
 	}

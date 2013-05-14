@@ -7,12 +7,12 @@ import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.ActionSkill;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.Buff;
 
 public abstract class ActiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;
 
-	public static final double CRITICAL_MULT = 1.5;
+	public static final double CRITICAL_MULT = 1.7;
 	public static float ACCURACY_PERFECT = -1;
 
 	public enum Target {
@@ -50,6 +50,10 @@ public abstract class ActiveSkill extends Skill {
 		return mpCost;
 	}
 
+	public int getBaseDamage() {
+		return baseDamage;
+	}
+
 	protected ActiveSkill(String name, String icon, Attribute attribute, 
 			Target target, boolean targetAllies, int baseDamage,
 			double accuracyFactor, double rangeFactor,
@@ -85,6 +89,7 @@ public abstract class ActiveSkill extends Skill {
 			Random random) {
 		boolean miss = getMiss(attacker, target, random);
 		critical &= !miss;
+		critical &= baseDamage > 0;
 		
 		Damage damage = getDamage(attacker, target, random);
 		if (miss) {

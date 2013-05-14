@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.Buff;
 
 public abstract class PassiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;

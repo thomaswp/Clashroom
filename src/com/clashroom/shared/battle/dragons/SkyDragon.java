@@ -27,7 +27,7 @@ public class SkyDragon extends DragonClass {
 
 	@Override
 	public double getStrengthFactor() {
-		return 0.40;
+		return 0.45;
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class SkyDragon extends DragonClass {
 
 	@Override
 	public double getHpFactor() {
-		return 0.5;
+		return 0.55;
 	}
 
 	@Override

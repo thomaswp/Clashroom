@@ -5,7 +5,7 @@ import java.util.List;
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.Buff;
 
 public class EggShellSkill extends PassiveSkill {   
 	private static final long serialVersionUID = 1L;

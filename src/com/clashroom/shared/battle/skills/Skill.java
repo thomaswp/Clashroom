@@ -26,7 +26,13 @@ public abstract class Skill implements Serializable {
 		new EggShellSkill(),
 		new FogSkill(),
 		new StormSkill(),
-		new LightningSkill()
+		new LightningSkill(),
+		new LionFireSkill(),
+		new BlessingSkill(),
+		new BodySlamSkill(),
+		new CurseSkill(),
+		new EnrageSkill(),
+		new HurlBoulderSkill()
 	};
 	//--> to here
 	

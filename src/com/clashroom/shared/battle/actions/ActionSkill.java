@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.Buff;
 import com.clashroom.shared.battle.skills.ActiveSkill;
 
 public class ActionSkill extends BattleAction {
@@ -37,7 +37,7 @@ public class ActionSkill extends BattleAction {
 			damageString = " and missed!";
 		} else {
 			damageString = "";
-			if (!skill.targetsAllies() || getPrimaryDamage().damage != 0) {
+			if (skill.getBaseDamage() != 0) {
 				damageString = skill.targetsAllies() ? " healing " : " dealing ";
 				for (int i = 0; i < damages.size(); i++) {
 					if (i > 0) damageString += i == damages.size() - 1 ? " and " : ", ";

@@ -2,6 +2,9 @@ package com.clashroom.shared.battle.dragons;
 
 import java.util.HashMap;
 
+import com.clashroom.shared.battle.skills.BodySlamSkill;
+import com.clashroom.shared.battle.skills.CurseSkill;
+import com.clashroom.shared.battle.skills.EnrageSkill;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class MeteorDragon extends DragonClass {
@@ -24,12 +27,12 @@ public class MeteorDragon extends DragonClass {
 
 	@Override
 	public double getStrengthFactor() {
-		return 1.0;
+		return 0.95;
 	}
 
 	@Override
 	public double getAgilityFactor() {
-		return 0.45;
+		return 0.40;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class MeteorDragon extends DragonClass {
 
 	@Override
 	public double getHpFactor() {
-		return 0.90;
+		return 0.85;
 	}
 
 	@Override
@@ -49,8 +52,9 @@ public class MeteorDragon extends DragonClass {
 
 	@Override
 	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
-		// TODO Auto-generated method stub
-		
+		skillTree.put(new EnrageSkill(), 1);
+		skillTree.put(new CurseSkill(), 5);
+		skillTree.put(new BodySlamSkill(), 8);
 	}
 
 

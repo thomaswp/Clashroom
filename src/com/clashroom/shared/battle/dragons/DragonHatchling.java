@@ -32,7 +32,7 @@ public class DragonHatchling extends DragonClass {
 
 	@Override
 	public double getAgilityFactor() {
-		return 0.50;
+		return 0.45;
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class DragonHatchling extends DragonClass {
 
 	@Override
 	public double getMpFactor() {
-		return 0.90;
+		return 0.85;
 	}
 
 	@Override

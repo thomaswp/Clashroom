@@ -1,7 +1,8 @@
 /* --- PROFILE --- */
 .UserInfo {
-	width:600px;
+	width:650px;
 	margin:30px auto;
+	padding-left: 15px;
 	background:#ccc;
 	box-shadow:0px 1px 1px 1px rgba(0,0,0,0.25);
 }
@@ -64,7 +65,7 @@
 }
 
 .profile_stats {
-	width:50%;
+	width:60%;
 	position:absolute;
 	top:120px;
 	left:250px;

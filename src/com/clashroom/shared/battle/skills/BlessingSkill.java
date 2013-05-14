@@ -1,14 +1,14 @@
 package com.clashroom.shared.battle.skills;
 
 import com.clashroom.shared.Constant;
-import com.clashroom.shared.battle.buff.BlessedBuff;
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.BlessedBuff;
+import com.clashroom.shared.battle.buffs.Buff;
 
 public class BlessingSkill extends ActiveSkill {
 	private static final long serialVersionUID = 1L;
 
 	public BlessingSkill() {
-		super("Blessing", "runes-orange-1.png", Attribute.Intelligence, Target.One, true, 0, 
+		super("Blessing", "runes-blue-1.png", Attribute.Intelligence, Target.One, true, 0, 
 				ACCURACY_PERFECT, 0, 50);
 	}
 

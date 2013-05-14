@@ -11,6 +11,7 @@ import com.clashroom.client.widget.ProgressBar.TextFormatter;
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
+import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.DragonEntity;
@@ -51,14 +52,10 @@ public class UserInfo extends Composite {
 		labelAgi.setValue((int)dragon.getAgility());
 		labelInt.setValue((int)dragon.getIntelligence());
 
-		
-
-		
-		labelMelee.setValue(45.0);
-		labelSkillMod.setValue(1.34);
-		labelSpellMod.setValue(0.82);
-		labelDodge.setValue(0.165);
-		labelCrit.setValue(0.135);
+		labelMelee.setValue(Battler.getMeleeModifier((int)dragon.getStrength()));
+		labelSpellMod.setValue(Battler.getSpellModifier((int)dragon.getIntelligence(), dragon.getLevel()));
+		labelDodge.setText(Math.round(100 * Battler.getDodgeChance((int)dragon.getAgility(), dragon.getLevel())) + "%");
+		labelCrit.setText(Math.round(100 * Battler.getCriticalChance((int)dragon.getAgility(), dragon.getLevel())) + "%");
 
 		vPanelSkills.addStyleName(Styles.profile_skills);
 		labelSp.setText(Formatter.format("You have %s%s to spend.", user.getSkillPoints(), 
@@ -155,10 +152,9 @@ public class UserInfo extends Composite {
 	
 
 	private NumberLabel<Double> labelSpellMod;
-	private NumberLabel<Double> labelSkillMod;
 	private NumberLabel<Double> labelMelee;
-	private NumberLabel<Double> labelDodge;
-	private NumberLabel<Double> labelCrit;
+	private Label labelDodge;
+	private Label labelCrit;
 	private VerticalPanel vPanelSkills;
 	private Label labelSp;
 	private UserInfoServiceAsync userInfoService;
@@ -269,7 +265,7 @@ public class UserInfo extends Composite {
 		HorizontalPanel hPanelSpellMod = new HorizontalPanel();
 		vPanelStats2.add(hPanelSpellMod);
 		
-		Label labelSpellModPrompt = new Label("Melee: ");
+		Label labelSpellModPrompt = new Label("Melee Bonus: ");
 		hPanelSpellMod.add(labelSpellModPrompt);
 		
 		labelMelee = new NumberLabel<Double>();
@@ -278,16 +274,7 @@ public class UserInfo extends Composite {
 		hPanelSpellMod = new HorizontalPanel();
 		vPanelStats2.add(hPanelSpellMod);
 		
-		labelSpellModPrompt = new Label("SkillMod: ");
-		hPanelSpellMod.add(labelSpellModPrompt);
-		
-		labelSkillMod = new NumberLabel<Double>();
-		hPanelSpellMod.add(labelSkillMod);
-		
-		hPanelSpellMod = new HorizontalPanel();
-		vPanelStats2.add(hPanelSpellMod);
-		
-		labelSpellModPrompt = new Label("SpellMod: ");
+		labelSpellModPrompt = new Label("Spell Bonus: ");
 		hPanelSpellMod.add(labelSpellModPrompt);
 		
 		labelSpellMod = new NumberLabel<Double>();
@@ -296,19 +283,19 @@ public class UserInfo extends Composite {
 		hPanelSpellMod = new HorizontalPanel();
 		vPanelStats2.add(hPanelSpellMod);
 		
-		labelSpellModPrompt = new Label("Dodge: ");
+		labelSpellModPrompt = new Label("Dodge Chance: ");
 		hPanelSpellMod.add(labelSpellModPrompt);
 		
-		labelDodge = new NumberLabel<Double>();
+		labelDodge = new Label();
 		hPanelSpellMod.add(labelDodge);
 		
 		hPanelSpellMod = new HorizontalPanel();
 		vPanelStats2.add(hPanelSpellMod);
 		
-		labelSpellModPrompt = new Label("Crit: ");
+		labelSpellModPrompt = new Label("Critical Chance: ");
 		hPanelSpellMod.add(labelSpellModPrompt);
 		
-		labelCrit = new NumberLabel<Double>();
+		labelCrit = new Label();
 		hPanelSpellMod.add(labelCrit);
 		
 		Label skillsLabel = new Label(Constant.TERM_SKILL_PL);

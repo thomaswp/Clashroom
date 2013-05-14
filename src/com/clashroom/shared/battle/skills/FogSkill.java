@@ -2,7 +2,7 @@ package com.clashroom.shared.battle.skills;
 
 import java.util.List;
 
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.Buff;
 
 public class FogSkill extends PassiveSkill {
 	private static final long serialVersionUID = 1L;

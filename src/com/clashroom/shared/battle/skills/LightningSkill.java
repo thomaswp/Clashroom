@@ -5,7 +5,7 @@ public class LightningSkill extends ActiveSkill {
 
 	public LightningSkill() {
 		super("Lightning", "lighting-eerie-1.png", Attribute.Intelligence, Target.One, 
-				false, 125, 1, 0.2, 60);
+				false, 135, 1, 0.2, 60);
 	}
 
 	@Override

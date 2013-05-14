@@ -19,6 +19,7 @@ import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.actions.ActionSkill.Damage;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.battlers.DragonBattler;
+import com.clashroom.shared.battle.dragons.DragonClass;
 import com.clashroom.shared.battle.dragons.DragonHatchling;
 import com.clashroom.shared.battle.skills.Skill;
 import com.clashroom.shared.entity.BattleEntity;
@@ -111,18 +112,21 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				}
 			});
 		} else {
-			testRoundRobbin();
+			//For testing battles and balancing
 			
-			Battler b1 = createTestBattler("Rufus", 2, 20);
-			Battler b2 = createTestBattler("Jax", 1, 20);
-			
-			printBattlerStats(b1);
-			printBattlerStats(b2);
-			factory = createTestFactory(b1, b2);
-			setupBattle();
+//			testRoundRobbin(1, 10, 30);
+//			
+//			Battler b1 = createTestBattler("Slick", 0, 20);
+//			Battler b2 = createTestBattler("Jax", 1, 20);
+//			
+//			printBattlerStats(b1);
+//			printBattlerStats(b2);
+//			factory = createTestFactory(b1, b2);
+//			setupBattle();
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private void printBattlerStats(Battler b) {
 		System.out.println(Formatter.format(
 				"Name: %s\nStr: %s\nAgi: %s\nInt: %s" +
@@ -131,20 +135,24 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				b.getDodgeChance(), b.getCriticalChance(), b.getSpellModifier(), b.getMeleeModifier()));
 	}
 	
-	private void testRoundRobbin() {
-		int[][] a = new int[4][4];
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
+	@SuppressWarnings("unused")
+	private void testRoundRobbin(int minLevel, int maxLevel, int roundsPerLevel) {
+		int nDragons = DragonClass.getNumDragonClasses();
+		int[][] a = new int[nDragons][nDragons + 1];
+		for (int i = 0; i < nDragons; i++) {
+			for (int j = 0; j < nDragons; j++) {
 				if (i != j) {
-					for (int k = 0; k < 25; k++) {
-						for (int l = 0; l < 10; l++) {
+					for (int k = minLevel; k <= maxLevel; k++) {
+						for (int l = 0; l < roundsPerLevel; l++) {
 							Battler b1 = createTestBattler("Rufus", i, k);
 							Battler b2 = createTestBattler("Hale", j, k);
 							
 							if (isTeamAWinner(createTestFactory(b1, b2))) {
 								a[i][j]++;
+								a[i][4]++;
 							} else {
 								a[j][i]++;
+								a[j][4]++;
 							}
 						}
 					}
@@ -153,11 +161,16 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		}
 		
 		String out = "";
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				out += (a[i][j] + ", ");
+		int rounds = (nDragons * (nDragons - 1) * (maxLevel - minLevel + 1) * roundsPerLevel);
+		int length = ("" + rounds).length();
+		for (int i = 0; i < nDragons; i++) {
+			out += DragonClass.getById(i).getName().substring(0, 5) + ":\t";
+			for (int j = 0; j < nDragons; j++) {
+				String n = "" + a[i][j];
+				while (n.length() < length) n = " " + n;
+				out += (n + ", ");
 			}
-			out += "\n";
+			out += (float)a[i][nDragons] / rounds + "%\n";
 		}
 		System.out.println(out);
 	}

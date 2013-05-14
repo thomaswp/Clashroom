@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.clashroom.shared.battle.skills.BlessingSkill;
 import com.clashroom.shared.battle.skills.HealSkill;
+import com.clashroom.shared.battle.skills.LionFireSkill;
 import com.clashroom.shared.battle.skills.Skill;
 
 public class LionDragon extends DragonClass {
@@ -26,7 +27,7 @@ public class LionDragon extends DragonClass {
 
 	@Override
 	public double getStrengthFactor() {
-		return 0.65;
+		return 0.70;
 	}
 
 	@Override
@@ -36,7 +37,7 @@ public class LionDragon extends DragonClass {
 
 	@Override
 	public double getIntelligenceFactor() {
-		return 0.35;
+		return 0.40;
 	}
 
 	@Override
@@ -51,6 +52,7 @@ public class LionDragon extends DragonClass {
 
 	@Override
 	protected void fillSkillTree(HashMap<Skill, Integer> skillTree) {
+		skillTree.put(new LionFireSkill(), 1);
 		skillTree.put(new HealSkill(), 4);
 		skillTree.put(new BlessingSkill(), 8);
 	}

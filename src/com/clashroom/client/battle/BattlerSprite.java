@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.battle.battlers.Battler;
-import com.clashroom.shared.battle.buff.Buff;
+import com.clashroom.shared.battle.buffs.Buff;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.canvas.dom.client.FillStrokeStyle;

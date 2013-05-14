@@ -159,3 +159,7 @@
 .outer_table ::-webkit-scrollbar-thumb {
     background:#a3daec;
 }
+
+.newsfeed .gwt-DecoratedTabBar {
+	margin-bottom:-6px;
+}
