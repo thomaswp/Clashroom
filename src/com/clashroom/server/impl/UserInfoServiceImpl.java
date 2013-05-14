@@ -228,7 +228,6 @@ implements UserInfoService {
 			user.setSkillPoints(totalsp);
 
 			user.getDragon().addExp(quest.getExperienceRewarded());
-			user.setDragon(pm.detachCopy(user.getDragon()));
 
 			QuestNews qn = new QuestNews(new Date(), quest.getQuestName(), user.getUsername(), user.getId());
 			NewsfeedEntity ne = new NewsfeedEntity(qn);
