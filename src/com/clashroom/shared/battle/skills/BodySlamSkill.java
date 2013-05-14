@@ -13,7 +13,7 @@ public class BodySlamSkill extends ActiveSkill {
 
     @Override
     public int getSkillPointCost() {
-        return 6;
+        return 5;
     }
 
     @Override

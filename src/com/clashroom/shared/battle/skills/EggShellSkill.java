@@ -16,7 +16,7 @@ public class EggShellSkill extends PassiveSkill {
 
 	@Override
 	public int getSkillPointCost() {
-		return 2;
+		return 3;
 	}
 
 	@Override

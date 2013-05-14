@@ -4,7 +4,9 @@ import javax.annotation.Nonnull;
 
 import com.clashroom.client.services.LoginService;
 import com.clashroom.client.services.LoginServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.user.SetupPage;
+import com.clashroom.client.widget.LoginWidget;
 import com.clashroom.shared.LoginInfo;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -27,9 +29,7 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 		return loginInfo;
 	}
 	
-	private LoginWidget loginWidget;
-	
-	private LoginServiceAsync loginService = GWT.create(LoginService.class);
+	private final static LoginServiceAsync loginService = Services.loginService;
 	
 	private static void ensureNotUmbrellaError(@Nonnull Throwable e) {
 		for (Throwable th : ((UmbrellaException) e).getCauses()) {
@@ -63,7 +63,7 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 					loginInfo = result;
 					
 					RootPanel login = RootPanel.get("login");
-					login.add(loginWidget = new LoginWidget(result));
+					login.add(new LoginWidget(result));
 					
 					if (result.isHasAccount()) {
 						if (History.getToken().isEmpty()) {

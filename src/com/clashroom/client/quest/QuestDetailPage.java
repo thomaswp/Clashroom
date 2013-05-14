@@ -1,4 +1,4 @@
-package com.clashroom.client.teacher;
+package com.clashroom.client.quest;
 
 import java.util.ArrayList;
 import com.clashroom.client.Page;
@@ -7,8 +7,10 @@ import com.clashroom.client.services.ItemRetrieverService;
 import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.client.window.ItemInnerWindow;
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.QuestEntity;
@@ -33,16 +35,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class QuestDetailPage extends Page implements ClickHandler {
 
 	public final static String NAME = "QuestDetails";
-	
-	private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
-            .create(QuestRetrieverService.class);
-	
-	private static UserInfoServiceAsync userSvc = GWT
-			.create(UserInfoService.class);
-	
-	private static ItemRetrieverServiceAsync itemSvc = GWT
-			.create(ItemRetrieverService.class);
-	
+
+	private static QuestRetrieverServiceAsync questRetrieverSvc = Services.questRetrieverService;
+
+	private static UserInfoServiceAsync userSvc = Services.userInfoService;
+
+	private static ItemRetrieverServiceAsync itemSvc = Services.itemRetrieverService;
+
 	private VerticalPanel vPanel;
 	private HorizontalPanel hPanel;
 	private Label questName;
@@ -58,67 +57,62 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	private Label codeEntryMsg;
 	private UserEntity currentUser;
 	private ArrayList<ItemEntity> questItems = new ArrayList<ItemEntity>();
-	
-	
+
+
 	private QuestEntity aQuest = null;
-	
+
 	public QuestDetailPage()
 	{
 		this(NAME);
 	}
 	public QuestDetailPage(String token) {
 		super(token);
-		
+
 		long id = getLongParameter("id");
-		
-		if(userSvc == null){
-			userSvc = GWT.create(UserInfoService.class);
-		}
-		
-		if (questRetrieverSvc == null) { 
-	        questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-	    }
-		
+
 		AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
 
 			@Override
 			public void onFailure(Throwable caught) {
 				System.err.println("Error: RPC Call Failed");
-		    	caught.printStackTrace();		
+				caught.printStackTrace();		
 			}
 
 			@Override
 			public void onSuccess(UserEntity result) {
-				currentUser = result;				
+				currentUser = result;
+				setUpContent();
 			}
-			
+
 		};
-	          
-	          	// Set up the callback object.
-	     AsyncCallback<QuestEntity> callback = new AsyncCallback<QuestEntity>() {
-	          
-	     @Override 
-	     public void onFailure(Throwable caught) {
-	    	 System.err.println("Error: RPC Call Failed");
-	    	 caught.printStackTrace(); 
-	     }
-	          
-	          @Override 
-	     public void onSuccess(QuestEntity result){ 
-	        	  aQuest = result;
-	     } };
-	     
-   	  		setupUI();
-	        questRetrieverSvc.retrieveAQuest(id, callback);
-	        getQuestItems();
-	        userSvc.getUser(callBack);	
+
+		// Set up the callback object.
+		AsyncCallback<QuestEntity> callback = new AsyncCallback<QuestEntity>() {
+
+			@Override 
+			public void onFailure(Throwable caught) {
+				System.err.println("Error: RPC Call Failed");
+				caught.printStackTrace(); 
+			}
+
+			@Override 
+			public void onSuccess(QuestEntity result){ 
+				aQuest = result;
+				setUpContent();
+			} 
+		};
+
+		setupUI();
+		questRetrieverSvc.retrieveAQuest(id, callback);
+		getQuestItems();
+		userSvc.getUser(callBack);	
 	}
-	
+
 	public void setupUI() {
-		
+
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
-		
+
 		questName = new Label();
 		questName.addStyleName(Styles.text_title);
 		questDesc = new Label();
@@ -139,113 +133,108 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		submit.setVisible(false);
 		enterCode = new TextBox();
 		enterCode.setVisible(false);
-		
+
 		submit.addClickHandler(this);
-		
+
 		VerticalPanel rewards = new VerticalPanel();
 		rewards.addStyleName(Styles.quest_rewards);
 		rewards.add(questXpGained);
 		rewards.add(questItemsAwarded);
 		rewards.add(itemsListTable);
-		
+
 		VerticalPanel panel = new VerticalPanel();
 		panel.addStyleName("details");
 		panel.add(questDateAvailable);
 		panel.add(questDateUnavailable);
 		panel.add(hPanel);
-		
+
 		vPanel.add(questName);
 		vPanel.add(questLevelRequirment);
 		vPanel.add(questDesc);
-		
+
 		vPanel.add(panel);
 
 		hPanel.add(enterCode);
 		hPanel.add(submit);
 		vPanel.add(codeEntryMsg);
-		
+
 		vPanel.add(rewards);
-		
+
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");
 		vPanel.addStyleName(NAME);
-//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-//		link.addStyleName(Styles.back_button);
-//		mainPanel.add(link);
+
 		mainPanel.add(vPanel);
-        initWidget(mainPanel);
-    }
-	
-	private void setUpContent(QuestEntity aQuest){
-		Window.setTitle("Quest Details: " + aQuest.getQuestName());
+		initWidget(mainPanel);
+	}
+
+	private void setUpContent(){
+		if (aQuest == null || questItems == null || currentUser == null) return;
 		
+		Window.setTitle("Quest Details: " + aQuest.getQuestName());
+
 		questName.setText(aQuest.getQuestName());
 		questDesc.setText(aQuest.getQuestDescription());
-		questXpGained.setText(Constant.TERM_EXP + ": "+ aQuest.getExperienceRewarded());
+		questXpGained.setText(Constant.TERM_EXP + ": "+ aQuest.getExperienceRewarded() + Constant.TERM_EXP_SHORT);
 		questLevelRequirment.setText("Level "+ aQuest.getLevelRequirement());
 		questItemsAwarded.setText("Items: ");
-		
-		
+
+
 		for(int i = 0; i < questItems.size(); i++){
 			if(aQuest.getItemsRewarded().contains(questItems.get(i).getId())){
-			itemsListTable.setWidget(i, 0, 
-					new Hyperlink(questItems.get(i).getName(),"url"));
+				itemsListTable.setWidget(i, 0, 
+						new ItemInnerWindow(questItems.get(i)));
 			}
-			//TODO Have these has hyperlinks go to Pages of items
 		}
 		questDateAvailable.setText("This quest will be available: " + aQuest.getDateAvailable() + " -");
 		questDateUnavailable.setText(aQuest.getDateUnavailable());
-		
+
 		completionTypeHandler(aQuest);
 	}
-	
+
 	private void completionTypeHandler(QuestEntity aQuest){
 		if(aQuest.getCompletionCode() != null){
 			submit.setVisible(true);
 			enterCode.setVisible(true);
 		}
-		
+
 	}
-	
+
 	private void getQuestItems(){
-		
-		if(itemSvc == null){
-			itemSvc = GWT.create(ItemRetrieverService.class);
-		}
+
 		AsyncCallback<ArrayList<ItemEntity>> callback = new AsyncCallback<ArrayList<ItemEntity>>() {
 
 			@Override
 			public void onFailure(Throwable caught) {
 				System.err.println("Error: RPC Call Failed");
-		    	caught.printStackTrace();						
+				caught.printStackTrace();						
 			}
-			
+
 			@Override
 			public void onSuccess(ArrayList<ItemEntity> result) {
-				
 				questItems = result;
-				setUpContent(aQuest);
+				setUpContent();
 			}
-			
+
 		};
-			itemSvc.retrieveItems(callback);
-		
+		itemSvc.retrieveItems(callback);
+
 	}
 	@Override
 	public void onClick(ClickEvent event) {
 		codeEntryMsg.setVisible(true);
 		if(event.getSource().equals(submit)){
-			
+
 			if(enterCode.getText().equals(aQuest.getCompletionCode())){
-				
+
 				Long id = getLongParameter("id");
 				if (id == null) return;
-				
+
 				currentUser.addCompletedQuest(id);
 				for(Long itemID: aQuest.getItemsRewarded()){
 					currentUser.addItemToInventory(itemID);
 				}
-				
+
 				if(userSvc == null){
 					userSvc = GWT.create(UserInfoService.class);
 				}
@@ -258,7 +247,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 
 					@Override
 					public void onSuccess(Void result) {
-						
+
 					}
 				});
 				codeEntryMsg.setText(aQuest.getVictoryText());

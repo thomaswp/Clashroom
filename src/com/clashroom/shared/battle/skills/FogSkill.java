@@ -13,7 +13,7 @@ public class FogSkill extends PassiveSkill {
 
 	@Override
 	public int getSkillPointCost() {
-		return 5;
+		return 3;
 	}
 
 	@Override

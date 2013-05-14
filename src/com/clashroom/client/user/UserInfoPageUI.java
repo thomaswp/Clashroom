@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.NumberLabel;
 
-public class UserInfo extends Composite {
+public class UserInfoPageUI extends Composite {
 
 	private DragonEntity dragon;
 
@@ -164,7 +164,7 @@ public class UserInfo extends Composite {
 		this.userInfoService = userInfoService;
 	}
 
-	public UserInfo() {
+	public UserInfoPageUI() {
 
 		VerticalPanel vPanelMain = new VerticalPanel();
 		if (Beans.isDesignTime()) {

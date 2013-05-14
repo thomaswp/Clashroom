@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import com.clashroom.client.Page;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
@@ -27,8 +28,7 @@ public class CreatedQuestsPage extends Page {
 
     public final static String NAME = "AvailableQuests";
 
-    private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
-                                    .create(QuestRetrieverService.class);
+    private static QuestRetrieverServiceAsync questRetrieverSvc = Services.questRetrieverService;
 
     private ArrayList<QuestEntity> availableQuests;
     private CreatedQuestsWidget questsWidget;

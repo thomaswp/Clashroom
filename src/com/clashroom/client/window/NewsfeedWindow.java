@@ -5,8 +5,10 @@ import java.util.List;
 
 import com.clashroom.client.Clashroom;
 import com.clashroom.client.Styles;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
+import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.news.NewsfeedItem;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -20,12 +22,12 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class NewsfeedWindow extends Composite {
+public class NewsfeedWindow extends Composite implements IWindow {
 	
 	private final static DateTimeFormat dateFormat = 
 			DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT);
 	
-	private UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
+	private UserInfoServiceAsync userInfoService = Services.userInfoService;
 	
 	private FlexTable tableMe, tableEveryone;
 	
@@ -115,13 +117,6 @@ public class NewsfeedWindow extends Composite {
 	}
 	
 	private void populateTable(FlexTable table, List<NewsfeedItem> news) {
-//		String[] headers = new String[] {
-//				"When", "What"
-//		};
-//		
-//		for (int i = 0; i < headers.length; i++) {
-//			table.setText(0, i, headers[i]);
-//		}
 		
 		int row = 1;
 		for (NewsfeedItem item : news) {
@@ -130,5 +125,10 @@ public class NewsfeedWindow extends Composite {
 			table.setWidget(row, col++, item.getInfoWidget());
 			row++;
 		}
+	}
+
+	@Override
+	public void onReceiveUserInfo(UserEntity user) {
+		
 	}
 }

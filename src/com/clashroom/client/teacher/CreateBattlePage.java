@@ -11,6 +11,7 @@ import com.clashroom.client.FlowControl;
 import com.clashroom.client.Page;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.widget.VerticalPanelWithSpacer;
@@ -35,8 +36,8 @@ public class CreateBattlePage extends Page {
 
 	public final static String NAME = "CreateBattle";
 
-	private UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
-	private BattleServiceAsync battleService = GWT.create(BattleService.class);
+	private UserInfoServiceAsync userInfoService = Services.userInfoService;
+	private BattleServiceAsync battleService = Services.battleService;
 
 	private PickupDragController dragController;
 

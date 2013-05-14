@@ -7,6 +7,7 @@ package com.clashroom.client.teacher;
 
 import java.util.ArrayList;
 
+import com.clashroom.client.quest.QuestDetailPage;
 import com.clashroom.shared.entity.QuestEntity;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;

@@ -5,6 +5,7 @@ import com.clashroom.client.FlowControl;
 import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.Debug;
@@ -17,10 +18,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 public class UserInfoPage extends Page {
 	public final static String NAME = "UserInfo";
 	
-	private static UserInfoServiceAsync userInfoService = 
-			GWT.create(UserInfoService.class);
+	private static UserInfoServiceAsync userInfoService = Services.userInfoService;
 	
-	private UserInfo userInfoWidget;
+	private UserInfoPageUI userInfoWidget;
 	private UserEntity user;
 	
 	public UserInfoPage() {
@@ -70,7 +70,7 @@ public class UserInfoPage extends Page {
 //		link.addStyleName(Styles.back_button);
 //		panel.add(link);
 		Window.setTitle("My Info");
-		userInfoWidget = new UserInfo();
+		userInfoWidget = new UserInfoPageUI();
 		userInfoWidget.setUserService(userInfoService);
 		userInfoWidget.addStyleName(Styles.position_relative);
 		userInfoWidget.setWidth("600px");

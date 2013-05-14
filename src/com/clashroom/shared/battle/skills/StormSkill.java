@@ -11,7 +11,7 @@ public class StormSkill extends ActiveSkill {
 
 	@Override
 	public int getSkillPointCost() {
-		return 3;
+		return 5;
 	}
 
 	@Override

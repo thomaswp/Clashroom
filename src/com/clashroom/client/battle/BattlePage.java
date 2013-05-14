@@ -6,6 +6,7 @@ import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.BattleService;
 import com.clashroom.client.services.BattleServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.Battle;
@@ -47,8 +48,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 
 	public final static String NAME = "Battle";
 
-	private final BattleServiceAsync battleService = GWT
-			.create(BattleService.class);
+	private final BattleServiceAsync battleService = Services.battleService;
 
 	private BattleFactory factory;
 	private long entityId;

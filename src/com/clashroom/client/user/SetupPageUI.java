@@ -33,7 +33,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-public class SetupUser extends Composite {
+public class SetupPageUI extends Composite {
 	
 	private static final int SCROLL = 25;
 	
@@ -53,7 +53,7 @@ public class SetupUser extends Composite {
 	private UserEntity user;
 	private Runnable onFinishedHandler;
 	
-	public SetupUser() {
+	public SetupPageUI() {
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		initWidget(verticalPanel);
@@ -314,7 +314,7 @@ public class SetupUser extends Composite {
 
 					focusedPanel.setStyleName("selected");
 					//focusPanel.setStyleName("border");
-					SetupUser.this.dragonClass = dragonClass; 
+					SetupPageUI.this.dragonClass = dragonClass; 
 					htmlDragonDescription.setHTML(Formatter.format(
 							"<b>%s</b>: %s", dragonClass.getName(), 
 							dragonClass.getDescription()));

@@ -1,11 +1,18 @@
 package com.clashroom.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.clashroom.client.services.Services;
 import com.clashroom.client.user.UserInfoPage;
+import com.clashroom.client.window.IWindow;
 import com.clashroom.client.window.ListBattleWindow;
 import com.clashroom.client.window.NewsfeedWindow;
 import com.clashroom.client.window.QuestsWindow;
 import com.clashroom.client.window.TasksWindow;
 import com.clashroom.client.window.UserInfoWindow;
+import com.clashroom.shared.entity.UserEntity;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -16,27 +23,47 @@ public class HomePage extends Page {
 	
 	public final static String NAME = "home";
 
+	private List<IWindow> windows = new ArrayList<IWindow>();
+	
 	public HomePage() {
 		this(NAME);
 	}
 	
-	public HomePage(String token) {
-		super(token);
-		
+	public HomePage(UserEntity user) {
+		super(NAME);
 		setup();
+		userCallback(user);
 	}
 	
-	public void setup() {		
+	public HomePage(String token) {
+		super(token);
+		setup();
+		Services.userInfoService.getUser(new AsyncCallback<UserEntity>() {
+			@Override
+			public void onSuccess(UserEntity result) {
+				userCallback(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
+			}
+		});
+	}
+	
+	private void userCallback(UserEntity user) {
+		for (IWindow window : windows) window.onReceiveUserInfo(user);
+	}
+	
+	private void setup() {		
 		AbsolutePanel main = new AbsolutePanel();
 		main.addStyleName(NAME);
 		
 		VerticalPanel box = new VerticalPanel();
 		box.addStyleName("column");
 		box.addStyleName("side");
-		Hyperlink link = new Hyperlink("Profile", UserInfoPage.NAME);
-		link.addStyleName(Styles.text_title);
-		//box.add(link);
 		final UserInfoWindow userInfoWindow = new UserInfoWindow();
+		windows.add(userInfoWindow);
 		box.add(userInfoWindow);
 		box.setWidth("24%");
 		box.setHeight("690px");
@@ -46,28 +73,31 @@ public class HomePage extends Page {
 		box.addStyleName("column");
 		box.addStyleName("center");
 		box.setWidth("50%");
-		QuestsWindow qw = new QuestsWindow();
-		box.add(qw);
-		link = new Hyperlink("Arena Listings", ListBattleWindow.NAME);
-		link.addStyleName(Styles.text_title);
-		//box.add(link);
-		box.add(new ListBattleWindow());
+		QuestsWindow questWindow = new QuestsWindow();
+		windows.add(questWindow);
+		box.add(questWindow);
+		ListBattleWindow listBattleWindow = new ListBattleWindow();
+		windows.add(listBattleWindow);
+		box.add(listBattleWindow);
 		main.add(box);
 		
 		box = new VerticalPanel();
 		box.addStyleName("column");
 		box.addStyleName("side");
 		
-		box.add(new NewsfeedWindow());
+		NewsfeedWindow newsfeedWindow = new NewsfeedWindow();
+		windows.add(newsfeedWindow);
+		box.add(newsfeedWindow);
 		
-		TasksWindow sqw = new TasksWindow();
-		sqw.setOnQuestCompletedListener(new Runnable() {
+		TasksWindow tasksWindow = new TasksWindow();
+		windows.add(tasksWindow);
+		tasksWindow.setOnQuestCompletedListener(new Runnable() {
 			@Override
 			public void run() {
 				userInfoWindow.update();
 			}
 		});
-		box.add(sqw);
+		box.add(tasksWindow);
 		box.setWidth("24%");
 		main.add(box);
 		

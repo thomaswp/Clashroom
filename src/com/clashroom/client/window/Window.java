@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FocusPanel;
 
 
-public abstract class Window extends Composite {
+public abstract class Window extends Composite implements IWindow {
 	
 	protected FocusPanel focusPanel;
 	

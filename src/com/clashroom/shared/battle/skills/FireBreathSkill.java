@@ -16,7 +16,6 @@ public class FireBreathSkill extends ActiveSkill {
 
 	@Override
 	public int getSkillPointCost() {
-		// TODO Auto-generated method stub
-		return 4;
+		return 5;
 	}
 }

@@ -244,4 +244,9 @@ public class TasksWindow extends Window {
 		});
 	}
 
+	@Override
+	public void onReceiveUserInfo(UserEntity user) {
+
+	}
+
 }

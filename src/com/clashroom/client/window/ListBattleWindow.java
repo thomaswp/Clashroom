@@ -15,6 +15,7 @@ import com.clashroom.shared.battle.BattleFactory;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.entity.BattleEntity;
 import com.clashroom.shared.entity.QueuedBattleEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
@@ -26,7 +27,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class ListBattleWindow extends Composite {
+public class ListBattleWindow extends Composite implements IWindow {
 
 	private static DateTimeFormat dateFormat = 
 			DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT); 
@@ -157,6 +158,11 @@ public class ListBattleWindow extends Composite {
 				caught.printStackTrace();
 			}
 		});
+	}
+
+	@Override
+	public void onReceiveUserInfo(UserEntity user) {
+		
 	}
 
 }

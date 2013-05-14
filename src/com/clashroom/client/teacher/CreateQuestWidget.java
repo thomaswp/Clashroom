@@ -7,6 +7,7 @@ import com.clashroom.client.services.ItemRetrieverService;
 import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.shared.Constant;
 import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.QuestEntity;
@@ -36,64 +37,64 @@ import com.google.gwt.user.datepicker.client.DatePicker;
 public class CreateQuestWidget extends Composite implements ChangeHandler,FocusHandler, 
 ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	
-		private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
-            .create(QuestRetrieverService.class);
+		private static QuestRetrieverServiceAsync questRetrieverSvc = Services.questRetrieverService;
 		
-		private static ItemRetrieverServiceAsync itemsRetrieverSvc = GWT
-				.create(ItemRetrieverService.class);
+		private static ItemRetrieverServiceAsync itemsRetrieverSvc = Services.itemRetrieverService;
 	
-		private final Button addRemoveItem = new Button("Add Item");
-	    private final ListBox autoGenerateCode = new ListBox();
-	    private final Button availableAMPM = new Button("AM");
-	    private final TextBox awardedXP = new TextBox();
-	    private final TextBox codeInput = new TextBox();
-	    private final ListBox completionType = new ListBox();
+		private Button addRemoveItem = new Button("Add Item");
+	    private ListBox autoGenerateCode = new ListBox();
+	    private Button availableAMPM = new Button("AM");
+	    private TextBox awardedXP = new TextBox();
+	    private TextBox questPointsAwarded = new TextBox();
+	    private TextBox codeInput = new TextBox();
+	    private ListBox completionType = new ListBox();
 	    private ArrayList<QuestEntity> createdQuests = new ArrayList<QuestEntity>();
-	    private final DatePicker dateAvailable = new DatePicker();
-	    private final DatePicker dateUnavailable = new DatePicker();
-	    private final HorizontalPanel hPanel = new HorizontalPanel();
-	    private final HorizontalPanel hPanel2 = new HorizontalPanel();
-	    private final HorizontalPanel hPanel3 = new HorizontalPanel();
-	    private final HorizontalPanel hPanel4 = new HorizontalPanel();
-	    private final ListBox itemsAvailable = new ListBox();
+	    private DatePicker dateAvailable = new DatePicker();
+	    private DatePicker dateUnavailable = new DatePicker();
+	    private HorizontalPanel hPanel = new HorizontalPanel();
+	    private HorizontalPanel hPanel2 = new HorizontalPanel();
+	    private HorizontalPanel hPanel3 = new HorizontalPanel();
+	    private HorizontalPanel hPanel4 = new HorizontalPanel();
+	    private ListBox itemsAvailable = new ListBox();
 	    private ArrayList<ItemEntity> itemsAvailableList = new ArrayList<ItemEntity>();
-	    private final TextBox itemsForServer = new TextBox();
-	    private final ListBox itemsSelected = new ListBox();
-	    private final ArrayList<ItemEntity> itemsSelectedList = new ArrayList<ItemEntity>();
-	    private final Label label1 = new Label("Enter the name of the quest.");
-	    private final Label label10 = new Label();
-	    private final Label label11 = new Label();
-	    private final Label label12 = new Label(
+	    private TextBox itemsForServer = new TextBox();
+	    private ListBox itemsSelected = new ListBox();
+	    private ArrayList<ItemEntity> itemsSelectedList = new ArrayList<ItemEntity>();
+	    private Label label1 = new Label("Enter the name of the quest.");
+	    private Label label10 = new Label();
+	    private Label label11 = new Label();
+	    private Label label12 = new Label(
 	                                    "When will this quest be no more?");
-	    private final Label label13 = new Label();
-	    private final Label label14 = new Label(
+	    private Label label13 = new Label();
+	    private Label label14 = new Label(
 	                                    "Every adveturer needs some words of encouragement for completing a quest. What shall you tell them upon completion?");
-	    private final Label label2 = new Label(
+	    private Label label2 = new Label(
 	                                    "Please tell the tale of this quest.");
-	    private final Label label3 = new Label(
+	    private Label label3 = new Label(
 	                                    "How shall you know the quest is complete?");
-	    private final Label label4 = new Label();
-	    private final Label label5 = new Label();
-	    private final Label label6 = new Label(Constant.TERM_EXP + " gained from quest");
-	    private final Label label7 = new Label("Items obtained from quest:");
-	    private final Label label8 = new Label(
+	    private Label label4 = new Label();
+	    private Label label5 = new Label();
+	    private Label label6 = new Label(Constant.TERM_EXP + " gained from quest");
+	    private Label label7 = new Label("Items obtained from quest:");
+	    private Label label8 = new Label(
 	                                    "How shall adveturers know of this quest?");
-	    private final Label label9 = new Label();
-	    private final ListBox questAvailability = new ListBox();
-	    private final TextArea questDescription = new TextArea();
-	    private final FormPanel questForm = new FormPanel();
-	    private final TextBox questName = new TextBox();
-	    private final ListBox questPrereq = new ListBox();
-	    private final ListBox questUnavailability = new ListBox();
-	    private final TextBox requiredLvl = new TextBox();
-	    private final Button submitQuest = new Button("Create Quest!");
-	    private final ListBox timeAvailableHours = new ListBox();
-	    private final ListBox timeAvailableMinutes = new ListBox();
-	    private final ListBox timeUnAvailableHours = new ListBox();
-	    private final ListBox timeUnAvailableMinutes = new ListBox();
-	    private final Button unAvailableAMPM = new Button("AM");
-	    private final TextArea victoryText = new TextArea();
-	    private final VerticalPanel mainPanel = new VerticalPanel();
+	    private Label label9 = new Label();
+	    private Label label15 = new Label("How many quest points shall the adveturer reciver for their efforts?");
+	    private ListBox questAvailability = new ListBox();
+	    private TextArea questDescription = new TextArea();
+	    private FormPanel questForm = new FormPanel();
+	    private TextBox questName = new TextBox();
+	    private ListBox questPrereq = new ListBox();
+	    private ListBox questUnavailability = new ListBox();
+	    private TextBox requiredLvl = new TextBox();
+	    private Button submitQuest = new Button("Create Quest!");
+	    private ListBox timeAvailableHours = new ListBox();
+	    private ListBox timeAvailableMinutes = new ListBox();
+	    private ListBox timeUnAvailableHours = new ListBox();
+	    private ListBox timeUnAvailableMinutes = new ListBox();
+	    private Button unAvailableAMPM = new Button("AM");
+	    private TextArea victoryText = new TextArea();
+	    private VerticalPanel mainPanel = new VerticalPanel();
 	
 	public CreateQuestWidget(){	
 		
@@ -295,6 +296,8 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
         mainPanel.add(label6);
         mainPanel.add(awardedXP);
         mainPanel.add(label7);
+        mainPanel.add(label15);
+        mainPanel.add(questPointsAwarded);
         mainPanel.add(hPanel);
         hPanel.add(itemsAvailable);
         hPanel.add(itemsSelected);
@@ -483,6 +486,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
         timeUnAvailableMinutes.setVisibleItemCount(1);
         unAvailableAMPM.setVisible(false);
         victoryText.setName("Victory Text");
+        questPointsAwarded.setName("Quest Points");
 
     }
 }

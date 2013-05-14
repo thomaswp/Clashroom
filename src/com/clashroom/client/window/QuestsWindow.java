@@ -6,6 +6,7 @@ import com.clashroom.client.services.ItemRetrieverService;
 import com.clashroom.client.services.ItemRetrieverServiceAsync;
 import com.clashroom.client.services.QuestRetrieverService;
 import com.clashroom.client.services.QuestRetrieverServiceAsync;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.Debug;
@@ -25,18 +26,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * This Window is meant to be used on the main page
  */
 
-public class QuestsWindow extends Composite {
+public class QuestsWindow extends Composite implements IWindow {
 
 	public final static String NAME = "studentQuests";
 
-	private static QuestRetrieverServiceAsync questRetrieverSvc = GWT
-			.create(QuestRetrieverService.class);
-
-	private static UserInfoServiceAsync userRetrieverSvc = GWT
-			.create(UserInfoService.class);
-
-	private static ItemRetrieverServiceAsync itemCreatorSvc = GWT
-			.create(ItemRetrieverService.class);
+	private static QuestRetrieverServiceAsync questRetrieverSvc = Services.questRetrieverService;
 
 	private ArrayList<QuestEntity> availableQuests;
 	private UserEntity currentUser;
@@ -44,35 +38,8 @@ public class QuestsWindow extends Composite {
 
 	public QuestsWindow(){
 
-		if(userRetrieverSvc == null){
-			userRetrieverSvc = GWT.create(UserInfoService.class);
-		}
-
-		if (questRetrieverSvc == null) 
-		{ 
-			questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-		}
-
-
-
-
-		AsyncCallback<UserEntity> callBack = new AsyncCallback<UserEntity>(){
-
-			@Override
-			public void onFailure(Throwable caught) {
-				System.err.println("Error: RPC Call Failed");
-				caught.printStackTrace();		
-			}
-
-			@Override
-			public void onSuccess(UserEntity result) {
-				currentUser = result;	
-			}
-
-		};
-
 		// Set up the callback object.
-		AsyncCallback<ArrayList<QuestEntity>> callback = new
+		AsyncCallback<ArrayList<QuestEntity>> questCallback = new
 				AsyncCallback<ArrayList<QuestEntity>>() {
 
 			@Override public void onFailure(Throwable caught) {
@@ -89,35 +56,22 @@ public class QuestsWindow extends Composite {
 
 		setUpUI(); 
 
-		userRetrieverSvc.getUser(callBack);
-		questRetrieverSvc.retrieveQuests(callback);        
+		questRetrieverSvc.retrieveQuests(questCallback);        
 	}
 
 	public void listStudentQuests() {
-		/*
-		 * Will be taken out later. Meant to just check if any quests
-		 * exists and if they don't create one and slap it in.
-		 */
-		if(availableQuests.size() < 1){
-			createDummyQuest();
-		}        
-
-		String[] headers = new String[] {
-				"Quest Name", "Description", "Reward", "Type"
-		};
-
-//		for (int i = 0; i < headers.length; i++) {
-//			studentQuests.setText(0, i, headers[i]);
-//			if (i == 0) studentQuests.getColumnFormatter().setWidth(i, "25%");
-//			else if (i==1) studentQuests.getColumnFormatter().setWidth(i, "50%");
-//			else if (i==2) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
-//			else if (i==3) studentQuests.getColumnFormatter().setWidth(i, "12.5%");
-//		}
+		if (currentUser == null || availableQuests == null) {
+			return;
+		}
+		
+		int row = 1;
 		for (int i = 0; i < availableQuests.size(); i++) 
-		{	
+		{
 			if(!currentUser.getCompletedQuests().contains(availableQuests.get(i).getId())){
-				studentQuests.setWidget(i + 1, 0, new QuestInnerWindow(availableQuests.get(i)));
+				studentQuests.setWidget(row++, 0, new QuestInnerWindow(availableQuests.get(i)));
 				studentQuests.getFlexCellFormatter().setColSpan(i+1, 0, 4);
+			} else {
+				Debug.write("completed");
 			}
 		}
 
@@ -150,10 +104,10 @@ public class QuestsWindow extends Composite {
 		
 		for (int i = 0; i < headers.length; i++) {
 			outer.setText(0, i, headers[i]);
-			if (i == 0) outer.getColumnFormatter().setWidth(i, "25%");
+			if (i == 0) outer.getColumnFormatter().setWidth(i, "20%");
 			else if (i==1) outer.getColumnFormatter().setWidth(i, "50%");
-			else if (i==2) outer.getColumnFormatter().setWidth(i, "12.5%");
-			else if (i==3) outer.getColumnFormatter().setWidth(i, "12.5%");
+			else if (i==2) outer.getColumnFormatter().setWidth(i, "10%");
+			else if (i==3) outer.getColumnFormatter().setWidth(i, "25%");
 		}
 		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
 		outer.getRowFormatter().addStyleName(0, Styles.table_header);
@@ -167,59 +121,10 @@ public class QuestsWindow extends Composite {
 		initWidget(main);
 	}
 
-	/*
-	 * For testing purposes, will eventually delete
-	 */
-	private void createDummyQuest(){
-
-		if (questRetrieverSvc == null) 
-		{ 
-			questRetrieverSvc = GWT.create(QuestRetrieverService.class); 
-		}
-
-		// Set up the callback object.
-		AsyncCallback<String> callback = new
-				AsyncCallback<String>() {
-
-			@Override 
-			public void onFailure(Throwable caught) {
-				System.err.println("Error: RPC Call Failed");
-				caught.printStackTrace(); 
-			}
-
-			@Override 
-			public void onSuccess(String result) 
-			{ 
-
-			} };
-
-			questRetrieverSvc.addDummyQuest(callback); 	
-	}
-
-	private void createItems(){
-
-		if (itemCreatorSvc == null) 
-		{ 
-			itemCreatorSvc = GWT.create(ItemRetrieverService.class); 
-		}
-
-		// Set up the callback object.
-		AsyncCallback<Void> callback = new
-				AsyncCallback<Void>() {
-
-			@Override 
-			public void onFailure(Throwable caught) {
-				System.err.println("Error: RPC Call Failed");
-				caught.printStackTrace(); 
-			}
-
-			@Override 
-			public void onSuccess(Void result) 
-			{ 
-
-			} };
-
-			itemCreatorSvc.addItems(callback); 	
+	@Override
+	public void onReceiveUserInfo(UserEntity user) {
+		currentUser = user;
+		listStudentQuests();
 	}
 }
 

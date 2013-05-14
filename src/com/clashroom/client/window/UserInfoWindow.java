@@ -2,6 +2,7 @@ package com.clashroom.client.window;
 
 import com.clashroom.client.FlowControl;
 import com.clashroom.client.Styles;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.user.UserInfoPage;
@@ -23,8 +24,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class UserInfoWindow extends Window {
 	
-	private static UserInfoServiceAsync userInfoService = 
-			GWT.create(UserInfoService.class);
+	private final static UserInfoServiceAsync userInfoService = Services.userInfoService;
 	
 	private UserEntity user;
 	private Image image;
@@ -41,15 +41,13 @@ public class UserInfoWindow extends Window {
 	public UserInfoWindow() {
 		super();
 		setupUI();
-		update();
 	}
 	
 	public void update() {
 		userInfoService.getUser(new AsyncCallback<UserEntity>() {
 			@Override
 			public void onSuccess(UserEntity result) {
-				user = result;
-				populate();
+				onReceiveUserInfo(result);
 			}
 			
 			@Override
@@ -186,6 +184,12 @@ public class UserInfoWindow extends Window {
 	@Override
 	public void click() {
 		FlowControl.go(new UserInfoPage());
+	}
+
+	@Override
+	public void onReceiveUserInfo(UserEntity user) {
+		this.user = user;
+		populate();
 	}
 
 }

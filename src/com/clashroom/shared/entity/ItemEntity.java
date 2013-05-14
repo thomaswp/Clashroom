@@ -33,7 +33,7 @@ public class ItemEntity implements Serializable {
 	private ItemType itemType;
 	
 	@Persistent
-	private String desctiption;
+	private String desciption;
 	
 	@Persistent(serialized = "true")
 	private Skill skill;
@@ -49,10 +49,10 @@ public class ItemEntity implements Serializable {
 	public ItemEntity(String aName, String aDescription,
 			Skill aSkill,ItemType theitemType,String imageDir){
 		this.name = aName;
-		this.desctiption = aDescription;
+		this.desciption = aDescription;
 		this.skill = aSkill;
 		this.itemType = theitemType;
-		this.imageDir = "/img/itemIMG/"+imageDir;
+		this.imageDir = "/img/items/"+imageDir;
 	}
 	
 	public String getName() {
@@ -63,12 +63,12 @@ public class ItemEntity implements Serializable {
 		this.name = name;
 	}
 
-	public String getDesctiption() {
-		return desctiption;
+	public String getDescription() {
+		return desciption;
 	}
 
-	public void setDesctiption(String desctiption) {
-		this.desctiption = desctiption;
+	public void setDesciption(String desctiption) {
+		this.desciption = desctiption;
 	}
 
 	public Long getId() {

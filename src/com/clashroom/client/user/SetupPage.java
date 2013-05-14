@@ -3,6 +3,7 @@ package com.clashroom.client.user;
 import com.clashroom.client.FlowControl;
 import com.clashroom.client.HomePage;
 import com.clashroom.client.Page;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.entity.UserEntity;
@@ -14,8 +15,7 @@ public class SetupPage extends Page {
 
 	public final static String NAME = "Setup";
 
-	private static UserInfoServiceAsync userInfoService =
-			GWT.create(UserInfoService.class);
+	private static UserInfoServiceAsync userInfoService = Services.userInfoService;
 	
 	private UserEntity user;
 	
@@ -47,12 +47,12 @@ public class SetupPage extends Page {
 		});
 	}
 	
-	private SetupUser form;
+	private SetupPageUI form;
 	
 	private void setupUI() {
 		Window.setTitle("Setup");
 	
-		form = new SetupUser();
+		form = new SetupPageUI();
 		form.addStyleName(NAME);
 		initWidget(form);
 	}

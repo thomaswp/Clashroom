@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import com.clashroom.client.FlowControl;
 import com.clashroom.client.Page;
 import com.clashroom.client.Styles;
+import com.clashroom.client.services.Services;
 import com.clashroom.client.services.TaskService;
 import com.clashroom.client.services.TaskServiceAsync;
 import com.clashroom.client.services.UserInfoService;
@@ -45,8 +46,8 @@ public class SideQuestPage extends Page {
 	private ProgressBar totalBar = new ProgressBar();
 	private ArrayList<Task> quests;// = new ArrayList<Quest>();
 	private ActiveTaskList aql = new ActiveTaskList();
-	private static TaskServiceAsync questService = GWT.create(TaskService.class);
-	private static UserInfoServiceAsync userInfoService = GWT.create(UserInfoService.class);
+	private final static TaskServiceAsync taskService = Services.taskService;
+	private final static UserInfoServiceAsync userInfoService = Services.userInfoService;
 	private UserEntity user;
 	private Timer refreshTimer;
 	
@@ -217,7 +218,7 @@ public class SideQuestPage extends Page {
 	
 	//Requests datastore to persist the AQl
 	public void persistAQL(){
-		questService.persistAQL(user.getId(), aql, new AsyncCallback<String>() {
+		taskService.persistAQL(user.getId(), aql, new AsyncCallback<String>() {
 			@Override
 			public void onSuccess(String result) {
 				System.out.println(result);
@@ -233,7 +234,7 @@ public class SideQuestPage extends Page {
 	
 	//Requests datastore for the list of available quests
 	public void getAvailableQuests(){
-		questService.getAvailableQuests(new AsyncCallback<ArrayList<Task>>() {
+		taskService.getAvailableQuests(new AsyncCallback<ArrayList<Task>>() {
 			@Override
 			public void onSuccess(ArrayList<Task> result) {
 				quests = result;
@@ -249,7 +250,7 @@ public class SideQuestPage extends Page {
 	
 	//Requests datastore for the list of Active quests
 	public void getActiveQuests(Long userID) {
-		questService.getActiveQuests(userID, new AsyncCallback<ActiveTaskList>() {
+		taskService.getActiveQuests(userID, new AsyncCallback<ActiveTaskList>() {
 			@Override
 			public void onSuccess(ActiveTaskList result) {
 				aql = result;
@@ -340,7 +341,7 @@ public class SideQuestPage extends Page {
 			
 			//Check for active Quest for completion
 			if (aql.activeTimeLeft() <= 0 && aql.getAllQuests().size() > 0){
-				questService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
+				taskService.completeQuest(user.getId(), aql, new AsyncCallback<String>() {
 
 					@Override
 					public void onFailure(Throwable caught) {
