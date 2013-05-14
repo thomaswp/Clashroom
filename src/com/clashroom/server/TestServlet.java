@@ -121,7 +121,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 "Congratulations! You are well on your way to becoming a great dragon trainer!.","",
-                itemList, 200);
+                itemList, 1);
 		questList.add(quest1);
 		
 		QuestEntity quest2 = new QuestEntity("Wait..what do dragons eat again?", "You are still in the process of understanding your role as a dragon trainer. " +
@@ -132,7 +132,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 "Delicious! Is what your dragon would say if it could talk... but you know deep inside it enjoyed the food you brought it.","",
-                itemList, 200);
+                itemList, 1);
 		questList.add(quest2);
 		
 		QuestEntity quest3 = new QuestEntity("Dragon Trainer's Liscense: Part 1", "Hmmmm, who would have thought you needed a liscense to train a dragon. Obtaining a " +
@@ -143,7 +143,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 "It seems like you're at the right place. As you walk in you take a right and notice a room of futuristic scientist hard at work on their weird light boxes.","",
-                itemList, 100);
+                itemList, 1);
 		questList.add(quest3);
 		
 		QuestEntity quest4 = new QuestEntity("Dragon Trainer's Liscense: Part 2", " After walking past the room with light boxes you notice a seating area." +
@@ -154,7 +154,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 " Haladas Lunn Von, hmmm you have never heard of her. And there is no record of her ever existing in the Land of Elon, you take a closer look at the name.","",
-                itemList, 150);
+                itemList, 1);
 		questList.add(quest4);
 		
 		QuestEntity quest5 = new QuestEntity("Dragon Trainer's Liscense: Part 3", " Who is this sorceress? At this rate you'll never be able to get a liscense." +
@@ -164,7 +164,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 " Yes! You have figured it out. Haladas Lunn Vonn turns out to be an anagram for Shannon Duvall! She will be able to give you a dragon trainer's liscense!","",
-                itemList, 200);
+                itemList, 1);
 		questList.add(quest5);
 		
 		QuestEntity quest6 = new QuestEntity("Dragon Trainer's Liscense: Part 4", " You finally find the sorceress who will provide you with a dragon trainer's liscense." +
@@ -174,7 +174,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 " Awesome, a moth was the correct answer. You have finally recived your dragon trainer's liscense! Look out dragon trainers there is a new kid in town... ","",
-                itemList, 100);
+                itemList, 1);
 		questList.add(quest6);
 		
 		QuestEntity quest7 = new QuestEntity("Wealth flows in the Land: Part 1"," While exploring The Land of Oaks you notice a change." +
@@ -184,7 +184,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 " You didn't get a chance to meet with the monarch but your name is now known at this castle. Could this be a possible sponsor for the future?","",
-                itemList, 100);
+                itemList, 1);
 		questList.add(quest7);
 		
 		QuestEntity quest8 = new QuestEntity("Wealth flows in the Land: Part 2"," While continuing to explore The Land of Oaks you notice another change." +
@@ -194,7 +194,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 " You didn't get a chance to meet with the monarch but your name is now known at this castle. Could this be a possible sponsor for the future?","",
-                itemList, 100);
+                itemList, 1);
 		questList.add(quest8);
 		
 		QuestEntity quest9 = new QuestEntity("Wealth flows in the Land: Part 3"," While continuing to explore The Land of Oaks you notice another change." +
@@ -204,7 +204,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 "You didn't get a chance to meet with the monarch but your name is now known at this castle. Could this be a possible sponsor for the future?","",
-                itemList, 100);
+                itemList, 1);
 		questList.add(quest9);
 		
 		QuestEntity quest10 = new QuestEntity("Wealth flows in the Land: Part 4"," While continuing to explore The Land of Oaks you notice another change." +
@@ -214,7 +214,7 @@ public class TestServlet extends HttpServlet {
                 "5-9-13 3:22am",
                 "This quest will not expire",
                 "You didn't get a chance to meet with the monarch but your name is now known at this castle. Could this be a possible sponsor for the future?","",
-                itemList, 100);
+                itemList, 1);
 		questList.add(quest10);
     	 
          try {
