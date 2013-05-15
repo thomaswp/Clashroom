@@ -154,82 +154,82 @@ public void createRealWorldQuests(){
 		}
 		
 		QuestEntity quest1 = new QuestEntity("A Dragon Trainer is Born", "You are now a dragon trainer, but what do you do? How do you become the best trainer out there? " +
-				"You adveture leads you to the temple of Belk. There you feel inclined to sit in the back on the first floor and begin your studies." +
+				"Your adventure leads you to the temple of Belk. There you feel inclined to sit in the back on the first floor and begin your studies." +
 				" You start by checking a very large Webster dictionary to see what more you can learn about dragons. You find this dictionary closest to the window and" +
 				"on top of a book shelf.", "dragonknowledge",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                "Congratulations! You are well on your way to becoming a great dragon trainer!.","",
+                "Congratulations! You are well on your way to becoming a great dragon trainer!","",
                 itemList, 1);
 		questList.add(quest1);
 		
 		QuestEntity quest2 = new QuestEntity("Wait..what do dragons eat again?", "You are still in the process of understanding your role as a dragon trainer. " +
-				"Dragons, like other animals, need food but what do dragons eat? And where do you go to find it? Luckily you over hear another dragon trainer mention something " +
-				"about going to the Mosely market to pick up their dragon some food for the road. You decide to travel to Mosely market to find some food for your dragon" +
+				"Dragons, like other animals, need food but what do dragons eat? And where do you go to find it? Luckily you over heard another dragon trainer mention something " +
+				"about going to the Mosley market to pick up some dragon food for the road. You decide to travel to Mosley market to find some food for your dragon" +
 				" no matter what. Even if that means looking under every table.", "dragonchow",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                "Delicious! Is what your dragon would say if it could talk... but you know deep inside it enjoyed the food you brought it.","",
+                "Delicious! Is what your dragon would say if it could talk... but you know deep inside that it enjoyed the food you brought it.","",
                 itemList, 1);
 		questList.add(quest2);
 		
-		QuestEntity quest3 = new QuestEntity("Dragon Trainer's Liscense: Part 1", "Hmmmm, who would have thought you needed a liscense to train a dragon. Obtaining a " +
-				" liscense shouldn't be too hard though, right? You decide to head to the castle of mathematicians and futuristic scientists who have the ability" +
-				" to program these wierd machines that look like boxes of light. What was the name of that castle again? You decide to sit and ponder the name" +
-				" before you venture out for a liscense. Knowing the name of the castle first will make it easier to find", "Duke",
+		QuestEntity quest3 = new QuestEntity("Dragon Trainer's License: Part 1", "Hmmmm, who would have thought you needed a license to train a dragon? Obtaining a " +
+				" license shouldn't be too hard though, right? You decide to head to the castle of mathematicians and futuristic scientists who have the ability" +
+				" to program these weird machines that look like boxes of light. What was the name of that castle again? You decide to sit and ponder the name" +
+				" before you venture out for a license. Knowing the name of the castle first will make it easier to find.", "Duke",
                 100, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                "It seems like you're at the right place. As you walk in you take a right and notice a room of futuristic scientist hard at work on their weird light boxes.","",
+                "It seems like you're at the right place. As you walk in, you take a right and notice a room of futuristic scientist hard at work on their weird light boxes.","",
                 itemList, 1);
 		questList.add(quest3);
 		
-		QuestEntity quest4 = new QuestEntity("Dragon Trainer's Liscense: Part 2", " After walking past the room with light boxes you notice a seating area." +
-				" You figure if you just wait here someone will assist you momentarily and give you a dragon trainer's liscense. To past the time you" +
-				" look through some left out scrolls on the table. What's this? You see a letter stating that those who wish to obtain a dragon liscense must" +
+		QuestEntity quest4 = new QuestEntity("Dragon Trainer's License: Part 2", " After walking past the room with light boxes you notice a seating area." +
+				" You figure if you just wait here someone will assist you momentarily and give you a dragon trainer's license. To past the time you" +
+				" look through some left out scrolls on the table. What's this? You see a letter stating that those who wish to obtain a dragon trainer license must" +
 				" speak to a sorceress by the name of...without second thought you write down the name and go to seek out this person.", "Haldas Lunn Von",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                " Haladas Lunn Von, hmmm you have never heard of her. And there is no record of her ever existing in the Land of Elon, you take a closer look at the name.","",
+                "Haldas Lunn Von, hmmm you have never heard of her. And there is no record of her ever existing in the Land of Elon; you take a closer look at the name.","",
                 itemList, 1);
 		questList.add(quest4);
 		
-		QuestEntity quest5 = new QuestEntity("Dragon Trainer's Liscense: Part 3", " Who is this sorceress? At this rate you'll never be able to get a liscense." +
+		QuestEntity quest5 = new QuestEntity("Dragon Trainer's License: Part 3", " Who is this sorceress? At this rate you'll never be able to get a License." +
 				" Perhaps if you go back to the castle where you found this letter you will be able to find her. Checking the name tags on the outside of" +
 				" the room doors seems like a good idea. You look at the name one more time...hmmm is this possibly an anagram of some sort?", "Shannon Duvall",
                 200, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                " Yes! You have figured it out. Haladas Lunn Vonn turns out to be an anagram for Shannon Duvall! She will be able to give you a dragon trainer's liscense!","",
+                "Yes! You have figured it out. Haldas Lunn Von turns out to be an anagram for Shannon Duvall! She will be able to give you a dragon trainer's license!","",
                 itemList, 1);
 		questList.add(quest5);
 		
-		QuestEntity quest6 = new QuestEntity("Dragon Trainer's Liscense: Part 4", " You finally find the sorceress who will provide you with a dragon trainer's liscense." +
-				" She is reluctant to give you the liscense. After some debate decides to give you a liscense if and only if you can answer a question for her." +
-				" What was the first light box (computer) bug? You respond with an answer, hopefully you're right or you won't be able to get your dragon trainer's liscense.", "zuztye",
+		QuestEntity quest6 = new QuestEntity("Dragon Trainer's License: Part 4", " You finally find the sorceress who will provide you with a dragon trainer's license." +
+				" She is reluctant to give you the license, but after some debate she decides to give you a license if and only if you can answer a question for her." +
+				" What was the first light box (computer) bug? You respond with an answer, hopefully you're right or you won't be able to get your dragon trainer's license.", "zuztye",
                 100, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                " Awesome, a moth was the correct answer. You have finally recived your dragon trainer's liscense! Look out dragon trainers there is a new kid in town... ","",
+                "Awesome, a moth was the correct answer. You have finally received your dragon trainer's license! Look out dragon trainers there is a new kid in town... ","",
                 itemList, 1);
 		questList.add(quest6);
 		
 		QuestEntity quest7 = new QuestEntity("Wealth flows in the Land: Part 1"," While exploring The Land of Oaks you notice a change." +
-				" The castle formally named castle A has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advetageous" +
-				" to know the wealthy in this land as they are fans of the dragon tournaments and often sponser young trainers they know and like.", "Williams",
+				" The castle formally named castle A has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advantageous" +
+				" to know the wealthy in this land. Monarchs are fans of dragon tournaments and often sponsor young trainers they like.", "Williams",
                 100, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
-                " You didn't get a chance to meet with the monarch but your name is now known at this castle. Could this be a possible sponsor for the future?","",
+                "You didn't get a chance to meet with the monarch but your name is now known at this castle. Could this be a possible sponsor for the future?","",
                 itemList, 1);
 		questList.add(quest7);
 		
 		QuestEntity quest8 = new QuestEntity("Wealth flows in the Land: Part 2"," While continuing to explore The Land of Oaks you notice another change." +
-				" The castle formally named castle E has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advetageous" +
-				" to know the wealthy in this land as they are fans of the dragon tournaments and often sponser young trainers they know and like.", "Council",
+				" The castle formally named castle E has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advantageous" +
+				" to know the wealthy in this land. Monarchs are fans of dragon tournaments and often sponsor young trainers they like.", "Council",
                 100, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
@@ -238,8 +238,8 @@ public void createRealWorldQuests(){
 		questList.add(quest8);
 		
 		QuestEntity quest9 = new QuestEntity("Wealth flows in the Land: Part 3"," While continuing to explore The Land of Oaks you notice another change." +
-				" The castle formally named castle E has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advetageous" +
-				" to know the wealthy in this land as they are fans of the dragon tournaments and often sponser young trainers they know and like.", "Brown",
+				" The castle formally named castle E has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advantageous" +
+				" to know the wealthy in this land. Monarchs are fans of dragon tournaments and often sponsor young trainers they like.", "Brown",
                 100, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",
@@ -248,8 +248,8 @@ public void createRealWorldQuests(){
 		questList.add(quest9);
 		
 		QuestEntity quest10 = new QuestEntity("Wealth flows in the Land: Part 4"," While continuing to explore The Land of Oaks you notice another change." +
-				" The castle formally named castle F has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advetageous" +
-				" to know the wealthy in this land as they are fans of the dragon tournaments and often sponser young trainers they know and like.", "Sullivan",
+				" The castle formally named castle F has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advantageous" +
+				" to know the wealthy in this land. Monarchs are fans of dragon tournaments and often sponsor young trainers they know and like.", "Sullivan",
                 100, 0,
                 "5-9-13 3:22am",
                 "This quest will not expire",

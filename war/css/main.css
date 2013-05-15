@@ -151,6 +151,22 @@ html {
 	text-align:center;
 }
 
+.table_row_bold {
+  animation: blueflash 3s;
+    -webkit-animation: blueflash 3s; /* Safari and Chrome */
+}
+
+@keyframes blueflash {
+    0% {background:#fff;}
+    30% {background:#a3daec;}
+    100% {background:#fff;}
+}
+@-webkit-keyframes blueflash { /* Safari and Chrome */
+    0% {background:#fff;}
+    30% {background:#a3daec;}
+    100% {background:#fff;}
+}
+
 .table_hidden {
 	height:16px;
 	width:100%;

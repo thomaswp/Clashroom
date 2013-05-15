@@ -18,10 +18,12 @@ import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
@@ -53,6 +55,7 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	private Label questDateUnavailable;
 	private FlexTable itemsListTable;
 	private Button submit;
+	private Button navigate;
 	private TextBox enterCode;
 	private Label codeEntryMsg;
 	private UserEntity currentUser;
@@ -131,10 +134,15 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		itemsListTable = new FlexTable();
 		submit = new Button("Submit Code");
 		submit.setVisible(false);
+		navigate = new Button("Go back home");
+		navigate.setVisible(false);
+		navigate.addStyleName(".gwt-return-Button");
 		enterCode = new TextBox();
 		enterCode.setVisible(false);
 
 		submit.addClickHandler(this);
+		navigate.addClickHandler(this);
+		
 
 		VerticalPanel rewards = new VerticalPanel();
 		rewards.addStyleName(Styles.quest_rewards);
@@ -163,8 +171,10 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.setWidth("100%");
 		vPanel.addStyleName(NAME);
-
+		
 		mainPanel.add(vPanel);
+		mainPanel.add(navigate);
+		mainPanel.setCellHorizontalAlignment(navigate, HasHorizontalAlignment.ALIGN_CENTER);
 		initWidget(mainPanel);
 	}
 
@@ -223,9 +233,10 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	@Override
 	public void onClick(ClickEvent event) {
 		codeEntryMsg.setVisible(true);
+		navigate.setVisible(true);
 		if(event.getSource().equals(submit)){
 
-			if(enterCode.getText().equals(aQuest.getCompletionCode())){
+			if(enterCode.getText().equalsIgnoreCase((aQuest.getCompletionCode()))){
 
 				Long id = getLongParameter("id");
 				if (id == null) return;
@@ -254,6 +265,9 @@ public class QuestDetailPage extends Page implements ClickHandler {
 			}else{
 				codeEntryMsg.setText("Sorry the Code you eneterd was incorrect. Please try again.");
 			}
+		}
+		if(event.getSource().equals(navigate)){
+			History.back();
 		}
 	}
 }

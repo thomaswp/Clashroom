@@ -21,7 +21,10 @@ import com.clashroom.shared.battle.battlers.DragonBattler;
 public class BattleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public final static double LOSE_EXP_FACTOR = 0.50;
+	//experience decrease for the losers
+	public final static double LOSE_EXP_FACTOR = 0.75;
+	//experience decrease for not killing a dragon
+	public final static double LIVE_EXP_FACTOR = 0.30;
 	
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@PrimaryKey
@@ -66,15 +69,15 @@ public class BattleEntity implements Serializable {
 		teamAVictor = ((ActionFinish) action).teamAVictor;
 		
 		for (Battler battler : battle.getTeamB()) {
-			if (battler.isDead()) {
-				teamAExp += battler.getExpReward();
-			}
+			int exp = battler.getExpReward();
+			if (!battler.isDead()) exp *= LIVE_EXP_FACTOR;
+			teamAExp += exp;
 		}
 		if (!teamAVictor) teamAExp = (int)(teamAExp * LOSE_EXP_FACTOR);
 		for (Battler battler : battle.getTeamA()) {
-			if (battler.isDead()) {
-				teamBExp += battler.getExpReward();
-			}
+			int exp = battler.getExpReward();
+			if (!battler.isDead()) exp *= LIVE_EXP_FACTOR;
+			teamBExp += exp;
 		}
 		if (teamAVictor) teamBExp = (int)(teamBExp * LOSE_EXP_FACTOR);
 		

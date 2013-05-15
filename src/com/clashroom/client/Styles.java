@@ -16,6 +16,7 @@ public class Styles {
 	public static final String w_mouseOver = "w_mouseOver";
 	
 	public static final String table = "flexTable";
+	public static final String table_row_bold = "table_row_bold";
 	
 
 	public static final String outer_table = "outer_table";
@@ -48,6 +49,7 @@ public class Styles {
 	
 	public static final String battle_info = "battle_info";
 	public static final String battle_info_history = "battle_info_history";
+	
 	
 	//public static final String back_button = "back_button";
 	

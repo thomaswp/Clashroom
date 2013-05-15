@@ -71,6 +71,7 @@ implements UserInfoService {
 			entity = pm.detachCopy(entity);
 		}
 		
+		pm.flush();
 		pm.close();
 		
 		return entity;

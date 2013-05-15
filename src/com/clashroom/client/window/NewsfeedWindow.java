@@ -33,10 +33,8 @@ public class NewsfeedWindow extends Composite implements IWindow {
 	
 	public NewsfeedWindow() {
 		setupUI();
-		
-//		List<Long> users = new ArrayList<Long>();
-//		users.add(Clashroom.getLoginInfo().getUserId());
-		userInfoService.getNews(null, 5, new AsyncCallback<List<NewsfeedItem>>() {
+	
+		userInfoService.getNews(null, 20, new AsyncCallback<List<NewsfeedItem>>() {
 			@Override
 			public void onSuccess(List<NewsfeedItem> result) {
 				populateUI(result);
