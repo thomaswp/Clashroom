@@ -11,6 +11,10 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+/**
+ * Page for setting up a new user. Most of the work in this
+ * class is done in the {@link SetupPageUI} class.
+ */
 public class SetupPage extends Page {
 
 	public final static String NAME = "Setup";
@@ -59,10 +63,12 @@ public class SetupPage extends Page {
 	
 	private void setupUser() {
 		if (user.isSetup()) {
+			//If the user is set up already, navigate them back home
 			FlowControl.go(new HomePage());
 			return;
 		}
 		form.setUser(user);
+		//called when the UI handles the user clicking the final Next button
 		form.setOnFinishedHandler(new Runnable() {
 			@Override
 			public void run() {

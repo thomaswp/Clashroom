@@ -4,6 +4,10 @@ import java.beans.Beans;
 
 import com.google.gwt.user.client.Timer;
 
+/**
+ * A progress bar, which animates, rather than instantly taking on a value.
+ *
+ */
 public class AnimatedProgressBar extends ProgressBar {
 
 	private Timer timer;
@@ -15,6 +19,9 @@ public class AnimatedProgressBar extends ProgressBar {
 		setup();
 	}
 
+	/**
+	 * See {@link ProgressBar#ProgressBar(double, double, double)}
+	 */
 	public AnimatedProgressBar(double minProgress, double maxProgress, double curProgress) {
 		super(minProgress, maxProgress, curProgress);
 		desiredProgress = curProgress;
@@ -44,10 +51,17 @@ public class AnimatedProgressBar extends ProgressBar {
 		}
 	}
 
+	/**
+	 * Sets progress and animates the display
+	 * @param progress
+	 */
 	public void animateSetProgress(double progress) {
 		desiredProgress = progress;
 	}
 
+	/**
+	 * Sets the progress instantly without animating
+	 */
 	@Override
 	public void setProgress(double progress) {
 		super.setProgress(progress);
@@ -59,6 +73,7 @@ public class AnimatedProgressBar extends ProgressBar {
 	@Override
 	public void onUnload() {
 		super.onUnload();
+		//always make sure to stop timers when unloading widgets
 		timer.cancel();
 	}
 }

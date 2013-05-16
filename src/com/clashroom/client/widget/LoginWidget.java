@@ -6,6 +6,10 @@ import com.clashroom.shared.LoginInfo;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
+/**
+ * A banner widget that displays the user email and allows
+ * them to log out.
+ */
 public class LoginWidget extends HorizontalPanel {
 	private HTML labelLogin;
 	

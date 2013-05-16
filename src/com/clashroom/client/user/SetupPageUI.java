@@ -33,6 +33,11 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.ui.HTML;
 
+/**
+ * The UI for setting up a new user. This class is used
+ * by the {@link SetupPage}. It can be edited in the
+ * GWT Designer.
+ */
 public class SetupPageUI extends Composite {
 	
 	private static final int SCROLL = 25;
@@ -146,6 +151,7 @@ public class SetupPageUI extends Composite {
 		btnRandom.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				//Load a random first and last name from resources
 				String names = MyResources.INSTANCE.getNames().getText();
 				String[] nameArray = names.split("\t|\n");
 				String fisrtName = nameArray[(int)(nameArray.length * Math.random())];
@@ -287,6 +293,7 @@ public class SetupPageUI extends Composite {
 		final Image imageDragonBig = new Image("clear.cache.gif");
 		horizontalPanel_6.add(imageDragonBig);
 		
+		//Load the dragon classes and add them to the HorizontalPanel
 		for (final DragonClass dragonClass : DragonClass.getAllClasses()) {
 			Image image = new Image(Constant.IMG_BATTLER + dragonClass.getImageName());
 			image.setWidth("150px");
@@ -300,20 +307,19 @@ public class SetupPageUI extends Composite {
 			final FocusPanel focusPanel = new FocusPanel(vPanel);
 			focusPanel.setStyleName("borderHovered");
 			focusPanel.setStyleName("option");
+			//when clicked...
 			focusPanel.addFocusHandler(new FocusHandler() {
 				@Override
 				public void onFocus(FocusEvent event) {
 					if (focusedPanel != null) {
-						
-
-						//focusedPanel.setStyleName("borderHovered");
+						//unfocus the currently focued dragon
 						focusedPanel.setStyleName("option");
 					}
+					//and focus this one
 					focusedPanel = focusPanel;
-					
-
 					focusedPanel.setStyleName("selected");
-					//focusPanel.setStyleName("border");
+					
+					//Set the stat bars below
 					SetupPageUI.this.dragonClass = dragonClass; 
 					htmlDragonDescription.setHTML(Formatter.format(
 							"<b>%s</b>: %s", dragonClass.getName(), 
@@ -346,6 +352,8 @@ public class SetupPageUI extends Composite {
 		horizontalPanel_3.setCellHorizontalAlignment(buttonNext, HasHorizontalAlignment.ALIGN_RIGHT);
 	}
 	
+	//When Next is clicked, we either go to the next tab,
+	//or if there isn't one, we try to finish the setup
 	private void nextTab() {
 		int index = decoratedTabPanel.getTabBar().getSelectedTab();
 		index++;
@@ -359,6 +367,8 @@ public class SetupPageUI extends Composite {
 	private void tryFinish() {
 		if (user == null) return;
 		
+		//Check all fields for completion, and if they
+		//aren't refocus the missing ones
 		String firstName = textBoxFirstName.getText();
 		if (firstName.length() == 0) {
 			decoratedTabPanel.getTabBar().selectTab(0);
