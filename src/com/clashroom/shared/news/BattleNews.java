@@ -47,13 +47,12 @@ public class BattleNews extends NewsfeedItem implements Serializable {
 
 	@Override
 	public Widget getInfoWidget() {
-		String wName = winnerId == 0 ? winner : 
-			Formatter.format("<a href='#%s?id=%s'>%s</a>", UserInfoPage.NAME, winnerId, winner);
-		String lName = loserId == 0 ? loser : 
-			Formatter.format("<a href='#%s?id=%s'>%s</a>", UserInfoPage.NAME, loserId, loser);
+		String wName = winnerId == 0 ? winner : UserInfoPage.getHTMLLinkToUser(winner, winnerId);
+		String lName = loserId == 0 ? loser : UserInfoPage.getHTMLLinkToUser(loser, loserId);
+		String battle = BattlePage.getHTMLLinkToBattle("battle", battleId);
 		
-		return new HTML(Formatter.format("%s bested %s in a <a href='#%s?id=%s'>battle</a>", 
-				wName, lName, BattlePage.NAME, battleId));
+		return new HTML(Formatter.format("%s bested %s in a %s!", 
+				wName, lName, battle));
 	}
 
 	@Override

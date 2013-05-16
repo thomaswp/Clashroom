@@ -13,6 +13,7 @@ import com.clashroom.server.QueryUtils;
 import com.clashroom.shared.entity.ActiveBountyEntity;
 import com.clashroom.shared.entity.NewsfeedEntity;
 import com.clashroom.shared.entity.TaskEntity;
+import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.news.BattleNews;
 import com.clashroom.shared.news.TaskNews;
 import com.clashroom.shared.task.ActiveTaskList;
@@ -70,8 +71,11 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		UserInfoServiceImpl.addExpImpl(pm, atl.getActiveQuest().getReward());
 		
-		NewsfeedEntity item = new NewsfeedEntity(new TaskNews(atl.getActiveQuest(), userID));
-		pm.makePersistent(item);
+		UserEntity user = QueryUtils.queryUnique(pm, UserEntity.class, "id==%s", userID);
+		if (user != null) {
+			NewsfeedEntity item = new NewsfeedEntity(new TaskNews(atl.getActiveQuest(), userID, user.getUsername()));
+			pm.makePersistent(item);
+		}
 		
 		atl.removeFirst();
 		

@@ -33,7 +33,10 @@ public class NewsfeedWindow extends Composite implements IWindow {
 	
 	public NewsfeedWindow() {
 		setupUI();
+		update();
+	}
 	
+	public void update() {
 		userInfoService.getNews(null, 20, new AsyncCallback<List<NewsfeedItem>>() {
 			@Override
 			public void onSuccess(List<NewsfeedItem> result) {
@@ -115,7 +118,7 @@ public class NewsfeedWindow extends Composite implements IWindow {
 	}
 	
 	private void populateTable(FlexTable table, List<NewsfeedItem> news) {
-		
+		table.clear();
 		int row = 1;
 		for (NewsfeedItem item : news) {
 			int col = 0;

@@ -9,6 +9,7 @@ import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.Formatter;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.Window;
@@ -22,6 +23,11 @@ public class UserInfoPage extends Page {
 	
 	private UserInfoPageUI userInfoWidget;
 	private UserEntity user;
+	
+	public static String getHTMLLinkToUser(String text, long id) {
+		return Formatter.format("<a href=#%s?id=%s>%s</a>",
+				NAME, id, text);
+	}
 	
 	public UserInfoPage() {
 		this(NAME);

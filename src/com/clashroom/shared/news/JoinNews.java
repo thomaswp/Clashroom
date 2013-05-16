@@ -28,8 +28,8 @@ public class JoinNews extends NewsfeedItem {
 	@Override
 	public Widget getInfoWidget() {
 		return new HTML(Formatter.format(
-				"<a href='#%s?id=%s'>%s</a> has joined the adventure with a dragon named %s!", 
-				UserInfoPage.NAME, id, name, dragonName));
+				"%s has joined the adventure with a dragon named %s!", 
+				UserInfoPage.getHTMLLinkToUser(name, id), dragonName));
 	}
 
 	@Override

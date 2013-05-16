@@ -85,7 +85,7 @@ public class HomePage extends Page {
 		box.addStyleName("column");
 		box.addStyleName("side");
 		
-		NewsfeedWindow newsfeedWindow = new NewsfeedWindow();
+		final NewsfeedWindow newsfeedWindow = new NewsfeedWindow();
 		windows.add(newsfeedWindow);
 		box.add(newsfeedWindow);
 		
@@ -95,6 +95,7 @@ public class HomePage extends Page {
 			@Override
 			public void run() {
 				userInfoWindow.update();
+				newsfeedWindow.update();
 			}
 		});
 		box.add(tasksWindow);

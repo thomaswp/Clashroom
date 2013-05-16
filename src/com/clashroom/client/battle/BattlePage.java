@@ -73,6 +73,11 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	public static String getToken(long id) {
 		return NAME + "?id=" + id;
 	}
+
+	public static String getHTMLLinkToBattle(String text, long id) {
+		return Formatter.format("<a href='#%s?id=%s'>%s</a>", 
+				NAME, id, text);
+	}
 	
 	public BattlePage(BattleEntity entity) {
 		super(getToken(entity.getId()));

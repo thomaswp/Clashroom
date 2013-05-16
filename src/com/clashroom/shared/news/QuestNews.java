@@ -3,6 +3,7 @@ package com.clashroom.shared.news;
 import java.util.Date;
 import java.util.List;
 
+import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.shared.Formatter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,6 +14,7 @@ public class QuestNews extends NewsfeedItem {
 	
 	private String questName;
 	private String userName;
+	private long userId;
 	
 	@Deprecated
 	public QuestNews(){
@@ -23,6 +25,7 @@ public class QuestNews extends NewsfeedItem {
 		super(date,id);
 		this.questName = questName;
 		this.userName = username;
+		this.userId = id;
 	}
 	
 
@@ -32,8 +35,14 @@ public class QuestNews extends NewsfeedItem {
 
 	@Override
 	public Widget getInfoWidget() {
-		return new HTML(Formatter.format("%s has successfuly completed %s quest", 
-				userName,questName));
+		String name;
+		if (userId > 0) {
+			name = UserInfoPage.getHTMLLinkToUser(userName, userId);
+		} else {
+			name = userName;
+		}
+		return new HTML(Formatter.format("%s has successfuly completed the quest \"%s.\"", 
+				name, questName));
 	}
 
 	@Override
