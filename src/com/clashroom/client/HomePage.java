@@ -9,8 +9,9 @@ import com.clashroom.client.window.IWindow;
 import com.clashroom.client.window.ListBattleWindow;
 import com.clashroom.client.window.NewsfeedWindow;
 import com.clashroom.client.window.QuestsWindow;
-import com.clashroom.client.window.TasksWindow;
+import com.clashroom.client.window.BountiesWindow;
 import com.clashroom.client.window.UserInfoWindow;
+import com.clashroom.client.window.Window;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -18,26 +19,25 @@ import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-
+/**
+ * The main page of the application and the home page for the user.
+ * This page mostly contains the {@link Window}s that make it up.
+ */
 public class HomePage extends Page {
 	
 	public final static String NAME = "home";
 
+	//IWindows will be passed the UserInfoEntity when it is retrieved from the server
 	private List<IWindow> windows = new ArrayList<IWindow>();
 	
 	public HomePage() {
 		this(NAME);
 	}
 	
-	public HomePage(UserEntity user) {
-		super(NAME);
-		setup();
-		userCallback(user);
-	}
-	
 	public HomePage(String token) {
 		super(token);
-		setup();
+		setupUI();
+		//Fetch the UserEntity from the server and pass it on to the Windows
 		Services.userInfoService.getUser(new AsyncCallback<UserEntity>() {
 			@Override
 			public void onSuccess(UserEntity result) {
@@ -55,7 +55,8 @@ public class HomePage extends Page {
 		for (IWindow window : windows) window.onReceiveUserInfo(user);
 	}
 	
-	private void setup() {		
+	//Formats the layout of the 5 Windows on the home screen
+	private void setupUI() {		
 		AbsolutePanel main = new AbsolutePanel();
 		main.addStyleName(NAME);
 		
@@ -89,11 +90,14 @@ public class HomePage extends Page {
 		windows.add(newsfeedWindow);
 		box.add(newsfeedWindow);
 		
-		TasksWindow tasksWindow = new TasksWindow();
+		BountiesWindow tasksWindow = new BountiesWindow();
 		windows.add(tasksWindow);
-		tasksWindow.setOnQuestCompletedListener(new Runnable() {
+		tasksWindow.setOnTaskCompletedListener(new Runnable() {
 			@Override
 			public void run() {
+				//When a task is completed, we want to
+				//update the UserInfoWindow and the NewsfeedWindow
+				//to show the results
 				userInfoWindow.update();
 				newsfeedWindow.update();
 			}
@@ -102,6 +106,8 @@ public class HomePage extends Page {
 		box.setWidth("24%");
 		main.add(box);
 		
+		//All Components (and therefore Pages) have to
+		//call initWidget with their main widget.
 		initWidget(main);
 	}
 

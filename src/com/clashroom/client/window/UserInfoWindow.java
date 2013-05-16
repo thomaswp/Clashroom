@@ -1,6 +1,7 @@
 package com.clashroom.client.window;
 
 import com.clashroom.client.FlowControl;
+import com.clashroom.client.HomePage;
 import com.clashroom.client.Styles;
 import com.clashroom.client.services.Services;
 import com.clashroom.client.services.UserInfoService;
@@ -22,6 +23,10 @@ import com.google.gwt.user.client.ui.NumberLabel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * Displays information on the current user on the {@link HomePage}.
+ * Links to the {@link UserInfoPage} when clicked.
+ */
 public class UserInfoWindow extends Window {
 	
 	private final static UserInfoServiceAsync userInfoService = Services.userInfoService;
@@ -43,6 +48,10 @@ public class UserInfoWindow extends Window {
 		setupUI();
 	}
 	
+	/**
+	 * Called when the user has changed (such as gaining experience
+	 * when a task is completed) to update the information in this Window.
+	 */
 	public void update() {
 		userInfoService.getUser(new AsyncCallback<UserEntity>() {
 			@Override
@@ -57,13 +66,9 @@ public class UserInfoWindow extends Window {
 		});
 	}
 	
+	//Setup the UI, lot's of UI.
 	private void setupUI() {
 		VerticalPanel panel = new VerticalPanel();
-//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-//		link.addStyleName(Styles.back_button);
-//		panel.add(link);
-
-		//panel.addStyleName(UserInfoPage.NAME);
 		
 		panel.addStyleName(Styles.profile_window);
 		
@@ -91,6 +96,8 @@ public class UserInfoWindow extends Window {
 		progressBarExp.setTextFormatter(new TextFormatter() {
 			@Override
 			protected String getText(ProgressBar bar, double curProgress) {
+				//The format for the text in the middle of the experience
+				//progress bar. Currently looks like "Exp: 10/100"
 				return Formatter.format("%s: %s/%s", Constant.TERM_EXP_SHORT, 
 						(int)curProgress, (int)bar.getMaxProgress());
 			}
@@ -159,7 +166,7 @@ public class UserInfoWindow extends Window {
 		initWidget(focusPanel);
 	}
 	
-	
+	//populates the UI with information from the user
 	private void populate() {
 		image.setUrl(Constant.IMG_BATTLER + user.getDragon().getDragonClass().getImageName());
 		labelDragonName.setText(user.getDragon().getName());
@@ -183,6 +190,7 @@ public class UserInfoWindow extends Window {
 
 	@Override
 	public void click() {
+		//go to the UserInfoPage when clicked
 		FlowControl.go(new UserInfoPage());
 	}
 

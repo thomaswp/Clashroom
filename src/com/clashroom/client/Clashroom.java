@@ -19,18 +19,29 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * The entry point for the application. Every time the page is refreshed,
+ * execution start over at the {@link #onModuleLoad()} method of this class.
  */
 public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 	
 	private static LoginInfo loginInfo;
 	
+	/**
+	 * Gets the {@link LoginInfo} from the user's last log-in.
+	 * Because the application requires a log-in for any action,
+	 * it is safe to assume this is set and current after a {@link Page}
+	 * has been loaded.
+	 */
 	public static LoginInfo getLoginInfo() {
 		return loginInfo;
 	}
 	
 	private final static LoginServiceAsync loginService = Services.loginService;
 	
+	/**
+	 * Splits an {@link UmbrellaException} into its requisite parts
+	 * to print them.
+	 */
 	private static void ensureNotUmbrellaError(@Nonnull Throwable e) {
 		for (Throwable th : ((UmbrellaException) e).getCauses()) {
 			if (th instanceof UmbrellaException) {
@@ -41,6 +52,11 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 		}
 	}
 	
+	/**
+	 * The entry point for the whole application. Functions a main() method.
+	 * Every time the page is refreshed, this application restarts and calls
+	 * this method.
+	 */
 	@Override
 	public void onModuleLoad() {
 	
@@ -51,10 +67,13 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 			}
 		});
 		
+		//Sets the browser's title
 		Window.setTitle("Clashroom");
 		
+		//Handle "Back" and "Forward" browser events
 		History.addValueChangeHandler(this);
 		
+		//Get the user's login information
 		loginService.login(Window.Location.getHref(), new AsyncCallback<LoginInfo>() {
 			
 			@Override
@@ -62,19 +81,25 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 				if (result.isLoggedIn()) {
 					loginInfo = result;
 					
+					//Create the "Log Out" widget at the top of the screen
 					RootPanel login = RootPanel.get("login");
 					login.add(new LoginWidget(result));
 					
 					if (result.isHasAccount()) {
 						if (History.getToken().isEmpty()) {
+							//By default go to the home page
 							FlowControl.go(new HomePage());
 						} else {
+							//If they have history (likely meaning they've refreshed the page)
+							//Direct them to the page from the last History token
 					        FlowControl.go(History.getToken());
 						}
 					} else {
+						//If the user doesn't have an account, direct them to create one
 						FlowControl.go(new SetupPage());
 					}
 				} else {
+					//If there is no logged in user, redirect them to log in
 					Window.Location.replace(result.getLoginUrl());
 				}
 			}

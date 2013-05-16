@@ -1,4 +1,4 @@
-package com.clashroom.client.task;
+package com.clashroom.client.bounty;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +14,8 @@ import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.widget.ProgressBar;
+import com.clashroom.client.widget.ScrollableFlexTable;
+import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTask;
 import com.clashroom.shared.task.ActiveTaskList;
@@ -32,16 +34,16 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class SideQuestPage extends Page {
+public class BountiesPage extends Page {
 	
-	public final static String NAME = "sideQuests";
+	public final static String NAME = "bounties";
 	
 	private static final int TASK_LIMIT =  24*60*60*1000;
 	
 	private static final int REFRESH_INTERVAL = 1000; //ms
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private FlexTable questTable = new FlexTable();
-	private FlexTable queueTable = new FlexTable();
+	private ScrollableFlexTable questTable = new ScrollableFlexTable();
+	private ScrollableFlexTable queueTable = new ScrollableFlexTable();
 	private ProgressBar currentBar = new ProgressBar();
 	private ProgressBar totalBar = new ProgressBar();
 	private ArrayList<Task> quests;// = new ArrayList<Quest>();
@@ -51,11 +53,11 @@ public class SideQuestPage extends Page {
 	private UserEntity user;
 	private Timer refreshTimer;
 	
-	public SideQuestPage() {
+	public BountiesPage() {
 		this(NAME);
 	}
 
-	public SideQuestPage(String token) {
+	public BountiesPage(String token) {
 		super(token);
 		
 		setup();
@@ -67,31 +69,29 @@ public class SideQuestPage extends Page {
 		//Create tables for quests
 	
 		// Add styles to elements in the quest tables
-		questTable.getRowFormatter().addStyleName(0, Styles.table_header);
-		questTable.getRowFormatter().addStyleName(0, Styles.gradient);
-		questTable.addStyleName(Styles.table);
-		questTable.getColumnFormatter().addStyleName(4, Styles.text_center);
-		questTable.setCellSpacing(0);
-		questTable.getColumnFormatter().setWidth(0, "20%");
-		questTable.getColumnFormatter().setWidth(1, "55%");
-		questTable.getColumnFormatter().setWidth(2, "10%");
-		questTable.getColumnFormatter().setWidth(3, "10%");
-		questTable.getColumnFormatter().setWidth(4, "5%");
 		
-		queueTable.getRowFormatter().addStyleName(0, Styles.table_header);
-		queueTable.getRowFormatter().addStyleName(0, Styles.gradient);
-		queueTable.addStyleName(Styles.table);
-		queueTable.setCellSpacing(0);
-		queueTable.getColumnFormatter().setWidth(0, "20%");
-		queueTable.getColumnFormatter().setWidth(1, "50%");
-		queueTable.getColumnFormatter().setWidth(2, "10%");
-		queueTable.getColumnFormatter().setWidth(3, "17.5%");
-		queueTable.getColumnFormatter().setWidth(4, "5%");
+		questTable = new ScrollableFlexTable();
+		questTable.setHeaders("Title", "Description", "Reward", "Duration", "Add");
+		questTable.setHeaderWidths("20%", "50%", "10%", "12.5%", "7.5%");
+		questTable.setColumnWidths("20%", "55%", "10%", "10%", "5%");
+		questTable.addHeaderStyles(Styles.table_header, Styles.gradient);
+		questTable.getInnerTable().addStyleName(Styles.table);
+		questTable.getOuterTable().addStyleName(Styles.outer_table);
+		questTable.getScrollPanel().setHeight("175px");
+		questTable.getInnerTable().setCellSpacing(0);
+		
+		queueTable = new ScrollableFlexTable();
+		queueTable.setHeaders("Title", "Description", "Reward", "Time Left", "Remove");
+		queueTable.setHeaderWidths("20%", "40%", "15%", "17.5%", "7.5%");
+		queueTable.setColumnWidths("20%", "50%", "10%", "17.5%", "5%");
+		queueTable.addHeaderStyles(Styles.table_header, Styles.gradient);
+		queueTable.getInnerTable().addStyleName(Styles.table);
+		queueTable.getOuterTable().addStyleName(Styles.outer_table);
+		queueTable.getScrollPanel().setHeight("175px");
+		queueTable.getInnerTable().setCellSpacing(0);
 		
 		//Assemble main panel
-//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-//		link.addStyleName(Styles.back_button);
-//		mainPanel.add(link);
+
 		Label label = new Label("Bounties");
 		label.addStyleName(Styles.page_title);
 		mainPanel.add(label);
@@ -99,58 +99,12 @@ public class SideQuestPage extends Page {
 		label.addStyleName(Styles.page_subtitle);
 		mainPanel.add(label);
 		
-		ScrollPanel scroll = new ScrollPanel();
-		scroll.setHeight("175px");
-		scroll.add(questTable);
-		
-		FlexTable outer = new FlexTable();
-		outer.setText(0, 0, "Title");
-		outer.setText(0, 1, "Description");
-		outer.setText(0, 2, "Reward");
-		outer.setText(0, 3, "Duration");
-		outer.setText(0, 4, "Add");
-		outer.getColumnFormatter().setWidth(0, "20%");
-		outer.getColumnFormatter().setWidth(1, "50%");
-		outer.getColumnFormatter().setWidth(2, "10%");
-		outer.getColumnFormatter().setWidth(3, "12.5%");
-		outer.getColumnFormatter().setWidth(4, "7.5%");
-		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
-		outer.getRowFormatter().addStyleName(0, Styles.table_header);
-		outer.getRowFormatter().addStyleName(0, Styles.gradient);
-		outer.addStyleName(Styles.outer_table);
-		outer.setCellSpacing(0);
-		outer.setWidget(1, 0, scroll);
-		outer.getFlexCellFormatter().setColSpan(1, 0, 5);
-		
-		mainPanel.add(outer);
+		mainPanel.add(questTable);
 		label = new Label("Queued Bounties");
 		label.addStyleName(Styles.page_subtitle);
 		mainPanel.add(label);
-		
-		scroll = new ScrollPanel();
-		scroll.setHeight("175px");
-		scroll.add(queueTable);
-		
-		outer = new FlexTable();
-		outer.setText(0, 0, "Title");
-		outer.setText(0, 1, "Description");
-		outer.setText(0, 2, "Reward");
-		outer.setText(0, 3, "Time Left");
-		outer.setText(0, 4, "Remove");
-		outer.getColumnFormatter().setWidth(0, "20%");
-		outer.getColumnFormatter().setWidth(1, "40%");
-		outer.getColumnFormatter().setWidth(2, "15%");
-		outer.getColumnFormatter().setWidth(3, "17.5%");
-		outer.getColumnFormatter().setWidth(4, "7.5%");
-		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
-		outer.getRowFormatter().addStyleName(0, Styles.table_header);
-		outer.getRowFormatter().addStyleName(0, Styles.gradient);
-		outer.addStyleName(Styles.outer_table);
-		outer.setCellSpacing(0);
-		outer.setWidget(1, 0, scroll);
-		outer.getFlexCellFormatter().setColSpan(1, 0, 5);
-		
-		mainPanel.add(outer);
+
+		mainPanel.add(queueTable);
 		label = new Label("Current Progress");
 		label.addStyleName(Styles.page_subtitle);
 		mainPanel.add(label);
@@ -290,7 +244,7 @@ public class SideQuestPage extends Page {
 			});
 			addQuestButton.addStyleName(Styles.gradient);
 			questTable.setWidget(x, 4, addQuestButton);
-			questTable.getColumnFormatter().addStyleName(4, Styles.text_center);
+			questTable.getInnerTable().getColumnFormatter().addStyleName(4, Styles.text_center);
 		}
 	}
 	
@@ -331,7 +285,7 @@ public class SideQuestPage extends Page {
 				//Time left
 				queueTable.setText(x, 3, dtf2.format(new Date(timeLeft-(19*60*60*1000))));
 				
-				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
+				if (i == 0) queueTable.getInnerTable().getRowFormatter().addStyleName(1, Styles.text_bold);
 				
 				queueTable.setWidget(x, 4, removeQuestButton(i));
 				

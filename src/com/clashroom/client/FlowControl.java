@@ -4,18 +4,26 @@ import java.util.LinkedList;
 
 import com.clashroom.client.battle.BattlePage;
 import com.clashroom.client.battle.BattlePrepPage;
+import com.clashroom.client.bounty.BountiesPage;
 import com.clashroom.client.quest.ItemDetailsPage;
 import com.clashroom.client.quest.QuestDetailPage;
-import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.teacher.CreateBattlePage;
 import com.clashroom.client.teacher.CreateQuestPage;
 import com.clashroom.client.teacher.CreatedQuestsPage;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.user.UserInfoPage;
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.entity.BattleEntity;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.RootPanel;
 
+/**
+ * A static class to control navigation between {@link Page}s.
+ * To navigate to a Page, use {@link #go(Page)}, passing a 
+ * Page object, or use {@link #go(String)} and pass the appropriate
+ * token.
+ *
+ */
 public class FlowControl {
 
 	private static Page oldPage;
@@ -27,6 +35,10 @@ public class FlowControl {
 		listeners.add(listener);
 	}
 	
+	/**
+	 * Navigates to a {@link Page}.
+	 * @param nextPage The page to which to navigate
+	 */
 	public static void go(Page nextPage) {
 			
 		RootPanel root = RootPanel.get("main");
@@ -37,13 +49,8 @@ public class FlowControl {
 		}
 		oldPage = nextPage;
 		
-		//root.getElement().getStyle().setPosition(Position.RELATIVE); // not sure why, but GWT throws an exception without this. Adding to CSS doesn't work.
-		// add, determine height/width, center, then move. height/width are unknown until added to document. Catch-22!
 		root.add(nextPage);
-		//int left = Window.getClientWidth() / 2 - nextPage.getOffsetWidth() / 2; // find center
-		//int top = 100; //Window.getClientHeight() / 2 - c.getOffsetHeight() / 2;
-		//root.setWidgetPosition(nextPage, left, top);
-		Debug.write(nextPage.getToken());
+		Debug.write("Visiting page: " + nextPage.getToken());
 		History.newItem(History.encodeHistoryToken(nextPage.getToken()));
 		
 		for (OnPageChangedListener listener : listeners) {
@@ -51,6 +58,15 @@ public class FlowControl {
 		}
 	}
 
+	/**
+	 * Creates a {@link Page} based on the token passed. If not 
+	 * corresponding page is found, the {@link History#back()} method is called.
+	 * A proper token consists of a Page's NAME field, with optional
+	 * http-style parameters. For example, passing "Battle?id=1" would
+	 * load the {@link BattlePage} and load the {@link BattleEntity} with
+	 * an id of 1.
+	 * @param token The page token to load
+	 */
 	public static void go(String token) {
 		if (token == null) return;
 		
@@ -62,8 +78,8 @@ public class FlowControl {
 			go(new UserInfoPage(token));
 		} else if (token.startsWith(HomePage.NAME)) {
 			go(new HomePage(token));
-		} else if (token.startsWith(SideQuestPage.NAME)) {
-			go(new SideQuestPage(token));
+		} else if (token.startsWith(BountiesPage.NAME)) {
+			go(new BountiesPage(token));
 		} else if(token.startsWith(CreatedQuestsPage.NAME)){
         	go(new CreatedQuestsPage(token));
         } else if(token.startsWith(QuestDetailPage.NAME)){

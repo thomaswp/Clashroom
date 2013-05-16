@@ -1,5 +1,8 @@
 package com.clashroom.client;
 
+/**
+ * Contains style names to be used in CSS files.
+ */
 public class Styles {
 	
 	public static final String text_center = "align_center";

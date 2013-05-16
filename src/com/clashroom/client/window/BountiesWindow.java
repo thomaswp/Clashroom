@@ -5,13 +5,14 @@ import java.util.LinkedList;
 
 import com.clashroom.client.FlowControl;
 import com.clashroom.client.Styles;
+import com.clashroom.client.bounty.BountiesPage;
 import com.clashroom.client.services.TaskService;
 import com.clashroom.client.services.TaskServiceAsync;
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.client.services.UserInfoServiceAsync;
-import com.clashroom.client.task.SideQuestPage;
 import com.clashroom.client.user.SetupPage;
 import com.clashroom.client.widget.ProgressBar;
+import com.clashroom.client.widget.ScrollableFlexTable;
 import com.clashroom.shared.entity.UserEntity;
 import com.clashroom.shared.task.ActiveTask;
 import com.clashroom.shared.task.ActiveTaskList;
@@ -25,14 +26,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class TasksWindow extends Window {
+public class BountiesWindow extends Window {
 	
-	public final static String NAME = "sideQuestWidget";
+	public final static String NAME = BountiesPage.NAME;
 	
 	private static final int REFRESH_INTERVAL = 1000; //ms
 	
 	private VerticalPanel mainPanel = new VerticalPanel();
-	private FlexTable queueTable = new FlexTable();
+	private ScrollableFlexTable queueTable = new ScrollableFlexTable();
 	private ProgressBar currentBar = new ProgressBar();
 	private ProgressBar totalBar = new ProgressBar();
 	private ActiveTaskList aql = new ActiveTaskList();
@@ -42,12 +43,12 @@ public class TasksWindow extends Window {
 	private Timer refreshTimer;
 	private Runnable onQuestCompletedListener;
 	
-	public TasksWindow() {
+	public BountiesWindow() {
 		super();
 		setup();
 	}
 	
-	public void setOnQuestCompletedListener(Runnable onQuestCompletedListener) {
+	public void setOnTaskCompletedListener(Runnable onQuestCompletedListener) {
 		this.onQuestCompletedListener = onQuestCompletedListener;
 	}
 	
@@ -61,29 +62,18 @@ public class TasksWindow extends Window {
 		//queueTable.setText(0, 1, "Time Left");
 		
 		// Add styles to elements in the quest tables
-		queueTable.getColumnFormatter().addStyleName(1, Styles.text_right);
-		queueTable.getRowFormatter().addStyleName(0, Styles.table_header);
-		queueTable.getRowFormatter().addStyleName(0, Styles.gradient);
-		queueTable.addStyleName(Styles.table);
-		queueTable.setCellSpacing(0);
 		
-		//Assemble main panel
-		ScrollPanel scroll = new ScrollPanel();
-		scroll.setHeight("133px");
-		scroll.add(queueTable);
+		queueTable = new ScrollableFlexTable();
+		queueTable.setHeaders("Time", "Time Left");
+		queueTable.setHeaderWidths("20%", "40%", "15%", "17.5%", "7.5%");
+		queueTable.setColumnWidths("20%", "50%", "10%", "17.5%", "5%");
+		queueTable.addHeaderStyles(Styles.table_header, Styles.gradient);
+		queueTable.getInnerTable().addStyleName(Styles.table);
+		queueTable.getOuterTable().addStyleName(Styles.outer_table);
+		queueTable.getScrollPanel().setHeight("133px");
+		queueTable.getInnerTable().setCellSpacing(0);
 		
-		FlexTable outer = new FlexTable();
-		outer.setText(0, 0, "Title");
-		outer.setText(0, 1, "Time Left");
-		outer.getColumnFormatter().addStyleName(1, Styles.text_right);
-		outer.getRowFormatter().addStyleName(0, Styles.table_header);
-		outer.getRowFormatter().addStyleName(0, Styles.gradient);
-		outer.addStyleName(Styles.outer_table);
-		outer.setCellSpacing(0);
-		outer.setWidget(1, 0, scroll);
-		outer.getFlexCellFormatter().setColSpan(1, 0, 2);
-		
-		mainPanel.add(outer);
+		mainPanel.add(queueTable);
 		mainPanel.add(currentBar);
 		mainPanel.add(totalBar);
 		
@@ -172,7 +162,7 @@ public class TasksWindow extends Window {
 				//Time left
 				queueTable.setText(x, 1, dtf2.format(new Date(timeLeft-(19*60*60*1000))));
 				
-				if (i == 0) queueTable.getRowFormatter().addStyleName(1, Styles.text_bold);
+				if (i == 0) queueTable.getInnerTable().getRowFormatter().addStyleName(1, Styles.text_bold);
 				
 				
 			}
@@ -225,7 +215,7 @@ public class TasksWindow extends Window {
 
 	@Override
 	public void click() {
-		FlowControl.go(SideQuestPage.NAME);
+		FlowControl.go(BountiesPage.NAME);
 	}
 	
 	//Requests datastore to persist the AQl
