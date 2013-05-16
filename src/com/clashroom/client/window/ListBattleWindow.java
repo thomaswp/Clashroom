@@ -130,7 +130,7 @@ public class ListBattleWindow extends Composite implements IWindow {
 							desc = Formatter.format("<a href=#%s?id=%s>%s</a>", 
 									UserInfoPage.NAME, ((DragonBattler) battler).playerId, desc);
 						}
-						enemies += Formatter.appendList(enemies, desc);
+						enemies = Formatter.appendList(enemies, desc);
 					}
 					
 					
