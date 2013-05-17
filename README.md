@@ -45,3 +45,28 @@ This contains pages dealing with bounties, small time-based side quests that the
 ##### teacher #####
 This contains pages that the teacher might use to manipulate the game as time progresses.
 
+### server ###
+The server contains the backend of clashroom, mainly handling requests to the datastore. The main package contains a few servlets and utilities. The impl subpackage contains implementations for the [RPC server calls](https://developers.google.com/web-toolkit/doc/latest/tutorial/RPC).
+
+### shared ###
+Shared contains code used on the client and server sides, including a number of serialiable classes which are passed over RPC back and forth between the. It is split into a number of sub-packages as well:
+
+##### battle #####
+This contains classes for the simulated battles between Dragons. Inside are sub-packages for classes of Dragons, skills for battlers, types of battlers, buffs which can be applied to battlers and actions which can occur during battles.
+
+##### entity #####
+This contains entities which can be sotred in the datastore. Many of these entities are also serializable so they can be passed back to the client.
+
+##### news #####
+This contains types of news which can appear on a uer's newsfeed, such as a battle occuring, a quest being completed, a bounty finishing, etc.
+
+##### task #####
+This contains special classes for dealing with the bounty system.
+
+### Other resources ###
+
+##### css #####
+The css folder under war/ contains the four css pages that are used to style Clashroom. The css is generally organized by category into different files.
+
+##### img #####
+The img folder contains image resources used in Clashroom.
