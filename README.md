@@ -77,7 +77,7 @@ Clashroom has a number of extendable superclasses which allow you to easily add 
 **Skill.java**: Extend this class to create a new Skill for dragons to use. Have a DragonClass add it to its skill tree to have that dragon be able to learn your skill. Make sure to register your new skill with Skill's skills array.
 
 ## TODO ##
-There is a TODO.txt file inside the main directory with future work that needs doing. There are also TODO markers inside the code with specific improvement that are needed.
+There is a [TODO.md](TODO.md) file inside the main directory with future work that needs doing. There are also TODO markers inside the code with specific improvement that are needed.
 
 ## Helpful Hints ##
 There are a number of things to watch out for when working with GWT. A few memorable ones are listed below:
