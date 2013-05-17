@@ -79,7 +79,7 @@ Clashroom has a number of extendable superclasses which allow you to easily add 
 ## TODO ##
 There is a TODO.txt file inside the main directory with future work that needs doing. There are also TODO markers inside the code with specific improvement that are needed.
 
-## Caveats ##
+## Helpful Hints ##
 There are a number of things to watch out for when working with GWT. A few memorable ones are listed below:
  * Make sure any class that is being passed over RPC is Serializable, has a no-args constructor and doesn't include any fields that don't meet that requirement
  * If you want to send an entity retrieved from the datastore over RPC, you to send a PersistenceManager.detachCopy(entitiy) instead.
