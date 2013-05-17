@@ -88,3 +88,4 @@ There are a number of things to watch out for when working with GWT. A few memor
  * When you run into a problem, **just restart the server first**, then see if it persists before doing too much debugging.
  * [StackOverflow](http://www.stackoverflow.com) is your best friend. Use it.
  * Commit to GitHub often - it helps to have a record of you recent code.
+ * Update the documentation! Even if it's only the last week of your work, make sure not to leave loose ends. Update this README to help future contributors.
