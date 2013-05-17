@@ -91,6 +91,7 @@ public class NewsfeedWindow extends Composite implements IWindow {
 		ScrollableFlexTable table = new ScrollableFlexTable();
 		table.setHeaders("When", "What");
 		table.addHeaderStyles(Styles.table_header, Styles.gradient);
+		table.setHeaderWidths("95px", "");
 		table.getInnerTable().addStyleName(Styles.table);
 		table.getOuterTable().addStyleName(Styles.outer_table);
 		table.getScrollPanel().setHeight("181px");

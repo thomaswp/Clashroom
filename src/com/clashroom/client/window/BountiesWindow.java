@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class BountiesWindow extends Window {
 	
-	public final static String NAME = BountiesPage.NAME;
+	public final static String NAME = "sideQuestWidget";
 	
 	private static final int REFRESH_INTERVAL = 1000; //ms
 	
@@ -57,16 +57,12 @@ public class BountiesWindow extends Window {
 		label.addStyleName(Styles.text_title);
 		mainPanel.add(label);
 		
-		//Create tables for quests
-		//queueTable.setText(0, 0, "Title");
-		//queueTable.setText(0, 1, "Time Left");
-		
 		// Add styles to elements in the quest tables
 		
 		queueTable = new ScrollableFlexTable();
-		queueTable.setHeaders("Time", "Time Left");
-		queueTable.setHeaderWidths("20%", "40%", "15%", "17.5%", "7.5%");
-		queueTable.setColumnWidths("20%", "50%", "10%", "17.5%", "5%");
+		queueTable.setHeaders("Title", "Time Left");
+//		queueTable.setHeaderWidths("20%", "40%", "15%", "17.5%", "7.5%");
+//		queueTable.setColumnWidths("20%", "50%", "10%", "17.5%", "5%");
 		queueTable.addHeaderStyles(Styles.table_header, Styles.gradient);
 		queueTable.getInnerTable().addStyleName(Styles.table);
 		queueTable.getOuterTable().addStyleName(Styles.outer_table);
