@@ -6,7 +6,7 @@ Clashroom is online, multiplayer RPG where players take on the role of Dragon tr
 ## Prerequisites ##
 Clashroom is coded using Google Web Toolkit with a JDO/App Engine backend. Knowledge of each of these technologies is necessary to contribute to Clashroom. See https://developers.google.com/web-toolkit/ for a starting guide to GWT.
 
-An understanding of git is also important for contributing. While a single contributor will be successful using the GitHub client, if multiple contributors are working simultaneously, it is recommended you first establish a firm knownledge of git. A good tutorial can be found at http://www.vogella.com/articles/Git/article.html.
+An understanding of git is also important for contributing. While a single contributor will be successful using the GitHub client, if multiple contributors are working simultaneously, it is recommended you first establish a firm knowledge of git. A good tutorial can be found at http://www.vogella.com/articles/Git/article.html.
 
 ## Setting up the environment ##
 Make sure you have eclipse installed with the [Google Plugin](https://developers.google.com/eclipse/docs/download). Download and import Clashroom as an existing project.
@@ -16,13 +16,13 @@ If you get buildpath errors, go to Properties->Java Build Path and remove the "A
 Launch Clashroom as a "Web Application."
 
 ## Using Git ##
-For single contributors, the GitHub client will likely be sufficient for pushing and pulling the repository. For multiple contributors, consider using the [EGit](http://www.eclipse.org/egit/) plugin for eclipse. We have found the best strategy is to have each contributor create a new branch to work in. When the branches need to be merged, we recommend merging them into the master one at a time. First switch to the master, then merge in the first branch. Subsequent brnaches will involved conflict resolution, so use Team->Advanced->Synchronize->origin/[branch to merge in] to manually synchronize the branches. After each successful merge, make sure to test and then commit and push to save your work.
+For single contributors, the GitHub client will likely be sufficient for pushing and pulling the repository. For multiple contributors, consider using the [EGit](http://www.eclipse.org/egit/) plugin for eclipse. We have found the best strategy is to have each contributor create a new branch to work in. When the branches need to be merged, we recommend merging them into the master one at a time. First switch to the master, then merge in the first branch. Subsequent branches will involve conflict resolution, so use Team->Advanced->Synchronize->origin/[branch to merge in] to manually synchronize the branches. After each successful merge, make sure to test and then commit and push to save your work.
 
 ## Structure ##
 Like any GWT application, code is divided into 3 main packages: client, server and shared.
 
 ### Client ###
-The client contains the UI for Clashroom. The Clashroom class serves as the entrypoint for the application. The UI is split into various Page classes, each of which represents a page on the website. Page navigation is handled by the FlowControl class. The HomePage class is tha main page, and contains links to the various other portions of the website. These are generally separated into the other sub-packes in the client folder:
+The client contains the UI for Clashroom. The Clashroom class serves as the entrypoint for the application. The UI is split into various Page classes, each of which represents a page on the website. Page navigation is handled by the FlowControl class. The HomePage class is the main page, and contains links to the various other portions of the website. These are generally separated into the other sub-packages in the client folder:
 
 **window** contains various Window subclasses, which are the various sections of the HomePage. Most Windows have a corresponding Page where their information can be viewed in more detail.
 
@@ -39,16 +39,16 @@ The client contains the UI for Clashroom. The Clashroom class serves as the entr
 **teacher** contains pages that the teacher might use to manipulate the game as time progresses.
 
 ### Server ###
-The server contains the backend of clashroom, mainly handling requests to the datastore. The main package contains a few servlets and utilities. The impl subpackage contains implementations for the [RPC server calls](https://developers.google.com/web-toolkit/doc/latest/tutorial/RPC).
+The server contains the backend of Clashroom, mainly handling requests to the datastore. The main package contains a few servlets and utilities. The impl subpackage contains implementations for the [RPC server calls](https://developers.google.com/web-toolkit/doc/latest/tutorial/RPC).
 
 ### Shared ###
-Shared contains code used on the client and server sides, including a number of serialiable classes which are passed over RPC back and forth between the. It is split into a number of sub-packages as well:
+Shared contains code used on the client and server sides, including a number of serializable classes which are passed over RPC back and forth between them. It is split into a number of sub-packages as well:
 
 **battle** contains classes for the simulated battles between Dragons. Inside are sub-packages for classes of Dragons, skills for battlers, types of battlers, buffs which can be applied to battlers and actions which can occur during battles.
 
-**entity** contains entities which can be sotred in the datastore. Many of these entities are also serializable so they can be passed back to the client.
+**entity** contains entities which can be stored in the datastore. Many of these entities are also serializable so they can be passed back to the client.
 
-**news** contains types of news which can appear on a uer's newsfeed, such as a battle occuring, a quest being completed, a bounty finishing, etc.
+**news** contains types of news which can appear on a user's newsfeed, such as a battle occurring, a quest being completed, a bounty finishing, etc.
 
 **task** contains special classes for dealing with the bounty system.
 
