@@ -18,6 +18,7 @@ import com.clashroom.client.widget.VerticalPanelWithSpacer;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.Battle;
+import com.clashroom.shared.entity.QueuedBattleEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,6 +33,18 @@ import com.google.gwt.user.client.ui.Widget;
 import com.tractionsoftware.gwt.user.client.ui.UTCDateBox;
 import com.tractionsoftware.gwt.user.client.ui.UTCTimeBox;
 
+/**
+ * A very thrown together page to setup Battles
+ * to be played out at a given time. Once added,
+ * the {@link QueuedBattleEntity} will be executed
+ * by the cron job (run once every minute) as soon
+ * as the appropriate time is up.
+ * 
+ * On a lark, this page uses the DragNDrop library,
+ * which we hope to explore further in the future
+ * for real UI. See <a href="http://code.google.com/p/gwt-dnd/">
+ * http://code.google.com/p/gwt-dnd/</a>
+ */
 public class CreateBattlePage extends Page {
 
 	public final static String NAME = "CreateBattle";

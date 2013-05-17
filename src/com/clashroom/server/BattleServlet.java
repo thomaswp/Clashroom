@@ -14,6 +14,9 @@ import com.clashroom.server.impl.BattleServiceImpl;
 import com.clashroom.shared.Debug;
 import com.clashroom.shared.entity.QueuedBattleEntity;
 
+/**
+ * Called by a cron job to run {@link QueuedBattleEntity}s.
+ */
 public class BattleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

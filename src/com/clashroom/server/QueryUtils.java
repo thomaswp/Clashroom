@@ -8,9 +8,13 @@ import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.clashroom.shared.Debug;
+import com.clashroom.shared.entity.UserEntity;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JDOCursorHelper;
 
+/**
+ * Static class to help query the datastore.
+ */
 public class QueryUtils {
 	
 	@Deprecated
@@ -21,6 +25,24 @@ public class QueryUtils {
 		return answer;
 	}
 	
+	/**
+	 * Queries the datastore for a unique instance of the given Class,
+	 * meeting the given parameters.
+	 * <p/>
+	 * Filters should take the form found at
+	 * <a href="https://developers.google.com/appengine/docs/java/datastore/jdo/queries#Filters">
+	 * https://developers.google.com/appengine/docs/java/datastore/jdo/queries#Filters</a>
+	 * but instead of declaring parameters to compare field against, just write "%s" for each
+	 * parameter. Then fill them in using the parameters. For example:
+	 * queryUnique(pm, UserEntity.class, "id==%s", 5) would return the {@link UserEntity}
+	 * with an id of 5. You could of course replace 5 with a variable.
+	 * 
+	 * @param pm The PersistenceManager to use
+	 * @param c The Class for which to query
+	 * @param filter 
+	 * @param parameters 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T queryUnique(PersistenceManager pm, 
 			Class<T> c, String filter, Object... parameters) {
@@ -37,12 +59,37 @@ public class QueryUtils {
 		return copy;
 	}
 	
+	/**
+	 * Queries the datastore, returning a list of all Entities which fit the given filter. For more
+	 * on writing filters, see {@link QueryUtils#queryUnique(Class, String, Object...)}.
+	 * 
+	 * @param pm The PersistenceManager to use
+	 * @param c The Class for which to query
+	 * @param filter
+	 * @param parameters
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> query(PersistenceManager pm, 
 			Class<T> c, String filter, Object... parameters) {
 		return (List<T>)query(pm, c, false, filter, parameters);
 	}
 	
+	/**
+	 * Queries the datastore for a given number of results of the
+	 * given Class, using the given ordering. Returns a cursorString
+	 * which can be passed to this method to pick up returning results
+	 * where the last query left off.
+	 * 
+	 * @param pm The PersistenceManager
+	 * @param c The Class for which to query
+	 * @param ordering The field to use for ordering, for insance "date asc" to
+	 * use the date field of an Entity to order the results, in ascending order
+	 * @param numResults The number of results to return
+	 * @param cursorString The cursor String
+	 * @return The cursor String to pass to the next query to pick up where this
+	 * query left off
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> queryRange(PersistenceManager pm,
 			Class<T> c, String ordering, int numResults, String cursorString) {

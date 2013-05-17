@@ -5,6 +5,11 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.canvas.dom.client.FillStrokeStyle;
 
+/**
+ * Not currently implemented.
+ * The plan for this Sprite is to serve as a hover-text when
+ * mousing over other {@link BattlerSprite}s, Buffs, etc.
+ */
 public class DetailsSprite {
 	
 	private float x, y;

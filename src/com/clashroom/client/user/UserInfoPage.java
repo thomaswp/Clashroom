@@ -16,6 +16,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * {@link Page} for viewing a user's basic information, as well
+ * as learning skill when viewing your own page. Most of the UI
+ * for this page is implemented in {@link UserInfoPageUI}.
+ */
 public class UserInfoPage extends Page {
 	public final static String NAME = "UserInfo";
 	
@@ -24,6 +29,13 @@ public class UserInfoPage extends Page {
 	private UserInfoPageUI userInfoWidget;
 	private UserEntity user;
 	
+	/**
+	 * Returns HTML for a link to this page for viewing
+	 * the user with the given id.
+	 * @param text The text to go inside the anchor tags
+	 * @param id The id of the user
+	 * @return The HTML for the link
+	 */
 	public static String getHTMLLinkToUser(String text, long id) {
 		return Formatter.format("<a href=#%s?id=%s>%s</a>",
 				NAME, id, text);
@@ -44,10 +56,13 @@ public class UserInfoPage extends Page {
 			@Override
 			public void onSuccess(UserEntity result) {
 				if (!result.isSetup()) {
+					//If this user isn't setup, redirect to the setup page
 					FlowControl.go(new SetupPage(result));
 				} else {
 					user = result;
 					if (user == null) {
+						//If this user doesn't exist (meaning you provided an
+						//invalid id), redirect to the home page
 						FlowControl.go(new HomePage());
 						return;
 					} else {
@@ -64,17 +79,16 @@ public class UserInfoPage extends Page {
 		};
 		
 		if (id == null) {
+			//If there's no id parameter, use the logged in user
 			userInfoService.getUser(callback);	
 		} else {
+			//Otherwise use the provided id
 			userInfoService.getUser(id, callback);
 		}
 	}
 	
 	private void setupUI() {
 		VerticalPanel panel = new VerticalPanel();
-//		Hyperlink link = new Hyperlink("<", HomePage.NAME);
-//		link.addStyleName(Styles.back_button);
-//		panel.add(link);
 		Window.setTitle("My Info");
 		userInfoWidget = new UserInfoPageUI();
 		userInfoWidget.setUserService(userInfoService);

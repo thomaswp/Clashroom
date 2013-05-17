@@ -29,6 +29,15 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 
+/**
+ * Used for manual setup of the datastore. For example: <br/>
+ * task: creates the default bounties <br/>
+ * sp: adds one skill point to the logged in user <br/>
+ * quests: adds the default quests <br/>
+ * setup: does "tasks" and "quests" <br/>
+ * <br/>
+ * Make a query in the form /test?do=... 
+ */
 public class TestServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;

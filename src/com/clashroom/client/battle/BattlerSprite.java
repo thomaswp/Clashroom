@@ -13,19 +13,29 @@ import com.google.gwt.canvas.dom.client.Context2d.TextAlign;
 import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.ui.Image;
 
+/**
+ * A Sprite to represent a {@link Battler} in an animated
+ * {@link BattlePage} battle.
+ */
 public class BattlerSprite extends BatchedSprite {
 	
+	//directory of battler images
 	public final static String IMG_DIR = Constant.IMG_BATTLER;
 	public final static String IMG_DIR_RED = Constant.IMG_BATTLER_RED;
 	public final static String IMG_DIR_GREEN = Constant.IMG_BATTLER_GREEN;
 	
+	//time spent moving forward and back on an attack
 	private final static int ATTACK_TIME = 400;
+	//time spent flashing red/green on an attack
 	private final static int HURT_TIME = 400;
+	//amount for the damage text to rise over time
 	private final static int TEXT_RISE = 50;
+	//the amount a battler moves forward on an attack
 	private final static float ATTACK_DISTANCE = 40;
 	
 	private Battler battler;
 	private float width, height;
+	//we overlay a red or green sprite to show healing/damage
 	private ImageElement image, imageDamaged, imageHealed;
 	private boolean loaded;
 	private int hp;
@@ -33,13 +43,21 @@ public class BattlerSprite extends BatchedSprite {
 	private double phaseOut;
 	private boolean dead;
 	
+	//how long have we been attacking
 	private int attackingFor = -1;
+	//how far has the sprite moved during the attack
 	private float attackOffset;
-	private boolean attackIsHeal;
-	private int attackDamage;
+	//callback for when an attack is finished
 	private Runnable onAttackFinishedCallback;
 	
-	private int hurtFor = -1;
+	//is this attack we just received a heal
+	private boolean damageIsHeal;
+	//how much damage did we just receive
+	private int damageReceived;
+	//how long we've been flashing red/green for this damage
+	private int damagedFor = -1;
+	//do we show damage? this is used primarily to "heal" when we level up
+	//without showing a healing damage
 	private boolean showDamage;
 	
 	public float x, y;
@@ -80,31 +98,51 @@ public class BattlerSprite extends BatchedSprite {
 		imageHealed = ImageElement.as(img.getElement());
 	}
 	
+	/**
+	 * Do an attack animation, them call the callback
+	 * @param onFinishedCallback the callback
+	 */
 	public void attack(Runnable onFinishedCallback) {
 		onAttackFinishedCallback = onFinishedCallback;
 		attackingFor = 0;
 	}
 	
+	/**
+	 * Take damage and flash red/green
+	 * @param damage The amount of damage dealt
+	 */
 	public void takeHit(int damage) {
 		targetHp = battler.hp;
-		hurtFor = 0;
-		attackIsHeal = damage < 0;
-		attackDamage = damage;
+		damagedFor = 0;
+		damageIsHeal = damage < 0;
+		damageReceived = damage;
 		showDamage = true;
 	}
 	
+	/**
+	 * Show a level up animation, healing to full health
+	 * and flashing green
+	 */
 	public void levelUp() {
-		hurtFor = 0;
-		attackIsHeal = true;
+		damagedFor = 0;
+		damageIsHeal = true;
 		showDamage = false;
 	}
 	
+	/**
+	 * Die. Enough said.
+	 */
 	public void die() {
 		dead = true;
 	}
 	
+	/**
+	 * Updates this sprite - should be called once per frame
+	 * @param timeElapsed The amount of time in ms since the last frame
+	 */
 	public void update(long timeElapsed) {
 		if (width == 0) {
+			//If the images aren't loaded yet, stall
 			if (image.getWidth() == 0 || imageDamaged.getWidth() == 0 ||
 					imageHealed.getWidth() == 0) return;
 			width = image.getWidth();
@@ -112,6 +150,7 @@ public class BattlerSprite extends BatchedSprite {
 			loaded = true;
 		}
 		
+		//Update the attack animation
 		if (attackingFor >= 0) {
 			attackingFor += timeElapsed;
 			if (attackingFor >= ATTACK_TIME) {
@@ -119,6 +158,7 @@ public class BattlerSprite extends BatchedSprite {
 				x -= attackOffset;
 				attackOffset = 0;
 			} else {
+				//Use a sin curve for the attack move distance
 				float newOffset = ATTACK_DISTANCE * (float)Math.sin(
 						Math.pow((float)attackingFor / ATTACK_TIME, 0.7) * Math.PI );
 				int dir = battler.teamA ? 1 : -1;
@@ -136,13 +176,15 @@ public class BattlerSprite extends BatchedSprite {
 					
 		}
 		
-		if (hurtFor >= 0) {
-			hurtFor += timeElapsed;
-			if (hurtFor >= HURT_TIME) {
-				hurtFor = -1;
+		//Update the hit animation
+		if (damagedFor >= 0) {
+			damagedFor += timeElapsed;
+			if (damagedFor >= HURT_TIME) {
+				damagedFor = -1;
 			}
 		}
 		
+		//Update the hp bar to the battler's current hp
 		int dif = targetHp - hp;
 		int seg = Math.max((int)(battler.getMaxHp() * 0.01f), 1);
 		if (dif > 0) {
@@ -151,6 +193,7 @@ public class BattlerSprite extends BatchedSprite {
 			hp = Math.max(targetHp, hp - seg);
 		}
 		
+		//phase out the battler if dead
 		if (dead && phaseOut < 1) {
 			phaseOut += timeElapsed / 1000.0;
 		}
@@ -160,23 +203,23 @@ public class BattlerSprite extends BatchedSprite {
 		return renderer;
 	}
 	
+	//The Renderer for BattlerSprites
 	private static Renderer<BattlerSprite> renderer;
 	static {
 		renderer = new Renderer<BattlerSprite>() {
 
+			//Was the last sprite we drew flipped?
 			private boolean lastFlipped;
-//			
-//			private float left, top, width, height, x, y;
-//			private boolean flipped;
-//			private Battler battler;
 			
 			@Override
 			protected boolean startDraw(Context2d context2d, BattlerSprite sprite) {
 				if (!sprite.loaded) return false;
 				
 				if (sprite.phaseOut > 1) {
+					//don't draw phased out sprites
 					return false;
 				} else if (sprite.phaseOut != 0) {
+					//set the global alpha if this Sprite is phasing out
 					context2d.setGlobalAlpha(1 - sprite.phaseOut);
 				}
 				
@@ -186,6 +229,7 @@ public class BattlerSprite extends BatchedSprite {
 			@Override
 			protected void endDraw(Context2d context2d, BattlerSprite sprite) {		
 				if (context2d.getGlobalAlpha() != 1) {
+					//reset the alpha when when we're done
 					context2d.setGlobalAlpha(1);
 				}
 			}
@@ -204,6 +248,8 @@ public class BattlerSprite extends BatchedSprite {
 						float left = sprite.x - sprite.width / 2; 
 						float top = sprite.y - sprite.height / 2;
 						
+						//flip the canvas if it's not the right
+						//direction for this sprite
 						if (!sprite.flipped && lastFlipped) {
 							context2d.restore();
 						} else if (sprite.flipped && !lastFlipped) {
@@ -218,11 +264,12 @@ public class BattlerSprite extends BatchedSprite {
 						} else {
 							context2d.drawImage(sprite.image, -sprite.x - sprite.width / 2, top);
 						}
-						if (sprite.hurtFor >= 0) {
+						//Draw the green/red overlay if we're damaged
+						if (sprite.damagedFor >= 0) {
 							double alpha = context2d.getGlobalAlpha();
-							double perc = Math.sin(Math.PI * sprite.hurtFor / HURT_TIME);
+							double perc = Math.sin(Math.PI * sprite.damagedFor / HURT_TIME);
 							context2d.setGlobalAlpha(alpha * perc);
-							ImageElement img = sprite.attackIsHeal ?
+							ImageElement img = sprite.damageIsHeal ?
 									sprite.imageHealed : sprite.imageDamaged;
 							if (!sprite.flipped) {
 								context2d.drawImage(img, left, top);
@@ -235,6 +282,7 @@ public class BattlerSprite extends BatchedSprite {
 					
 					@Override
 					public void endStep(Context2d context2d) {
+						//restore the canvas if we left it flipped
 						if (lastFlipped) {
 							lastFlipped = false;
 							context2d.restore();
@@ -270,6 +318,7 @@ public class BattlerSprite extends BatchedSprite {
 						if (sprite.battler.getMaxHp() > 0) {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
+							//start drawing two health-bar heights above the battler
 							int barFill = barWidth * sprite.hp / sprite.battler.getMaxHp();
 							context2d.fillRect(sprite.x - barWidth / 2, top - hpBarHeight * 2, barFill, hpBarHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - hpBarHeight * 2, barWidth, hpBarHeight);
@@ -296,6 +345,7 @@ public class BattlerSprite extends BatchedSprite {
 							float top = sprite.y - sprite.height / 2;
 							int barWidth = (int)(sprite.width * 0.8f);
 							int barFill = barWidth * sprite.battler.mp / sprite.battler.getMaxMp();
+							//draw right below the health bar
 							context2d.fillRect(sprite.x - barWidth / 2, top - hpBarHeight, barFill, mpBarHeight);
 							context2d.strokeRect(sprite.x - barWidth / 2, top - hpBarHeight, barWidth, mpBarHeight);
 						}
@@ -367,13 +417,14 @@ public class BattlerSprite extends BatchedSprite {
 						String name = sprite.battler.description;
 						double textWidth = lastWidth;
 						if (!name.equals(lastString)) {
+							//measuring text is expensive, so avoid it if
+							//the text hasn't changed
 							textWidth = context2d.measureText(name).getWidth();
 							lastString = name;
 							lastWidth = textWidth;
 						}
 						
-						double preferredAlpha = (1 - sprite.phaseOut) * 0.5;
-						context2d.setGlobalAlpha(preferredAlpha);
+						context2d.setGlobalAlpha((1 - sprite.phaseOut) * 0.5);
 						
 						int border = 3;
 						float top = sprite.y - sprite.height / 2;
@@ -395,9 +446,7 @@ public class BattlerSprite extends BatchedSprite {
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-
-						double preferredAlpha = (1 - sprite.phaseOut);
-						context2d.setGlobalAlpha(preferredAlpha);
+						context2d.setGlobalAlpha(1 - sprite.phaseOut);
 						
 						float top = sprite.y - sprite.height / 2;
 						context2d.fillText(sprite.battler.description, sprite.x, 
@@ -405,7 +454,7 @@ public class BattlerSprite extends BatchedSprite {
 					}
 				});
 				
-				//Write damage
+				//Write the floating damage string
 				drawSteps.add(new DrawStep<BattlerSprite>() {
 					final FillStrokeStyle fillStyle = CssColor.make("#CCCCCC");
 					
@@ -417,9 +466,9 @@ public class BattlerSprite extends BatchedSprite {
 					
 					@Override
 					public void doStep(Context2d context2d, BattlerSprite sprite) {
-						if (sprite.hurtFor >= 0 && sprite.showDamage) {
-							float y = sprite.y - sprite.hurtFor * TEXT_RISE / HURT_TIME;
-							context2d.fillText("" + Math.abs(sprite.attackDamage), sprite.x, y);
+						if (sprite.damagedFor >= 0 && sprite.showDamage) {
+							float y = sprite.y - sprite.damagedFor * TEXT_RISE / HURT_TIME;
+							context2d.fillText("" + Math.abs(sprite.damageReceived), sprite.x, y);
 						}
 					}
 				});

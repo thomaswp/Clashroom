@@ -28,10 +28,18 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+/**
+ * Handles datastore requests pertaining to the users.
+ */
 @SuppressWarnings("serial")
 public class UserInfoServiceImpl extends RemoteServiceServlet 
 implements UserInfoService {
 
+	/**
+	 * Gets the currently logged in user
+	 * @param pm
+	 * @return
+	 */
 	public static UserEntity getCurrentUser(PersistenceManager pm) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
@@ -42,6 +50,9 @@ implements UserInfoService {
 		return entity;
 	}
 	
+	/**
+	 * Gets the {@link UserEntity}
+	 */
 	public UserEntity getUser(long id) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {

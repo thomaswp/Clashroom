@@ -2,6 +2,10 @@ package com.clashroom.client.services;
 
 import com.google.gwt.core.shared.GWT;
 
+/**
+ * A static class to store RPC services so they
+ * only need by instantiated once.
+ */
 public class Services {
 	public final static QuestRetrieverServiceAsync questRetrieverService = 
 			GWT.create(QuestRetrieverService.class);

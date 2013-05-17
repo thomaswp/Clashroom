@@ -34,11 +34,18 @@ public class UserInfoPageUI extends Composite {
 
 	private DragonEntity dragon;
 
+	/**
+	 * Populate this UI with a {@link UserEntity}.
+	 * @param user The UserEntity
+	 * @param isMe Set to true if this is the logged-in user
+	 * to allow learning skill, etc.
+	 */
 	public void setUser(UserEntity user, boolean isMe) {
 		dragon = user.getDragon();
 
 		DragonClass dragonClass = dragon.getDragonClass();
 
+		//Set lets of UI fields
 		labelDragonName.setText(dragon.getName());
 		imageDragon.setUrl(Constant.IMG_BATTLER + dragonClass.getImageName());
 		labelLevel.setText(" " + dragon.getLevel());
@@ -61,12 +68,15 @@ public class UserInfoPageUI extends Composite {
 		labelSp.setText(Formatter.format("You have %s%s to spend.", user.getSkillPoints(), 
 				Constant.TERM_SKILL_POINT_SHORT));
 		labelSp.addStyleName("indent");
+		//Only show skill points if you're looking at your own profile
 		labelSp.setVisible(isMe);
 		for (Skill skill : dragonClass.getSkills()) {
+			//Show spells and if applicable allow the user to learn them
 			addSkill(skill, user, dragonClass, isMe);
 		}
 	}
 
+	//Add a skill icon and description to vPanelSkills
 	private void addSkill(final Skill skill, UserEntity user, DragonClass dragonClass, boolean isMe) {
 		boolean learned = user.getDragon().getSkills().contains(skill.getId());
 
@@ -93,6 +103,7 @@ public class UserInfoPageUI extends Composite {
 		Label labelDescription = new Label(skill.getDescription());
 		hPanelName.add(labelDescription);
 
+		//Allow the skill to be learned if not already
 		if (!learned) {
 			HorizontalPanel hPanelRequirements = new HorizontalPanel();
 			vPanelText.add(hPanelRequirements);
@@ -100,6 +111,9 @@ public class UserInfoPageUI extends Composite {
 					"[Costs %s%s]", skill.getSkillPointCost(), 
 					Constant.TERM_SKILL_POINT_SHORT);
 			int reqLevel = dragonClass.getSkillTree().get(skill);
+			
+			//Skills can be learned if this is your profile, the dragon is a high enough leve
+			//and you have enough skill points
 			if (isMe && reqLevel <= dragon.getLevel() && user.getSkillPoints() >= skill.getSkillPointCost()) {
 				
 				final Anchor anchorSkillPoint = new Anchor(Formatter.format("[Learn for %s%s]", 
@@ -107,12 +121,16 @@ public class UserInfoPageUI extends Composite {
 				anchorSkillPoint.addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
+						//User the enable/disable flag to mark whether the user has
+						//has clicked on this already
 						if (anchorSkillPoint.isEnabled()) {
+							//On the first click, just change the text to [Confirm]
 							anchorSkillPoint.setText("[Confirm]");
 							anchorSkillPoint.setEnabled(false);
 							return;
 						}
 						
+						//Learn the skill and refresh
 						userInfoService.learnSkill(skill.getId(), new AsyncCallback<Void>() {
 							@Override
 							public void onSuccess(Void result) {
@@ -129,6 +147,7 @@ public class UserInfoPageUI extends Composite {
 				});
 				hPanelRequirements.add(anchorSkillPoint);
 			} else {
+				//If the skill is already learned, just use a Label
 				Label labelSkillPoints = new Label(cost);
 				hPanelRequirements.add(labelSkillPoints);
 			}
@@ -166,6 +185,8 @@ public class UserInfoPageUI extends Composite {
 
 	public UserInfoPageUI() {
 
+		//Create a mess of UI
+		
 		VerticalPanel vPanelMain = new VerticalPanel();
 		if (Beans.isDesignTime()) {
 			vPanelMain.setStyleName(UserInfoPage.NAME);

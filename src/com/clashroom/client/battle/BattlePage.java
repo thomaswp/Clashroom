@@ -44,6 +44,10 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+/**
+ * A {@link Page} for showing past {@link Battle}s.
+ * This page uses HTML5 Canvas to show the battles.
+ */
 public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandler, MouseUpHandler {
 
 	public final static String NAME = "Battle";
@@ -56,6 +60,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	private Timer timer;
 
 	private Context2d context2d;
+	//width and height of the battle scene
 	private int width = 1100, height = 600;
 	private long lastUpdate;
 
@@ -104,6 +109,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		if (id != null) {
 			entityId = id;
 
+			//fetch the battle from the database
 			battleService.getBattle(entityId, new AsyncCallback<BattleEntity>() {
 				@Override
 				public void onSuccess(BattleEntity result) {
@@ -131,6 +137,11 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		}
 	}
 	
+	/**
+	 * Prints the stats of a Battler for debugging and
+	 * balancing.
+	 * @param b The Battler to print
+	 */
 	@SuppressWarnings("unused")
 	private void printBattlerStats(Battler b) {
 		System.out.println(Formatter.format(
@@ -140,6 +151,21 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				b.getDodgeChance(), b.getCriticalChance(), b.getSpellModifier(), b.getMeleeModifier()));
 	}
 	
+	/**
+	 * Creates a series of {@link Battle}s for balancing
+	 * testing. Prints the results in a table to the console.
+	 * Battles are run between each possible pair of {@link DragonClass}s
+	 * at every level in the given range. 
+	 * <p />
+	 * Each row in the printed table corresponds to a DragonBattler,
+	 * and each column represents how well it did against each other
+	 * DragonBattler. The final column is the win percentage.
+	 * 
+	 * @param minLevel The level to start testing battles
+	 * @param maxLevel The level to end testing battles
+	 * @param roundsPerLevel The number of battles to do between
+	 * each pair of DragonBattlers at each level
+	 */
 	@SuppressWarnings("unused")
 	private void testRoundRobbin(int minLevel, int maxLevel, int roundsPerLevel) {
 		int nDragons = DragonClass.getNumDragonClasses();
@@ -149,8 +175,8 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				if (i != j) {
 					for (int k = minLevel; k <= maxLevel; k++) {
 						for (int l = 0; l < roundsPerLevel; l++) {
-							Battler b1 = createTestBattler("Rufus", i, k);
-							Battler b2 = createTestBattler("Hale", j, k);
+							Battler b1 = createTestBattler("Test A", i, k);
+							Battler b2 = createTestBattler("Test B", j, k);
 							
 							if (isTeamAWinner(createTestFactory(b1, b2))) {
 								a[i][j]++;
@@ -180,6 +206,11 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		System.out.println(out);
 	}
 	
+	/**
+	 * Runs through a battle to see which team won.
+	 * @param factory The BattleFactory to test
+	 * @return true if TeamA was the winner of the battle
+	 */
 	private boolean isTeamAWinner(BattleFactory factory) {
 		Battle battle = factory.generateBattle();
 		do {
@@ -195,6 +226,10 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		return false;
 	}
 	
+	/**
+	 * Creates a test {@link BattleFactory} pitting the two
+	 * provided Dragons against each other
+	 */
 	private BattleFactory createTestFactory(Battler a, Battler b) {
 		LinkedList<Battler> teamA = new LinkedList<Battler>();
 		LinkedList<Battler> teamB = new LinkedList<Battler>();
@@ -205,7 +240,16 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		return new BattleFactory("Team A", teamA, "Team B", teamB);
 	}
 	
-	
+	/**
+	 * Creates a {@link DragonBattler} for testing/balancing.
+	 * Automatically has the Dragon learn all available skills
+	 * at its level.
+	 *  
+	 * @param name The name of the dragon
+	 * @param dragonClass The index of the dragon's class
+	 * @param level The level of the dragon
+	 * @return The dragon
+	 */
 	private DragonBattler createTestBattler(String name, int dragonClass, int level) {
 		DragonEntity entity = new DragonEntity();
 		entity.setName(name);
@@ -231,16 +275,13 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		}
 	}
 
+	//Set up lots of fun UI
 	private void setupUI() {
 		Window.setTitle("Battle");
 
 		VerticalPanel panel = new VerticalPanel();
 		panel.addStyleName(NAME);
 		initWidget(panel);
-		
-//		Hyperlink link = new Hyperlink("<", ListBattlePage.NAME);
-//		link.addStyleName(Styles.back_button);
-//		panel.add(link);
 		
 		labelTitle = new Label("Battle");
 		labelTitle.addStyleName(Styles.page_title);
@@ -272,8 +313,10 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		canvas.setCoordinateSpaceWidth(width);
 		canvas.setCoordinateSpaceHeight(height);
 
+		//Adding handlers seems to create a performance issue in Java
+		//mode, but likely not in javascript
 		canvas.addMouseDownHandler(this);
-		//canvas.addMouseUpHandler(this);
+//		canvas.addMouseUpHandler(this);
 //		canvas.addMouseMoveHandler(this);
 
 		context2d = canvas.getContext2d();
@@ -304,6 +347,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		battlers.clear();
 		battle = factory.generateBattle();
 
+		//Create team A
 		int dx = 40, dy = 65;
 		int dSize = battle.getTeamA().size() / 2;
 		int x = 230 - dx * dSize, y = height / 2 - dy * dSize;
@@ -314,6 +358,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 			x += dx; y += dy;
 		}
 
+		//Create team B
 		dSize = battle.getTeamB().size() / 2;
 		x = width - 230 + dx * dSize; 
 		y = height / 2 - dy * dSize;
@@ -324,6 +369,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 			x -= dx; y += dy;
 		}
 		
+		//currently does nothing
 		detailsSprite = new DetailsSprite();
 //		detailsSprite.setBattle(battle.getTeamA().get(0));
 	}
@@ -340,6 +386,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 	private void draw() {
 		context2d.clearRect(0, 0, width, height);
 
+		//draw the battlers in a batch to save performance
 		BatchedSprite.draw(context2d, BattlerSprite.getRenderer(), battlers);
 		detailsSprite.draw(context2d);
 
@@ -373,12 +420,15 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 
 	@Override
 	public void onMouseMove(MouseMoveEvent event) {
+		//currently does nothing
 		detailsSprite.setPosition(event.getX(), event.getY());
 	}
-
+	
+	//post a new Action from the battle
 	private void postInfo(String text) {
 		Label hLabel = new Label(labelInfo.getText());
 		hLabel.addStyleName(Styles.battle_info);
+		//add the old info to the history
 		vPanelInfoHistory.insert(hLabel, 0);
 		labelInfo.setText(SafeHtmlUtils.htmlEscape(text));
 	}
@@ -388,10 +438,13 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 		mouseDown = true;
 		BattleAction postAction;
 		if (event.getNativeButton() == 2) {
+			//Right click resets the battle - mainly for debugging
 			setupBattle();
 		} else if (battle != null && !battle.isOver()) {
+			//advance the battle by one action
 			BattleAction action = battle.nextAction();
 			if (action instanceof ActionSkill) {
+				//If they attack, animate it
 				final ActionSkill actionAttack = (ActionSkill) action;
 				BattlerSprite attacker = actionAttack.attacker.getTag();
 				Runnable damage = null;
@@ -399,6 +452,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 					damage = new Runnable() {
 						@Override
 						public void run() {
+							//Delay taking damage until 1/2 through the attack animation
 							for (Damage damage : actionAttack.damages) {
 								BattlerSprite attacked = damage.target.getTag();
 								attacked.takeHit(damage.damage);	
@@ -408,6 +462,9 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 				}
 				attacker.attack(damage);
 			} else if (action instanceof ActionSkillTargetAll) {
+				//We handle target-all attack separately because miss/critical
+				//works a little differently. For the purposes of this class,
+				//it works out to the same
 				final ActionSkillTargetAll actionAttack = (ActionSkillTargetAll) action;
 				BattlerSprite attacker = actionAttack.attacker.getTag();
 				Runnable damage = new Runnable() {
@@ -430,6 +487,7 @@ public class BattlePage extends Page implements MouseDownHandler, MouseMoveHandl
 			postInfo(action.toBattleString());
 		}
 		else if (battle != null && (postAction = battle.getNextPostBattleAction()) != null) {
+			//Print experience gains and levels up after the battle ends
 			if (postAction instanceof ActionExp) {
 				ActionExp actionExp = (ActionExp) postAction;
 				if (actionExp.newLevel != actionExp.battler.level) {
