@@ -10,6 +10,10 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+/**
+ * An entity representing a {@link BattleEntity} that should be
+ * created in the future.
+ */
 @PersistenceCapable
 public class QueuedBattleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;

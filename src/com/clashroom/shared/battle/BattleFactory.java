@@ -9,6 +9,9 @@ import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.battlers.Battler;
 
+/**
+ * Holds all the information necessary to reconstruct a {@link Battle}
+ */
 public class BattleFactory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -49,6 +52,11 @@ public class BattleFactory implements Serializable {
 		return teamNew;
 	}
 	
+	/**
+	 * Add information to post after the battle, such as experience
+	 * gain and leveling up, that are not calculated in a battle itself.
+	 * @param battleAction The BattleAction to add
+	 */
 	public void addPostBattleAction(BattleAction battleAction) {
 		postBattleActions.add(battleAction);
 	}
@@ -63,6 +71,7 @@ public class BattleFactory implements Serializable {
 		seed = (long)(Math.random() * Long.MAX_VALUE);
 	}
 	
+	//Empty constructor is necessary for passing over RPC
 	@Deprecated
 	public BattleFactory() { }
 }

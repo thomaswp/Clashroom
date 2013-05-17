@@ -11,10 +11,20 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+/**
+ * An RPC service for handling logging in/out of a user's account.
+ */
 @SuppressWarnings("serial")
 public class LoginServiceImpl extends RemoteServiceServlet implements
 LoginService {
 
+	/**
+	 * Return information about the users login state. This includes
+	 * whether or not the current user is logged in, if not where to
+	 * redirect to log in, and if so where to log out.
+	 * @param requestUri The URI to which to redirect the user after logging in/out.
+	 * This is usually the current URL
+	 */
 	@Override
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();

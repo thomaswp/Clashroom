@@ -9,6 +9,8 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 
+import org.apache.jsp.ah.searchDocumentBody_jsp;
+
 import com.clashroom.client.services.UserInfoService;
 import com.clashroom.server.PMF;
 import com.clashroom.server.QueryUtils;
@@ -51,19 +53,26 @@ implements UserInfoService {
 	}
 	
 	/**
-	 * Gets the {@link UserEntity}
+	 * Gets the {@link UserEntity} with the given id.
+	 * @param id The id of the requested User
 	 */
+	@Override
 	public UserEntity getUser(long id) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			UserEntity entity = QueryUtils.queryUnique(pm, UserEntity.class, "id == %s", id);
-			entity = pm.detachCopy(entity);
+			entity = pm.detachCopy(entity); //Must detach Entities to send them across RPC
 			return entity;
 		} finally {
 			pm.close();
 		}
 	}
 	
+	/**
+	 * Gets the {@link UserEntity} for the currently logged in user.
+	 * If it does not exist, returns a new UserEntity, with the
+	 * {@link UserEntity#isSetup()} property set to false.
+	 */
 	@Override
 	public UserEntity getUser() {
 		UserService userService = UserServiceFactory.getUserService();
@@ -76,8 +85,6 @@ implements UserInfoService {
 		
 		if (entity == null) {
 			entity = new UserEntity(user.getEmail());
-//			pm.makePersistent(entity);
-//			pm.flush();
 		} else {
 			entity = pm.detachCopy(entity);
 		}
@@ -88,6 +95,9 @@ implements UserInfoService {
 		return entity;
 	}
 	
+	/**
+	 * Gets all {@link UserEntity}s in the datastore.
+	 */
 	@Override
 	public List<UserEntity> getAllUsers() {
 		LinkedList<UserEntity> entities = new LinkedList<UserEntity>();
@@ -96,15 +106,20 @@ implements UserInfoService {
 		List<UserEntity> attachedEntities = QueryUtils.query(pm, UserEntity.class, "");
 		
 		for (UserEntity entity : attachedEntities) {
-			entities.add(pm.detachCopy(entity));
+			entities.add(pm.detachCopy(entity)); //must detach to send across RPC
 		}
 		
 		return entities;
 	}
 
+	/**
+	 * Persists a {@link UserEntity} to the datastore which
+	 * <b>does not yet exist</b>. The UserEntity will presumably
+	 * not yet have an id.
+	 * @param user
+	 */
 	@Override
-	public void setUser(UserEntity user) {
-		//if (user.getId() == null) throw new RuntimeException("No id!");
+	public void addUser(UserEntity user) {
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		if (QueryUtils.query(pm, UserEntity.class, "email==%s", user.getEmail()).size() != 0) {
@@ -114,11 +129,13 @@ implements UserInfoService {
 		
 		DragonEntity dragon = user.getDragon();
 		
+		//Start gain the Dragon's initial stats
 		DragonClass dragonClass = DragonClass.getById(dragon.getDragonClassId());
 		dragonClass.setUp(dragon);
 
 		pm.makePersistent(user);
 		
+		//Add some news that a new player joined the game
 		JoinNews joinNews = new JoinNews(user);
 		NewsfeedEntity newsEntity = new NewsfeedEntity(joinNews);
 		pm.makePersistent(newsEntity);
@@ -127,6 +144,15 @@ implements UserInfoService {
 		pm.close();
 	}
 
+	/**
+	 * Has the current {@link UserEntity} learn the {@link Skill}
+	 * with the given id. Will fail if the user's {@link DragonEntity}
+	 * is not a high enough level or if the user does not have enough
+	 * skill points. The user's skill points will be appropriately
+	 * reduced after the Skill is learned.
+	 * 
+	 * @param id The id of the Skill to learn
+	 */
 	@Override
 	public void learnSkill(int id) {
 
@@ -153,15 +179,28 @@ implements UserInfoService {
 		}
 		
 		user.setSkillPoints(user.getSkillPoints() - skill.getSkillPointCost());
+		//Because Dragons are EmbeddedEntities we've found it is necessary to detach a copy
+		//before modifying in order to update the datastore with the changes
+		//This essentially forces the the UserEntity to update it's dragon field.
 		DragonEntity dragon = pm.detachCopy(user.getDragon());
 		dragon.getSkills().add(skill.getId());
 		user.setDragon(dragon);
+		
 		pm.makePersistent(user);
 		
 		pm.flush();
 		pm.close();
 	}
 
+	/**
+	 * Gets up to the given count of {@link NewsfeedItem}s from the
+	 * datastore which involve one of the given users. If users is
+	 * null, simply returns the most recent news items, up to count.
+	 * 
+	 * @param users a list of ids of users, one of which the returned news
+	 * should involve
+	 * @param count the maximum number of results to return
+	 */
 	@Override
 	public List<NewsfeedItem> getNews(List<Long> users, int count) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -192,6 +231,11 @@ implements UserInfoService {
 		return items;
 	}
 
+	/**
+	 * Gives the current {@link UserEntity} experience, leveling
+	 * up if appropriate.
+	 * @param exp The amount of experience to gain
+	 */
 	@Override
 	public void addExp(int exp) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -199,11 +243,25 @@ implements UserInfoService {
 		pm.close();
 	}
 	
+	/**
+	 * A static method, allowing the currently logged in {@link UserEntity}
+	 * to gain the given amount of experience, leveling up if appropriate.
+	 * This allows other server-side code to add experience to the user.
+	 * This method handles retrieving and persisting the {@link DragonEntity},
+	 * so it would be inappropriate to use it in a situation where the user has
+	 * already been retrieved.
+	 * <p/>
+	 * <b>Do not use this method</b> if you already have a detached {@link DragonEntity}.
+	 * Instead, simply call {@link DragonEntity#addExp(int)}.
+	 * 
+	 * @param pm The PersistenceManager to use for this transaction
+	 * @param exp The amount of experience to gain
+	 */
 	public static void addExpImpl(PersistenceManager pm, int exp) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
 		
-		Debug.write("Exp: %d", exp);
+		Debug.write("Exp gained: %d", exp);
 		
 		if (user == null) return;
 		
@@ -213,14 +271,21 @@ implements UserInfoService {
 			throw new RuntimeException("No UserEntity");
 		}
 		entity.getDragon().addExp(exp);
+		//see learnSkill() for why to detach a copy
 		entity.setDragon(pm.detachCopy(entity.getDragon()));
 		
 		pm.makePersistent(entity);
 	}
 	
+	/**
+	 * Has the currently logged in {@link UserEntity} finish the
+	 * {@link QuestEntity} with the given id.
+	 * @param id The id
+	 */
 	@Override
 	public void completeQuest(long id) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
+		//The try/finally block ensure the pm is closed no matter what
 		try {
 			UserEntity user = getUser();
 			if (user == null) throw new RuntimeException("No user");
@@ -228,19 +293,21 @@ implements UserInfoService {
 			QuestEntity quest = QueryUtils.queryUnique(pm, QuestEntity.class, "id==%s", id);
 			if (quest == null) throw new RuntimeException("No quest with id :" + id);
 
+			if (user.getCompletedQuests().contains(id)) throw new RuntimeException("Quest already completed!");
 
 			user.addCompletedQuest(id);
-			user.setCompletedQuests(user.getCompletedQuests());
+			user.setCompletedQuests(user.getCompletedQuests()); //Ensure the UserEntity updates this field
 			for(Long itemID: quest.getItemsRewarded()){
 				user.addItemToInventory(itemID);
 			}
-			user.setItemsIventory(user.getItemInventory());
+			user.setItemsIventory(user.getItemInventory());  //Ensure the UserEntity updates this field
 			int totalsp = user.getSkillPoints() + quest.getQuestPoints();
 
 			user.setSkillPoints(totalsp);
 
 			user.getDragon().addExp(quest.getExperienceRewarded());
 
+			//Add some news that this quest was completed
 			QuestNews qn = new QuestNews(new Date(), quest.getQuestName(), user.getUsername(), user.getId());
 			NewsfeedEntity ne = new NewsfeedEntity(qn);
 			pm.makePersistent(ne);

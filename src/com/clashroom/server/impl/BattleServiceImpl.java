@@ -25,19 +25,30 @@ import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+/**
+ * An RPC service for manipulating {@link BattleEntity}s.
+ */
 public class BattleServiceImpl extends RemoteServiceServlet implements BattleService {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Retrieves the {@link BattleEntity} with the given id.
+	 * @param id The id
+	 */
 	@Override
 	public BattleEntity getBattle(long id) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		BattleEntity entity = pm.getObjectById(BattleEntity.class, id);
-		entity.getBattleFactory();
-		entity = pm.detachCopy(entity);
+		entity.getBattleFactory(); //Get the BattleFactory to ensure it is retrieved from the datastore
+		entity = pm.detachCopy(entity); //Detach the entity, to allow it to be passed over RPC
 		pm.close();
 		return entity;
 	}
 
+	/**
+	 * Gets all {@link BattleEntity}s in the datastore which involve
+	 * the currently logged in user.
+	 */
 	@Override
 	public List<BattleEntity> getBattles() throws IllegalArgumentException {
 		ArrayList<BattleEntity> entities = new ArrayList<BattleEntity>();
@@ -52,14 +63,17 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		
 		List<BattleEntity> queryEntities = QueryUtils.query(
 				pm, BattleEntity.class, "playerIds.contains(%s)", userEntity.getId());
-		for (BattleEntity entity : queryEntities) {
-			entity.getBattleFactory();
-			entities.add(pm.detachCopy(entity));
+		for (BattleEntity entity : queryEntities) { 
+			entity.getBattleFactory(); //Get the BattleFactory to ensure it is retrieved from the datastore
+			entities.add(pm.detachCopy(entity)); //Detach the entity, to allow it to be passed over RPC
 		}
 		pm.close();
 		return entities;
 	}
 	
+	/**
+	 * Gets all {@link QueuedBattleEntity} which involve the currently logged in user.
+	 */
 	@Override
 	public List<QueuedBattleEntity> getScheduledBattles() {
 		ArrayList<QueuedBattleEntity> entities = new ArrayList<QueuedBattleEntity>();
@@ -82,6 +96,14 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		return entities;
 	}
 	
+	/**
+	 * Adds a new {@link QueuedBattleEntity} with the given opposing teams
+	 * for the given date.
+	 * @param teamAName The name of the left-side team
+	 * @param teamAIds A list of ids of the {@link UserEntity}s which comprise teamA
+	 * @param teamBName The name of the right-side team
+	 * @param teamBIds A list of ids of the {@link UserEntity}s which comprise teamB
+	 */
 	@Override
 	public Long scheduleBattle(String teamAName, List<Long> teamAIds, 
 			String teamBName, List<Long> teamBIds, Date time) {
@@ -92,6 +114,14 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		return qb.getId();
 	}
 	
+	/**
+	 * Creates a new {@link BattleEntity} with the given teams. The battle
+	 * is automatically run and the appropriate experience is given to the
+	 * participants.
+	 * 
+	 * @param teamAIds A list of ids of the {@link UserEntity}s which comprise teamA 
+	 * @param teamBIds A list of ids of the {@link UserEntity}s which comprise teamB
+	 */
 	@Override
 	public Long createBattle(List<Long> teamAIds, List<Long> teamBIds) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -101,10 +131,28 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 	}
 
 
-	public static void createBattleImpl(PersistenceManager pm, QueuedBattleEntity qb) {
-		createBattleImpl(pm, qb.getTeamAIds(), qb.getTeamBIds(), qb.getTime());
+	/**
+	 * Uses the given {@link QueuedBattleEntity} to call 
+	 * {@link BattleServiceImpl#createBattleImpl(PersistenceManager, List, List, Date)}
+	 * with the appropriate arguments.
+	 * @param pm The PersistenceManager to use for this transaction
+	 * @param qb The QueuedBatteEntity to use to fill the parameters
+	 * @return
+	 */
+	public static Long createBattleImpl(PersistenceManager pm, QueuedBattleEntity qb) {
+		return createBattleImpl(pm, qb.getTeamAIds(), qb.getTeamBIds(), qb.getTime());
 	}
 	
+	/**
+	 * Creates a {@link BattleEntity} pitting the given teams against each other,
+	 * running the battle and adding the appropriate experience to both sides.
+	 * @param pm The PersistenceManager to use for the transaction
+	 * @param teamAIds A list of ids of the {@link UserEntity}s which comprise teamA 
+	 * @param teamBIds A list of ids of the {@link UserEntity}s which comprise teamB
+	 * @param time The time the given battle should [take/have taken] place. Regardless
+	 * the battle will execute immediately, but the date will show up as provided
+	 * @return The id of the created BattleEntity, or null if the battle failed to create
+	 */
 	public static Long createBattleImpl(PersistenceManager pm, List<Long> teamAIds, 
 			List<Long> teamBIds, Date time) {
 		LinkedList<UserEntity> teamAEntities = new LinkedList<UserEntity>();
@@ -146,6 +194,7 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		
 		pm.makePersistent(battleEntity);
 		
+		//Add some news that this happened
 		NewsfeedEntity item = new NewsfeedEntity(new BattleNews(battleEntity));
 		pm.makePersistent(item);
 		
@@ -154,6 +203,7 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 		return battleEntity.getId();
 	}
 	
+	//Has the given team gain its experience from the battle
 	private static void gainExp(PersistenceManager pm, List<UserEntity> users, 
 			List<Battler> team, int exp, BattleFactory factory) {
 		for (int i = 0; i < users.size(); i++) {
@@ -164,7 +214,12 @@ public class BattleServiceImpl extends RemoteServiceServlet implements BattleSer
 			dragon.addExp(exp);
 			userEntity.setDragon(dragon);
 			pm.makePersistent(userEntity);
+			//Add some text at the end of the battle, saying that
+			//the player gained some experience
 			factory.addPostBattleAction(new ActionExp(db, exp, dragon.getLevel()));
+			//TODO: There seems to be a bug, either in this logic or in BattlePage's
+			//logic, which prevents this message from showing up sometimes at the end
+			//of a battle. It is unclear whether the experience is gained or not.
 		}
 	}
 }

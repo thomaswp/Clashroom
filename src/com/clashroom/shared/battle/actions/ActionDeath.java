@@ -3,6 +3,9 @@ package com.clashroom.shared.battle.actions;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
 
+/**
+ * A {@link BattleAction} for when a {@link Battler} dies.
+ */
 public class ActionDeath extends BattleAction {
 	private static final long serialVersionUID = 1L;
 	

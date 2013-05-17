@@ -3,6 +3,9 @@ package com.clashroom.shared.battle.actions;
 import com.clashroom.shared.Formatter;
 import com.clashroom.shared.battle.battlers.Battler;
 
+/**
+ * A post-battle action for players gaining experience.
+ */
 public class ActionExp extends BattleAction {
 	private static final long serialVersionUID = 1L;
 	

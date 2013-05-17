@@ -1,10 +1,16 @@
 package com.clashroom.shared.battle.battlers;
 
 import com.clashroom.shared.Formatter;
+import com.clashroom.shared.battle.Battle;
 
+/**
+ * An NPC {@link Battler} for testing, an hopefully for
+ * in-game NPC {@link Battle}s in the future.
+ */
 public class GoblinBattler extends Battler {
 	private static final long serialVersionUID = 1L;
 
+	//Empty constructor is necessary for passing over RPC
 	@Deprecated
 	public GoblinBattler() {}
 	

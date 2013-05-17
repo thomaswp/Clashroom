@@ -78,7 +78,7 @@ public class SetupPage extends Page {
 	}
 	
 	private void finish() {
-		userInfoService.setUser(form.getUser(), new AsyncCallback<Void>() {
+		userInfoService.addUser(form.getUser(), new AsyncCallback<Void>() {
 			@Override
 			public void onSuccess(Void result) {
 				FlowControl.go(new HomePage());

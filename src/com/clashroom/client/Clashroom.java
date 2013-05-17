@@ -85,7 +85,7 @@ public class Clashroom implements EntryPoint, ValueChangeHandler<String> {
 					RootPanel login = RootPanel.get("login");
 					login.add(new LoginWidget(result));
 					
-					if (result.isHasAccount()) {
+					if (result.hasAccount()) {
 						if (History.getToken().isEmpty()) {
 							//By default go to the home page
 							FlowControl.go(new HomePage());

@@ -1,6 +1,11 @@
 package com.clashroom.shared;
 import java.io.Serializable;
 
+import com.clashroom.shared.entity.UserEntity;
+
+/**
+ * A class for holding information about a User's logged in state.
+ */
 @SuppressWarnings("serial")
 public class LoginInfo implements Serializable {
 
@@ -20,6 +25,10 @@ public class LoginInfo implements Serializable {
 		this.loggedIn = loggedIn;
 	}
 
+	/**
+	 * The URL where the user can be redirected to log in
+	 * @return The URL
+	 */
 	public String getLoginUrl() {
 		return loginUrl;
 	}
@@ -27,7 +36,11 @@ public class LoginInfo implements Serializable {
 	public void setLoginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
 	}
-
+	
+	/**
+	 * The URL where the user can be directed to log out
+	 * @return The URL
+	 */
 	public String getLogoutUrl() {
 		return logoutUrl;
 	}
@@ -52,7 +65,11 @@ public class LoginInfo implements Serializable {
 		this.nickname = nickname;
 	}
 
-	public boolean isHasAccount() {
+	/**
+	 * Returns true if this user has an account with Clashroom, meaning
+	 * a {@link UserEntity} assigned to their email.
+	 */
+	public boolean hasAccount() {
 		return hasAccount;
 	}
 
@@ -60,6 +77,10 @@ public class LoginInfo implements Serializable {
 		this.hasAccount = hasAccount;
 	}
 
+	/**
+	 * The id of the {@link UserEntity} assigned to this user.
+	 * @return The id
+	 */
 	public long getUserId() {
 		return userId;
 	}

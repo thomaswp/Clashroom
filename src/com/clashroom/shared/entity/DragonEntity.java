@@ -12,6 +12,12 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.clashroom.shared.battle.dragons.DragonClass;
 
+/**
+ *  An entity representing a user's Dragon. It is embedded in the 
+ *  {@link UserEntity}, meaning they are combined when stored in the
+ *  datastore. This allows them to be tied together, but they can exist
+ *  as separate objects for good Object-Oriented practice.
+ */
 @SuppressWarnings("serial")
 @PersistenceCapable
 @EmbeddedOnly
@@ -39,10 +45,19 @@ public class DragonEntity implements Serializable {
 	@Persistent
 	private List<Integer> skills = new LinkedList<Integer>();
 	
+	/**
+	 * Get the {@link DragonClass} of this dragon,
+	 * using it's {@link DragonEntity#dragonClassId}.
+	 */
 	public DragonClass getDragonClass() {
 		return DragonClass.getById(dragonClassId);
 	}
 
+	/**
+	 * Adds experience to this Dragon, and handles any leveling up
+	 * or stat gains from the level up.
+	 * @param exp The experience to gain
+	 */
 	public void addExp(int exp) {
 		DragonClass dragonClass = getDragonClass();
 		this.experience += exp;
@@ -122,6 +137,11 @@ public class DragonEntity implements Serializable {
 		this.maxMp = maxMp;
 	}
 
+	/**
+	 * Gets the id of the {@link DragonClass} of this
+	 * Dragon.
+	 * @return The id
+	 */
 	public int getDragonClassId() {
 		return dragonClassId;
 	}

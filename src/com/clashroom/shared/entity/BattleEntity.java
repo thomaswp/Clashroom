@@ -17,6 +17,11 @@ import com.clashroom.shared.battle.actions.BattleAction;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.battlers.DragonBattler;
 
+/**
+ * An Entity wrapping a {@link BattleFactory} and
+ * exposing the important fields. Also handles
+ * calculating experience gain for battling Dragons.
+ */
 @PersistenceCapable
 public class BattleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -61,6 +66,7 @@ public class BattleEntity implements Serializable {
 		this.battleFactory = battleFactory;
 		this.date = date;
 		
+		//Determine who won the battle
 		Battle battle = battleFactory.generateBattle();
 		BattleAction action = battle.nextAction();
 		while (!(action instanceof ActionFinish)) {
@@ -68,6 +74,7 @@ public class BattleEntity implements Serializable {
 		}
 		teamAVictor = ((ActionFinish) action).teamAVictor;
 		
+		//Calculate teamA and teamB's exp
 		for (Battler battler : battle.getTeamB()) {
 			int exp = battler.getExpReward();
 			if (!battler.isDead()) exp *= LIVE_EXP_FACTOR;
@@ -81,6 +88,7 @@ public class BattleEntity implements Serializable {
 		}
 		if (teamAVictor) teamBExp = (int)(teamBExp * LOSE_EXP_FACTOR);
 		
+		//Add the teams' id's so this can be looked up in the datastore with them
 		for (Battler battler : battleFactory.getTeamA()) {
 			if (battler instanceof DragonBattler) {
 				teamAIds.add(((DragonBattler) battler).playerId);

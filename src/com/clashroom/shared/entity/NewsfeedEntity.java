@@ -11,6 +11,10 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.clashroom.shared.news.NewsfeedItem;
 
+/**
+ * Entity to wrap a {@link NewsfeedItem} and expose the necessary
+ * fields for access from the datastore.
+ */
 @PersistenceCapable
 public class NewsfeedEntity {
 

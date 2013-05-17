@@ -12,6 +12,9 @@ import com.clashroom.shared.entity.BattleEntity;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * A {@link NewsfeedItem} for when the player is in a battle.
+ */
 public class BattleNews extends NewsfeedItem implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -19,6 +22,8 @@ public class BattleNews extends NewsfeedItem implements Serializable {
 	private String winner, loser;
 	private long winnerId, loserId;
 	
+	//need a static method to use in the super constructor
+	//combines two lists of Longs
 	private static List<Long> combine(List<Long> listA, List<Long> listB) {
 		ArrayList<Long> list = new ArrayList<Long>();
 		list.addAll(listA);
@@ -26,11 +31,16 @@ public class BattleNews extends NewsfeedItem implements Serializable {
 		return list;
 	}
 	
+	//Empty constructor is necessary for serialization across RPC
 	@Deprecated
 	public BattleNews() { 
 		super(null, (List<Long>)null);
 	}
 	
+	/**
+	 * Constructs a {@link NewsfeedItem} for the given battle occurring
+	 * @param battle The battle
+	 */
 	public BattleNews(BattleEntity battle) {
 		super(battle.getDate(), combine(battle.getTeamAIds(), battle.getTeamBIds()));
 		String teamA = battle.getBattleFactory().getTeamAName();

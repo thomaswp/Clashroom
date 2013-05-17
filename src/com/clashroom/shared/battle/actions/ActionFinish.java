@@ -2,6 +2,9 @@ package com.clashroom.shared.battle.actions;
 
 import com.clashroom.shared.Formatter;
 
+/**
+ * Action for when a {@link Battle} finishes.
+ */
 public class ActionFinish extends BattleAction {
 	private static final long serialVersionUID = 1L;
 	

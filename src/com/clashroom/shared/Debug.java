@@ -1,7 +1,14 @@
 package com.clashroom.shared;
 
 
+/**
+ * A class for centralizing debugging, so that it can be universally
+ * enabled/disabled or redirected. Currently uses System.out for output.
+ */
 public class Debug {
+	/**
+	 * Set to true to have Debug do output, and false to stifle it
+	 */
 	public static boolean DEBUG = true;
 	
 	public static void write(long x) {

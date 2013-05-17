@@ -15,8 +15,8 @@ public interface UserInfoServiceAsync {
 	public void getUser(AsyncCallback<UserEntity> callback);
 	/** See {@link UserInfoServiceImpl#getUser(long id)} */
 	public void getUser(long id, AsyncCallback<UserEntity> callback);
-	/** See {@link UserInfoServiceImpl#setUser(UserEntity)} */
-	public void setUser(UserEntity user, AsyncCallback<Void> callback);
+	/** See {@link UserInfoServiceImpl#addUser(UserEntity)} */
+	public void addUser(UserEntity user, AsyncCallback<Void> callback);
 	/** See {@link UserInfoServiceImpl#getAllUsers()} */
 	public void getAllUsers(AsyncCallback<List<UserEntity>> callback);
 	/** See {@link UserInfoServiceImpl#addExp(int)} */

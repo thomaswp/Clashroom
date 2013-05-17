@@ -6,6 +6,10 @@ import java.util.List;
 import com.clashroom.shared.battle.battlers.Battler;
 import com.clashroom.shared.battle.buffs.Buff;
 
+/**
+ * Represents a passive {@link Skill}, which a {@link Battler} does not
+ * actively use on their turn, but which affects its stats.
+ */
 public abstract class PassiveSkill extends Skill {
 	private static final long serialVersionUID = 1L;
 
@@ -24,5 +28,9 @@ public abstract class PassiveSkill extends Skill {
 		addBuffs(buffs);
 	}
 	
+	/**
+	 * Should add any {@link Buff}s given by this Skill to the provided list.
+	 * @param buffs The list to which to add any Buffs.
+	 */
 	protected abstract void addBuffs(List<Buff> buffs);
 }
