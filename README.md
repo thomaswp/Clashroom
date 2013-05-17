@@ -86,5 +86,5 @@ There are a number of things to watch out for when working with GWT. A few memor
  * In order for JDO to recognize changes you make to an entity and persist them in the datastore, you have to use the appropriate setters. You can't just modify the field. For that reason, entities should never have public fields.
  * Sometimes changes you make to an entity won't persist in the datastore, even when you use the right setters. Sometime you can fix this by detaching a copy and repersisting it.
  * When you run into a problem, **just restart the server first**, then see if it persists before doing too much debugging.
- * [StackOverflow](www.stackoverflow.com) is your best friend. Use it.
+ * [StackOverflow](http://www.stackoverflow.com) is your best friend. Use it.
  * Commit to GitHub often - it helps to have a record of you recent code.
