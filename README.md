@@ -21,52 +21,70 @@ For single contributors, the GitHub client will likely be sufficient for pushing
 ## Structure ##
 Like any GWT application, code is divided into 3 main packages: client, server and shared.
 
-### client ###
+### Client ###
 The client contains the UI for Clashroom. The Clashroom class serves as the entrypoint for the application. The UI is split into various Page classes, each of which represents a page on the website. Page navigation is handled by the FlowControl class. The HomePage class is tha main page, and contains links to the various other portions of the website. These are generally separated into the other sub-packes in the client folder:
 
-##### window #####
-This contains various Window subclasses, which are the various sections of the HomePage. Most Windows have a corresponding Page where their information can be viewed in more detail.
+**window** contains various Window subclasses, which are the various sections of the HomePage. Most Windows have a corresponding Page where their information can be viewed in more detail.
 
-##### widget #####
-This contains custom GWT widgets for use on the various pages.
+**widget** contains custom GWT widgets for use on the various pages.
 
-##### user #####
-This contains pages dealing with the user, viewing a user's profile and setting up a new user.
+**user** contains pages dealing with the user, viewing a user's profile and setting up a new user.
 
-##### quest #####
-This contains pages dealing with real-world quests.
+**quest** contains pages dealing with real-world quests.
 
-##### battle #####
-This contains pages dealing with battles between players, including a page which uses HTML5 canvas to display battles to the user.
+**battle** contains pages dealing with battles between players, including a page which uses HTML5 canvas to display battles to the user.
 
-##### bounty #####
-This contains pages dealing with bounties, small time-based side quests that the user can queue up to gain extra experience. This rewards players who check in frequently to the website.
+**bounty** contains pages dealing with bounties, small time-based side quests that the user can queue up to gain extra experience. This rewards players who check in frequently to the website.
 
-##### teacher #####
-This contains pages that the teacher might use to manipulate the game as time progresses.
+**teacher** contains pages that the teacher might use to manipulate the game as time progresses.
 
-### server ###
+### Server ###
 The server contains the backend of clashroom, mainly handling requests to the datastore. The main package contains a few servlets and utilities. The impl subpackage contains implementations for the [RPC server calls](https://developers.google.com/web-toolkit/doc/latest/tutorial/RPC).
 
-### shared ###
+### Shared ###
 Shared contains code used on the client and server sides, including a number of serialiable classes which are passed over RPC back and forth between the. It is split into a number of sub-packages as well:
 
-##### battle #####
-This contains classes for the simulated battles between Dragons. Inside are sub-packages for classes of Dragons, skills for battlers, types of battlers, buffs which can be applied to battlers and actions which can occur during battles.
+**battle** contains classes for the simulated battles between Dragons. Inside are sub-packages for classes of Dragons, skills for battlers, types of battlers, buffs which can be applied to battlers and actions which can occur during battles.
 
-##### entity #####
-This contains entities which can be sotred in the datastore. Many of these entities are also serializable so they can be passed back to the client.
+**entity** contains entities which can be sotred in the datastore. Many of these entities are also serializable so they can be passed back to the client.
 
-##### news #####
-This contains types of news which can appear on a uer's newsfeed, such as a battle occuring, a quest being completed, a bounty finishing, etc.
+**news** contains types of news which can appear on a uer's newsfeed, such as a battle occuring, a quest being completed, a bounty finishing, etc.
 
-##### task #####
-This contains special classes for dealing with the bounty system.
+**task** contains special classes for dealing with the bounty system.
 
 ### Other resources ###
+There are other resources under the war/ directory that are worth noting:
 
-##### css #####
-The css folder under war/ contains the four css pages that are used to style Clashroom. The css is generally organized by category into different files.
+**css** contains the four css pages that are used to style Clashroom. The css is generally organized by category into different files.
 
-##### img #####
-The img folder contains image resources used in Clashroom.
+**img** contains image resources used in Clashroom.
+
+## Superclasses ##
+Clashroom has a number of extendable superclasses which allow you to easily add components. The primary documentation can be found in the classes themselves, but some suggestions are as follows:
+
+**Page.java**: Extend this class to add a page Clashroom. Make sure you register your page with the FlowControl.go() method.
+
+**NewsfeedItem.java**: Extend this class to create a new type of news to appear in the Town Herald. Simply create a new NewsfeedEntity and pass your newly created NewsfeedItem to its constructor, then persist the entity.
+
+**BattleAction.java**: Extend this class to create a new action that can occur during Battles. Current examples include attacking, dying, winning, etc. Make sure that BattlePage is edited to handle your action when it pops up.
+
+**Battler.java**: Extend this class to create new types of NPC Battlers.
+
+**Buff.java**: Extend this class to create a new type of Buff that can be applied to Battlers to change their stats.
+
+**DragonClass.java**: Extend this class to create a new class of dragon for the player to use. Make sure you register your class in DragonClass's dragons field.
+
+**Skill.java**: Extend this class to create a new Skill for dragons to use. Have a DragonClass add it to its skill tree to have that dragon be able to learn your skill. Make sure to register your new skill with Skill's skills array.
+
+## TODO ##
+There is a TODO.txt file inside the main directory with future work that needs doing. There are also TODO markers inside the code with specific improvement that are needed.
+
+## Caveats ##
+There are a number of things to watch out for when working with GWT. A few memorable ones are listed below:
+ * Make sure any class that is being passed over RPC is Serializable, has a no-args constructor and doesn't include any fields that don't meet that requirement
+ * If you want to send an entity retrieved from the datastore over RPC, you to send a PersistenceManager.detachCopy(entitiy) instead.
+ * In order for JDO to recognize changes you make to an entity and persist them in the datastore, you have to use the appropriate setters. You can't just modify the field. For that reason, entities should never have public fields.
+ * Sometimes changes you make to an entity won't persist in the datastore, even when you use the right setters. Sometime you can fix this by detaching a copy and repersisting it.
+ * When you run into a problem, **just restart the server first**, then see if it persists before doing too much debugging.
+ * [StackOverflow](www.stackoverflow.com) is your best friend. Use it.
+ * Commit to GitHub often - it helps to have a record of you recent code.
