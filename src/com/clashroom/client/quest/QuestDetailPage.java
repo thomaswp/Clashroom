@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 /*
  * Page that gets the details of a quest that was chosen
- * Riese Narcisse
  */
 public class QuestDetailPage extends Page implements ClickHandler {
 
@@ -63,11 +62,21 @@ public class QuestDetailPage extends Page implements ClickHandler {
 
 
 	private QuestEntity aQuest = null;
-
+	
+	/*
+	*Default Constructor
+	*/
 	public QuestDetailPage()
 	{
 		this(NAME);
 	}
+	
+	/*
+	* Constructor to display the details of the selected quest based on the
+	* id given in the url string.
+	*
+	* @param String token
+	*/
 	public QuestDetailPage(String token) {
 		super(token);
 
@@ -110,7 +119,10 @@ public class QuestDetailPage extends Page implements ClickHandler {
 		getQuestItems();
 		userSvc.getUser(callBack);	
 	}
-
+	
+	/*
+	*Helper method that is used to set up the UI
+	*/
 	public void setupUI() {
 
 		vPanel = new VerticalPanel();
