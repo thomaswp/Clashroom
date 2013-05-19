@@ -21,7 +21,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements ItemRetrieverService {
 	private static final long serialVersionUID = 1L;
-
+	
+	/**
+	 * RPC call to retrieve all the items from the database
+	 * */
 	@Override
 	public ArrayList<ItemEntity> retrieveItems() {
 		Collection<ItemEntity> itemCollection = null;
@@ -42,7 +45,12 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
 		}
 		return itemList;
 	}
-
+	
+	/**
+	 * RPC call to retrieve an item bases on the itemId 
+	 * 
+	 * @param long itemId
+	 * */
 	@Override
 	public ItemEntity retrieveAnItem(long itemId) {
 		ItemEntity anItemEntity = null;
@@ -60,6 +68,10 @@ public class ItemRetrieverServiceImpl extends RemoteServiceServlet implements It
 		return anItemEntity;
 	}
 
+	/**
+	 * For testing purposes only. Just adds items to the database.
+	 * Can eventually delete this.
+	 * */
 	@Override
 	public void addItems() {
 		List<ItemEntity> itemList = new ArrayList<ItemEntity>();
