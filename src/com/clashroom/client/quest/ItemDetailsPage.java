@@ -70,7 +70,7 @@ public class ItemDetailsPage extends Page {
 		
 	}
 	/*
-	* Helper method to seperate out the code needed to set up the user inferace
+	* Helper method to seperate out the code needed to set up the user interface
 	*/
 	public void setupUI() {
 		
