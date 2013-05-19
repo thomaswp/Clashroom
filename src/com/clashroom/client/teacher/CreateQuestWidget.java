@@ -34,6 +34,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.FormPanel.SubmitHandler;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
+/**
+ * Widget class that is created in the CreateQuestPage
+ * */
+
 public class CreateQuestWidget extends Composite implements ChangeHandler,FocusHandler, 
 ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	
@@ -96,6 +100,11 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 	    private TextArea victoryText = new TextArea();
 	    private VerticalPanel mainPanel = new VerticalPanel();
 	
+	/**
+	 * Default Constructor that sets up all the widgets that are all 
+	 * a part of a form used for submition to a servlet.
+	 * 
+	 * */
 	public CreateQuestWidget(){	
 		
 	    questForm.setWidget(mainPanel);
@@ -243,7 +252,7 @@ ClickHandler, SubmitHandler,SubmitCompleteHandler {
 		
 	}
 	
-	/*
+    /*
      * Helper method to add times to the timeAvailable and timeExpire
      * listBoxes
      */
