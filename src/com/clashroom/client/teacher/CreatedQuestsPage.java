@@ -1,5 +1,5 @@
 /**
- * AvailableQuestPage.java 1.0 Apr 13, 2013	
+ * CreatedQuestsPage.java 1.0 Apr 13, 2013	
  *
  * COPYRIGHT (c) 2013 Riese P. Narcisse. All Rights Reserved 
  */
@@ -18,7 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 /**
- * Start with summary description line.
+ * Page that displays all the quest created that are in the database.
+ * This page is for teachers. This is where a teacher can edit, update and delete
+ * quests.
  * 
  * @author Rpn
  * @version 1.0
@@ -38,6 +40,8 @@ public class CreatedQuestsPage extends Page {
     }
 
     /**
+     * Constructor
+     * 
      * @param aToken
      */
     public CreatedQuestsPage(String aToken) {
@@ -67,7 +71,11 @@ public class CreatedQuestsPage extends Page {
           questRetrieverSvc.retrieveQuests(callback);
          
     }
-
+    
+    /**
+     * Helper method that creates a new CreatedQuestsWidget for display
+     * 
+     * */
     public void setupUI() {
         Window.setTitle("Available Quests");
         questsWidget = new CreatedQuestsWidget();
