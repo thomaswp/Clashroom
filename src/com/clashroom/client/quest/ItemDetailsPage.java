@@ -29,11 +29,20 @@ public class ItemDetailsPage extends Page {
 	
 	private ItemEntity item = null;
 	
+	/*
+	*  Default Constructor
+	*/
 	public ItemDetailsPage()
 	{
 		this(NAME);
 	}
-
+	
+	/*
+	* Method that grabs the appropriate item based on the id parameter attatched
+	* to the url and creates a page that diplays the details of that item.
+	*
+	* @param Strink token
+	*/
 	public ItemDetailsPage(String token) {
 		super(token);
 		
@@ -60,7 +69,10 @@ public class ItemDetailsPage extends Page {
 			setupUI();
 		
 	}
-public void setupUI() {
+	/*
+	* Helper method to seperate out the code needed to set up the user inferace
+	*/
+	public void setupUI() {
 		
 		vPanel = new VerticalPanel();
 		hPanel = new HorizontalPanel();
@@ -85,7 +97,7 @@ public void setupUI() {
 		vPanel.addStyleName(NAME);
 		
 		mainPanel.add(vPanel);
-        initWidget(mainPanel);
+        	initWidget(mainPanel);
     }
 
 	private void setUpContent(){
