@@ -1,5 +1,5 @@
 /**
- * QuestImpl.java 1.0 Mar 7, 2013	
+ * QuestEntity.java 1.0 Mar 7, 2013	
  *
  * COPYRIGHT (c) 2013 Riese P. Narcisse. All Rights Reserved 
  */
