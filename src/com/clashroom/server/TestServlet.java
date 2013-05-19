@@ -83,7 +83,7 @@ public class TestServlet extends HttpServlet {
 	
 	public String createQueue(){
 		ActiveTaskList aql = new ActiveTaskList();
-		aql.addQuest(new Task("The Dragon Oracle", "High above the city of Khost is a dragon’s cave, where the monster will answer questions for a price. Only the bravest of Warriors can hope to reach the dragon and learn their answer, for he keeps the dungeon well stocked with creatures. The Warriors have been hired to reach the dragon and ask a single question: is the treaty offered by a nearby count trustworthy or not? The Duke hiring the Warriors pays well, an objective room treasure and 50 gold each.", 2*60*60*1000, 50000));
+		aql.addQuest(new Task("The Dragon Oracle", "High above the city of Khost is a dragonï¿½s cave, where the monster will answer questions for a price. Only the bravest of Warriors can hope to reach the dragon and learn their answer, for he keeps the dungeon well stocked with creatures. The Warriors have been hired to reach the dragon and ask a single question: is the treaty offered by a nearby count trustworthy or not? The Duke hiring the Warriors pays well, an objective room treasure and 50 gold each.", 2*60*60*1000, 50000));
 		aql.addQuest(new Task("The Skaven Priests of Torne", "Princess Janitta, the daughter of King Reinwelle, has been captured by the evil skavens that control the sewers beneath the ancient city of Torne. The warriors have been commissioned to rescue her before she is sacrificed by the plague priests in their temple hidden somewhere deep within the meandering sewer passageways. ", 240000, 120));
 		
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -237,7 +237,7 @@ public void createRealWorldQuests(){
 		questList.add(quest7);
 		
 		QuestEntity quest8 = new QuestEntity("Wealth flows in the Land: Part 2"," While continuing to explore The Land of Oaks you notice another change." +
-				" The castle formally named castle E has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advantageous" +
+				" The castle formally named castle B has been bought by a monarch and renamed. You decide to take note of this name in your journal as it is advantageous" +
 				" to know the wealthy in this land. Monarchs are fans of dragon tournaments and often sponsor young trainers they like.", "Council",
                 100, 0,
                 "5-9-13 3:22am",
