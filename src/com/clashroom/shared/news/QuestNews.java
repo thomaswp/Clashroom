@@ -8,6 +8,10 @@ import com.clashroom.shared.Formatter;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
+/**
+ * Creates a messege in the news feed for the town herald whenever
+ * a user completes a quest
+ * */
 public class QuestNews extends NewsfeedItem {
 	
 	private static final long serialVersionUID = 1L;
@@ -20,7 +24,14 @@ public class QuestNews extends NewsfeedItem {
 	public QuestNews(){
 		super(null,(List<Long>)null);
 	}
-
+	/**
+	 * Constructor
+	 * 
+	 * @param Date date
+	 * @param String questName
+	 * @param String username
+	 * @param Long id
+	 * */
 	public QuestNews(Date date, String questName, String username, Long id) {
 		super(date,id);
 		this.questName = questName;
