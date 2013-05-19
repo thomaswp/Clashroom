@@ -21,6 +21,7 @@ Battles:
  * An automated battle schedule/pairing system
  * Teams/guilds for team battles, that are reworked perhaps every 2 weeks to keep things balanced
  * Win/Loss tracking
+ * Possibly make it where users have more control over a battle. Have it where they can choose which attacks they want their dragon to perform.
 
 Skills:
  * Consider a system where users can "train" their dragons to use certain skill in certain situations, rather than it being completely random
@@ -40,12 +41,20 @@ Items:
  * Players should be able to equip items to a battle and have the dragon use/benefit from them during the battle.
  * Some items should be consumed upon use, and other should be permanent
  * There should be a limit on the number of items from each category that can be equipped for a given battle
+ * Possibly have it where teachers have a page to create custom items if they want. These items don't have to have an impact on gameplay.
+ * Some items are hidden "secret items" that don't show up on quest details page as an obtainable item
+ * Item artwork
 
 Bounties:
  * 
  
 Quests:
- * 
+ * Code is there just needs to be implemented: Have it where students unlock some quests by completing certain ones prior to that one.
+ * Make certain quests available at a certain time and date and unavailable at a certain time and date. (Code is there for the most part)
+ * Make some quests that are completed based on student's honor. (Code is there for the most part)
+ * Make some quests that are completed based on teacher confirmation. (Code is there for the most part)
+ * Have a page where teacher can edit,update, and delete quests. (Partially coded, need rpc calls put in)
+ * Icon on home page representing the type of quest available i.e scroll img icon for code quests
  
 Newsfeed:
  * Possible integration of player icons (using gravatar.com) into the newsfeed
