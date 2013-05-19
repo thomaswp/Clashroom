@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Image;
 
 /*
- * This is a quest INNER window that will be apart of the home page
+ * This is a quest INNER window that will be a part of the home page
  * this window isn't meant to be used by itself rather it is meant to be put
  * inside of another widget like another flexTable
  */
@@ -21,6 +21,9 @@ public final static String NAME = "questInnerWindow";
 	private QuestEntity questEntity;
 	private FlexTable questTable;//A single row flexTable to display a single quest's info
 	
+	/**
+	 * Constructor
+	 * **/
 	public QuestInnerWindow(QuestEntity questEntity){
 		super();
 		this.questEntity = questEntity;
