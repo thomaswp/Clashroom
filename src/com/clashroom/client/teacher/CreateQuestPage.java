@@ -9,7 +9,9 @@ public class CreateQuestPage extends Page {
 	
 	private CreateQuestWidget createQuestWidget;
 	
-
+    /**
+     * Default Constructor
+     * */
     public CreateQuestPage() {
         this(NAME);
     }
