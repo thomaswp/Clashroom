@@ -76,6 +76,12 @@ Clashroom has a number of extendable superclasses which allow you to easily add 
 
 **Skill.java**: Extend this class to create a new Skill for dragons to use. Have a DragonClass add it to its skill tree to have that dragon be able to learn your skill. Make sure to register your new skill with Skill's skills array.
 
+## Art ##
+
+You will want to aquire more art at some point. Because this is an open-source project, it is important that all art assets be open source as well. Consider using Google's advanced image search and filter results by a "free to use and distribute" license. For instance, [this](http://www.google.com/search?as_st=y&tbm=isch&hl=en&as_q=dragon&as_epq=&as_oq=&as_eq=&cr=&as_sitesearch=&safe=images&tbs=sur:f&biw=1600&bih=784&sei=rTKZUbCyNJH69gTCtoDYAw) is an open-art search for "dragon".
+
+A particularly good find was [this site for mosters](http://www.flickr.com/photos/sergioroma/with/2296346206/#photo_2296346206), and [this one for dragons](http://mythka.deviantart.com/art/Guardian-Dragon-Alucio-348928763).
+
 ## TODO ##
 There is a [TODO.md](TODO.md) file inside the main directory with future work that needs doing. There are also TODO markers inside the code with specific improvement that are needed.
 
