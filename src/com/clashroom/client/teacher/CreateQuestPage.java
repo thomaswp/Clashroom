@@ -15,6 +15,9 @@ public class CreateQuestPage extends Page {
     }
 
     /**
+     * Constructor that creates the page for creating a quest
+     * this page should only be able to be accessed by teachers
+     * 
      * @param aToken
      */
     public CreateQuestPage(String aToken) {
