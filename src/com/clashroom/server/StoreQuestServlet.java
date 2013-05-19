@@ -1,5 +1,5 @@
 /**
- * QuestCreatorServlet.java 1.0 Mar 7, 2013	
+ * StoreQuestServlet.java 1.0 Mar 7, 2013	
  *
  * COPYRIGHT (c) 2013 Riese P. Narcisse. All Rights Reserved 
  */
