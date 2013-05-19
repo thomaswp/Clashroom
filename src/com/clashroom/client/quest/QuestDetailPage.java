@@ -72,8 +72,8 @@ public class QuestDetailPage extends Page implements ClickHandler {
 	}
 	
 	/*
-	* Constructor to display the details of the selected quest based on the
-	* id given in the url string.
+	* Constructor to create a page and display on it the 
+	* details of the selected quest based on the id given in the url string.
 	*
 	* @param String token
 	*/
