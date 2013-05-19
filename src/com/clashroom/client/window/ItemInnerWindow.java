@@ -6,11 +6,18 @@ import com.clashroom.shared.entity.ItemEntity;
 import com.clashroom.shared.entity.UserEntity;
 import com.google.gwt.user.client.ui.Label;
 
+/**
+ * Class that creates a clickable window (focus panel) that navigates to an item page
+ * based on the item id.
+ * */
 public class ItemInnerWindow extends Window {
 	public final static String NAME = "itemInnerWindow";
 	private ItemEntity item;
 	private Label itemName;
 	
+	/**
+	 * Constructor
+	 * */
 	public ItemInnerWindow(ItemEntity item){
 		super();
 		this.item = item;
