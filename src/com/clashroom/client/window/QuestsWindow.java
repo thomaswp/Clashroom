@@ -36,7 +36,10 @@ public class QuestsWindow extends Composite implements IWindow {
 	private ArrayList<QuestEntity> availableQuests;
 	private UserEntity currentUser;
 	private ScrollableFlexTable studentQuests;
-
+	
+	/**
+	 * Constructor
+	 * */
 	public QuestsWindow(){
 
 		// Set up the callback object.
@@ -59,7 +62,10 @@ public class QuestsWindow extends Composite implements IWindow {
 
 		questRetrieverSvc.retrieveQuests(questCallback);        
 	}
-
+	/**
+	 * Method to list all the quests that the user has not completed
+	 * 
+	 * */
 	public void listStudentQuests() {
 		if (currentUser == null || availableQuests == null) {
 			return;
@@ -78,10 +84,20 @@ public class QuestsWindow extends Composite implements IWindow {
 		}
 
 	}
+	
+	/**
+	 * Returns NAME
+	 * 
+	 * @return String name
+	 * 
+	 * */
 	public String getName(){
 		return NAME;
 	}
-
+	
+	/**
+	 * Helper method to set up the UI
+	 * */
 	public void setUpUI(){
 		VerticalPanel main = new VerticalPanel();
 		Label label = new Label("Adventures");
