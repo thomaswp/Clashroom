@@ -23,7 +23,7 @@ public class QuestRetrieverServiceImpl extends RemoteServiceServlet
                                 implements QuestRetrieverService {
 
     /*
-     * (non-Javadoc)
+     * RPC call to retrieve all quests from the database.
      * 
      * @see
      * elon.edu.clashroom.profUI.client.QuestCreatorService#createQuest
@@ -48,7 +48,13 @@ public class QuestRetrieverServiceImpl extends RemoteServiceServlet
 
         return questList;
     }
-    //TODO: Be sure to change this to ID
+    
+    /**
+     * RPC call to retrieve a quest from the database based on the passed
+     * id
+     * 
+     * @param long questId
+     * */
 	@Override
 	public QuestEntity retrieveAQuest(long questId) {
 		QuestEntity aQuestEntity = null;
