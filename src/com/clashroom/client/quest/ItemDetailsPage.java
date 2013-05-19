@@ -39,9 +39,9 @@ public class ItemDetailsPage extends Page {
 	
 	/*
 	* Method that grabs the appropriate item based on the id parameter attatched
-	* to the url and creates a page that diplays the details of that item.
+	* to the url and creates a page that displays the details of that item.
 	*
-	* @param Strink token
+	* @param String token
 	*/
 	public ItemDetailsPage(String token) {
 		super(token);
