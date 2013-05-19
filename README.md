@@ -1,7 +1,7 @@
 # Clashroom #
 
 ## About Clashroom ##
-Clashroom is online, multiplayer RPG where players take on the role of Dragon trainers. Players take on real-world quests to give their Dragons experience, items and new skills. When played in the context of a classroom setting, the real-world quests can be things like getting help from a tutor, doing practice problems or doing supplementary research. Dragons face off against each other in the arena, so these quests become vital to success in the game. The hope is that adding a Clashroom layer to a class can encourage students to get involved in the subject outside of class in fun, voluntary way.
+Clashroom is online, multiplayer RPG where players take on the role of Dragon trainers. Players take on real-world quests to give their Dragons experience, items and new skills. When played in the context of a classroom setting, the real-world quests can be things like getting help from a tutor, doing practice problems or doing supplementary research. Dragons face off against each other in the arena, so these quests become vital to success in the game. The hope is that adding a game layer to a class can encourage students to get involved in the subject outside of class in a fun, voluntary way.
 
 ## Prerequisites ##
 Clashroom is coded using Google Web Toolkit with a JDO/App Engine backend. Knowledge of each of these technologies is necessary to contribute to Clashroom. See https://developers.google.com/web-toolkit/ for a starting guide to GWT.
