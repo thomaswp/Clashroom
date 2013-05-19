@@ -1,5 +1,5 @@
 /**
- * AvailableQuestsWidget.java 1.0 Apr 13, 2013	
+ * CreatedQuestsWidget.java 1.0 Apr 13, 2013	
  *
  * COPYRIGHT (c) 2013 Riese P. Narcisse. All Rights Reserved 
  */
@@ -18,8 +18,7 @@ import com.google.gwt.user.client.ui.Label;
 
 
 /**
- * Available Quests Widget, List all Quest Available, from here
- * I want to navigate to a custom details page of every quest
+ * CreatedQuestsWidget, List all the quests created for editing
  * 
  * @author Rpn
  * @version 1.0
@@ -44,6 +43,14 @@ public class CreatedQuestsWidget extends Composite {
      * TODO: Have hyper links go to the appropriate quest info and update/delete appropriate
      * quests
      */
+     
+     /**
+      * 
+      * Lists all the Available Quests from the database.
+      * 
+      * @param ArrayList<QuestEntity> availableQuests
+      * 	All the quests from an rpc call
+      * */
     public void listAvailableQuests(ArrayList<QuestEntity> availableQuests) {
         this.availableQuests = availableQuests;
         
