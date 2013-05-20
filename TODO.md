@@ -46,7 +46,10 @@ Items:
  * Item artwork
 
 Bounties:
- * 
+ * Implement bounty completion as a cron job on the server. The current implementation is flawed and causes bugs.
+ * Balance bounties to have a larger impact of player progression
+ * Consider creating a system to generate or allow the creation of bounties over time to give player more incentive to see what's new and add immersion.
+ * Consider creating a tutorial of sorts to introduce players to the bounty system
  
 Quests:
  * Code is there just needs to be implemented: Have it where students unlock some quests by completing certain ones prior to that one.
