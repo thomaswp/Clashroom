@@ -6,6 +6,12 @@ import java.util.LinkedList;
 
 import com.clashroom.shared.entity.ActiveBountyEntity;
 
+/**
+ * A class the manages a player's list of {@link ActiveTask}
+ * 
+ * @author deagle
+ *
+ */
 public class ActiveTaskList implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -16,15 +22,26 @@ public class ActiveTaskList implements Serializable {
 	private Long eId;
 	private Long userID;
 	
+	/**
+	 * Constructs a blank ActiveTaskList
+	 */
 	public ActiveTaskList() {
 		list = new LinkedList<ActiveTask>();
 		history = new LinkedList<ActiveTask>();
 	}
 	
+	/**
+	 * Constructs an ActiveTaskList given a LinkedList of {@link ActiveTask}
+	 * @param list the LinkedList of {@link ActiveTask}
+	 */
 	public ActiveTaskList(LinkedList<ActiveTask> list){
 		this.list = list;
 	}
 	
+	/**
+	 * Constructs an ActiveTaskList from a given {@link ActiveBountyEntity}
+	 * @param entity the {@link ActiveBountyEntity} to fetch data from
+	 */
 	public ActiveTaskList(ActiveBountyEntity entity){
 		list = entity.getActiveQuests().getList();
 		history = entity.getActiveQuests().getHistory();
@@ -38,6 +55,11 @@ public class ActiveTaskList implements Serializable {
 		return list.isEmpty();
 	}
 	
+	/**
+	 * Adds a given {@link Task} to the list and initializes
+	 * the start time and history if needed
+	 * @param q the Task to add
+	 */
 	public void addQuest(Task q){
 		if (isEmpty()){
 			start = new Date().getTime();
@@ -52,6 +74,10 @@ public class ActiveTaskList implements Serializable {
 		return list.getFirst();
 	}
 	
+	/**
+	 * Sums up the duration of all of the quests in the current quest history
+	 * @return total duration
+	 */
 	public int getTotalDuration(){
 		int duration = 0;
 		for (ActiveTask q : history){
@@ -64,6 +90,10 @@ public class ActiveTaskList implements Serializable {
 		return start;
 	}
 	
+	/**
+	 * Calculates the remaining time left for the current active bounty
+	 * @return current bounty duration
+	 */
 	public long activeTimeLeft() {
 		return aqStart + activeDuration() - new Date().getTime();
 	}
@@ -72,6 +102,10 @@ public class ActiveTaskList implements Serializable {
 		return getActiveQuest().getDuration();
 	}
 	
+	/**
+	 * Calculates the remaining time left for the entire list of bounties
+	 * @return bounty list duration
+	 */
 	public long totalTimeLeft() {
 		return start + getTotalDuration() - new Date().getTime();
 	}

@@ -9,6 +9,13 @@ import javax.jdo.annotations.PrimaryKey;
 import com.clashroom.shared.task.Task;
 import com.google.appengine.api.datastore.Text;
 
+/**
+ * An entity that wraps a {@link Task} and exposes the necessary
+ * fields for access from the datastore. 
+ * 
+ * @author deagle
+ *
+ */
 @PersistenceCapable
 public class TaskEntity {
 	

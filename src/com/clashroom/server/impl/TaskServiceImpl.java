@@ -19,9 +19,18 @@ import com.clashroom.shared.news.TaskNews;
 import com.clashroom.shared.task.ActiveTaskList;
 import com.clashroom.shared.task.Task;
 
+/**
+ * An RPC service for manipulating {@link ActiveTaskList}s, 
+ * {@link ActiveBountyEntity} and retrieving the available {@link TaskEntity}s
+ * @author deagle
+ *
+ */
 public class TaskServiceImpl extends RemoteServiceServlet implements TaskService {
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * Retrieves all {@link TaskEntity}s from the datastore
+	 */
 	@Override
 	public ArrayList<Task> getAvailableQuests() throws IllegalArgumentException {
 		List<TaskEntity> entities = QueryUtils.query(TaskEntity.class, "");
@@ -33,6 +42,10 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		
 	}
 	
+	/**
+	 * Retrieves a unique {@link ActiveTaskList} given a user's id
+	 * @param userID the user's id
+	 */
 	@Override
 	public ActiveTaskList getActiveQuests(Long userID) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -47,6 +60,11 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		
 	}
 
+	/**
+	 * Persists a given {@link ActiveTaskList} with an associated user id
+	 * @param userID the id to associate the list with
+	 * @param atl the {@link ActiveTaskList} to persist
+	 */
 	@Override
 	public String persistAQL(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -66,6 +84,12 @@ public class TaskServiceImpl extends RemoteServiceServlet implements TaskService
 		return "AQL persisted";
 	}
 	
+	/**
+	 * Completes a {@link Task} and rewards the given user then persists
+	 * the given {@link ActiveTaskList}
+	 * @param userID the user id
+	 * @param atl the list to be persisted
+	 */
 	@Override
 	public String completeQuest(Long userID, ActiveTaskList atl) throws IllegalArgumentException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();

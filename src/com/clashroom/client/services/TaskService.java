@@ -19,5 +19,6 @@ public interface TaskService extends RemoteService {
 	//Requests datastore to persist the given active quest list
 	String persistAQL(Long userID, ActiveTaskList aql) throws IllegalArgumentException;
 	
+	//Completes a task, dishes out the reward then persists the active bounty list
 	String completeQuest(Long userID, ActiveTaskList atl) throws IllegalArgumentException;
 }
