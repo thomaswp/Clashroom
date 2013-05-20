@@ -50,6 +50,7 @@ Bounties:
  * Balance bounties to have a larger impact of player progression
  * Consider creating a system to generate or allow the creation of bounties over time to give player more incentive to see what's new and add immersion.
  * Consider creating a tutorial of sorts to introduce players to the bounty system
+ * Consider adding battles (with experience) against NPCs at the end of some bounties to add some challenge/levels of difficulty.
  
 Quests:
  * Code is there just needs to be implemented: Have it where students unlock some quests by completing certain ones prior to that one.
